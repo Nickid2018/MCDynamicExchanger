@@ -16,5 +16,7 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="D:/Minecraft3/.minecraft/libraries/com/mojang/brigadier/1.0.17/brigadier-1.0.17.jar"/>
+	<classpathentry kind="lib" path="D:/1.14.4-remapped.jar" sourcepath="D:/1.14.4-remapped-src.zip"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

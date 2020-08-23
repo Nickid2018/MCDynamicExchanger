@@ -21,6 +21,13 @@ public class ClassTransformer extends ClassVisitor {
 		this.asmcode = asmcode;
 	}
 
+	public String executeInString() throws IOException {
+		ClassReader reader = new ClassReader(asmcode);
+		reader.accept(this, ClassReader.SKIP_DEBUG);
+		this.writer.flush();
+		return this.writer.toString().replaceAll(clazzName, "THIS_CLASS");
+	}
+
 	public void execute() throws IOException {
 		ClassReader reader = new ClassReader(asmcode);
 		reader.accept(this, ClassReader.SKIP_DEBUG);
@@ -83,6 +90,26 @@ public class ClassTransformer extends ClassVisitor {
 			throw new RuntimeException(e);
 		}
 	}
+
+	@Override
+	public void visitInnerClass(String name, String outerName, String innerName, int access) {
+		try {
+			IOUtils.write("INNERCLASS  " + name + " " + outerName + " " + innerName + " " + access + "\n", writer);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@Override
+	public void visitOuterClass(String owner, String name, String desc) {
+		try {
+			IOUtils.write("OUTERCLASS  " + owner + " " + name + " " + desc + "\n", writer);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	
 
 	public static class ClassMethodWriter extends MethodTransformer.MethodWriter {
 

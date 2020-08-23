@@ -11,9 +11,16 @@ public class ClassGenerator {
 	public String details;
 	public String cname;
 	public ASMClass clazz;
+	public byte[] generated;
+
+	public ClassGenerator(String details, String cname) {
+		this.details = details;
+		this.cname = cname;
+	}
 
 	public ClassGenerator(String details) {
 		this.details = details;
+		cname = "_ASM_gen_" + (int) (Integer.MAX_VALUE * Math.random());
 	}
 
 	public void make() {
@@ -21,8 +28,7 @@ public class ClassGenerator {
 		details = splits[1];
 		String[] splitss = splits[0].split(" ", 3);
 		ClassWriter writer = new ClassWriter(0);
-		writer.visit(V1_8, Integer.parseInt(splitss[0]),
-				cname = "_ASM_gen_" + (int) (Integer.MAX_VALUE * Math.random()), null, splitss[1],
+		writer.visit(V1_8, Integer.parseInt(splitss[0]), cname, null, splitss[1],
 				splitss[2].trim().isEmpty() ? null : splitss[2].trim().split(" "));
 		details = details.replaceAll("[Tt][Hh][Ii][Ss]_[Cc][Ll][Aa][Ss][Ss]", cname);
 		String[] arrdetail = details.split("\n");
@@ -34,21 +40,43 @@ public class ClassGenerator {
 				index += genMethod(writer, arrdetail, index);
 				break;
 			case "FIELD":
-				index += genField(writer, arrdetail, index);
+				index += genField(writer, detail);
+				break;
+			case "INNERCLASS":
+				index += genInnerClass(writer, detail);
+				break;
+			case "OUTERCLASS":
+				index += genOuterClass(writer, detail);
 				break;
 			case "DEFAULT_INIT":
 				index += genDefaultInit(writer);
 				break;
 			default:
-				throw new IllegalArgumentException("Uncompile Tag");
+				throw new IllegalArgumentException("Uncongnized Tag:" + type);
 			}
 		}
 		writer.visitEnd();
-		clazz = ASMClass.newClass(writer.toByteArray());
+		generated = writer.toByteArray();
+	}
+
+	public ASMClass generateClass() {
+		return clazz = ASMClass.newClass(generated);
 	}
 
 	public Class<?> getGeneratedClass() {
 		return clazz.clazz;
+	}
+
+	public static int genInnerClass(ClassWriter writer, String detail) {
+		String[] all = detail.split(" ");
+		writer.visitInnerClass(all[1], all[2], all[3], Integer.parseInt(all[4]));
+		return 1;
+	}
+
+	public static int genOuterClass(ClassWriter writer, String detail) {
+		String[] all = detail.split(" ");
+		writer.visitOuterClass(all[1], all[2], all[3]);
+		return 1;
 	}
 
 	public static int genMethod(ClassWriter writer, String[] details, int offset) {
@@ -67,8 +95,8 @@ public class ClassGenerator {
 		return counter;
 	}
 
-	public static int genField(ClassWriter writer, String[] details, int offset) {
-		String[] aftSplit = details[offset].split(" ", 5);
+	public static int genField(ClassWriter writer, String detail) {
+		String[] aftSplit = detail.split(" ", 5);
 		FieldVisitor fwriter;
 		if (aftSplit.length == 4) {
 			fwriter = writer.visitField(Integer.parseInt(aftSplit[1]), aftSplit[2], aftSplit[3].trim(), null, null);
@@ -82,6 +110,10 @@ public class ClassGenerator {
 		}
 		fwriter.visitEnd();
 		return 1;
+	}
+
+	public static boolean genFieldNextLine(FieldVisitor writer, String detail) {
+		return false;
 	}
 
 	public static int genDefaultInit(ClassWriter writer) {

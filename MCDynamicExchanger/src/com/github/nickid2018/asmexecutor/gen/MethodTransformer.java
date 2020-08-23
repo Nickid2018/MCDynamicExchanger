@@ -133,6 +133,12 @@ public class MethodTransformer extends ClassVisitor {
 			}
 			return sb.toString();
 		}
+		
+		@Override
+		public AnnotationVisitor visitTypeAnnotation(int typeRef, TypePath typePath, String desc, boolean visible) {
+			// TODO 自动生成的方法存根
+			return super.visitTypeAnnotation(typeRef, typePath, desc, visible);
+		}
 
 		@Override
 		public void visitInsn(int opcode) {
