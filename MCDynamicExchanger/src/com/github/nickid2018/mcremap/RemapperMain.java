@@ -6,7 +6,7 @@ public class RemapperMain {
 
 	public static void main(String[] args) throws Exception {
 		// Command Format:
-		// remap.jar [--output:<destination>] <mapping_file_url>
+		// remap.jar [--output:<destination>] [--tmpdir:<temp>] <mapping_file_url>
 		// <source_jar>
 		OfficalFormat f = new OfficalFormat();
 		f.processInitMap(args[args.length - 2]);
@@ -17,6 +17,9 @@ public class RemapperMain {
 			for (String arg : args) {
 				if (arg.startsWith("--output")) {
 					dest = arg.split(":", 2)[1];
+				}
+				if (arg.startsWith("--tmpdir")) {
+					FileRemapper.tmpLocation = arg.split(":", 2)[1];
 				}
 			}
 		}

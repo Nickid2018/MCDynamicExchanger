@@ -19,7 +19,7 @@ public class DEInsertASMCommand {
 
 	public static final Dynamic2CommandExceptionType INSERT_COMMAND_ERROR = new Dynamic2CommandExceptionType(
 			(errortype, error) -> {
-				DEProgramInterface.logger.error("Error in invoking the method!", (Throwable) error);
+				SharedAfterLoadConstants.logger.error("Error in invoking the method!", (Throwable) error);
 				return new TextComponent(
 						"Command Internal Error: " + errortype + "(" + ((Throwable) error).getMessage() + ")");
 			});

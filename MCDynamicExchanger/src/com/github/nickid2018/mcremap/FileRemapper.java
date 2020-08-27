@@ -11,7 +11,7 @@ import org.objectweb.asm.commons.*;
 
 public class FileRemapper {
 
-	public static String tmpLocation = "D:\\MC-Remap";
+	public static String tmpLocation = System.getProperty("java.io.tmpdir") + "\\MC-Remap";
 
 	private String nowFile;
 	private double dealed = 0;
@@ -29,9 +29,11 @@ public class FileRemapper {
 		file.close();
 		// MANIFEST.MF
 		recreateManifest();
+		// Remove Modded Check
+		removeModCheck();
 		// zhuang beta de dai ma
 		hackTheName();
-		System.out.println("Class mapping over, now start to pack it into JAR");
+		System.out.println("Class mapping over, now start to pack it into JAR. Please wait jar.exe packing the files.");
 		runPack(dest);
 	}
 
@@ -119,6 +121,17 @@ public class FileRemapper {
 		create.createNewFile();
 		OutputStream os = new FileOutputStream(create);
 		IOUtils.write(in, os);
+		os.close();
+	}
+
+	private void removeModCheck() throws IOException {
+		InputStream is = new FileInputStream(tmpLocation + "\\net\\minecraft\\client\\Minecraft.class");
+		ClassReader reader = new ClassReader(IOUtils.toByteArray(is));
+		is.close();
+		ClassWriter writer = new ClassWriter(0);
+		reader.accept(new RemoveModCheck(writer), 0);
+		OutputStream os = new FileOutputStream(tmpLocation + "\\net\\minecraft\\client\\Minecraft.class");
+		IOUtils.write(writer.toByteArray(), os);
 		os.close();
 	}
 

@@ -15,7 +15,7 @@ public class DEASMClassReplaceCommand {
 
 	public static final Dynamic2CommandExceptionType REPLACE_ERROR = new Dynamic2CommandExceptionType(
 			(errortype, error) -> {
-				DEProgramInterface.logger.error("Error in invoking the method!", (Throwable) error);
+				SharedAfterLoadConstants.logger.error("Error in invoking the method!", (Throwable) error);
 				return new TextComponent(
 						"Command Internal Error: " + errortype + "(" + ((Throwable) error).getMessage() + ")");
 			});

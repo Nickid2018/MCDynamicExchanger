@@ -15,6 +15,15 @@ public class DETransformer implements ClassFileTransformer {
 			ClassReader reader = new ClassReader(classfileBuffer);
 			ClassWriter writer = new ClassWriter(0);
 			reader.accept(new HackCommandsWriter(writer), 0);
+			System.out.println("Hacked Commands");
+			return writer.toByteArray();
+		}
+		// Hack net.minecraft.CrashReport
+		if (className.equals("net/minecraft/CrashReport")) {
+			ClassReader reader = new ClassReader(classfileBuffer);
+			ClassWriter writer = new ClassWriter(0);
+			reader.accept(new HackCrashReportWriter(writer), 0);
+			System.out.println("Hacked CrashReport");
 			return writer.toByteArray();
 		}
 		return classfileBuffer;

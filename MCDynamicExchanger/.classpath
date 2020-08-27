@@ -17,6 +17,7 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="D:/Minecraft3/.minecraft/libraries/com/mojang/brigadier/1.0.17/brigadier-1.0.17.jar"/>
-	<classpathentry kind="lib" path="D:/1.14.4-remapped.jar" sourcepath="D:/1.14.4-remapped-src.zip"/>
+	<classpathentry kind="lib" path="D:/Minecraft3/.minecraft/libraries/org/apache/logging/log4j/log4j-api/2.11.2/log4j-api-2.11.2.jar"/>
+	<classpathentry kind="lib" path="D:/Minecraft3/.minecraft/versions/1.14.4-remapped/1.14.4-remapped.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
