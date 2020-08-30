@@ -29,7 +29,8 @@ public class ModifyTitleScreen extends ClassVisitor {
 			return new HackInitMethod(writer.visitMethod(access, name, desc, signature, exceptions));
 		}
 		if (name.equals("render")) {
-			return new HackRenderMethod(writer.visitMethod(access, name, desc, signature, exceptions));
+			return new HackRenderMethod(writer.visitMethod(access, name, desc, signature, exceptions),
+					desc.equals("(Lcom/mojang/blaze3d/vertex/PoseStack;IIF)V"));
 		}
 		return writer.visitMethod(access, name, desc, signature, exceptions);
 	}
@@ -59,11 +60,13 @@ public class ModifyTitleScreen extends ClassVisitor {
 	public class HackRenderMethod extends MethodVisitor {
 
 		private boolean over = true;
+		private boolean is16;
 		private MethodVisitor defaultVisitor;
 
-		public HackRenderMethod(MethodVisitor defaultVisitor) {
+		public HackRenderMethod(MethodVisitor defaultVisitor, boolean is16) {
 			super(Opcodes.ASM6, defaultVisitor);
 			this.defaultVisitor = defaultVisitor;
+			this.is16 = is16;
 		}
 
 		@Override
@@ -71,24 +74,47 @@ public class ModifyTitleScreen extends ClassVisitor {
 			super.visitMethodInsn(opcode, owner, name, desc, itf);
 			if (over && name.equals("drawString")) {
 				over = false;
-				defaultVisitor.visitVarInsn(Opcodes.ALOAD, 0);// ALOAD 0[this]
-				defaultVisitor.visitVarInsn(Opcodes.ALOAD, 0);// ALOAD 0[this]
-				defaultVisitor.visitFieldInsn(Opcodes.GETFIELD, "net/minecraft/client/gui/screens/TitleScreen", "font",
-						"Lnet/minecraft/client/gui/Font;");// GETFIELD this.font
-				defaultVisitor.visitLdcInsn("Remapped by Nickid2018");// LDC STRING
-				defaultVisitor.visitVarInsn(Opcodes.ALOAD, 0);// ALOAD 0[this]
-				defaultVisitor.visitFieldInsn(Opcodes.GETFIELD, "net/minecraft/client/gui/screens/TitleScreen",
-						"remapperX", "I");// GETFIELD this.remapperX
-				defaultVisitor.visitVarInsn(Opcodes.ALOAD, 0);// ALOAD 0[this]
-				defaultVisitor.visitFieldInsn(Opcodes.GETFIELD, "net/minecraft/client/gui/screens/TitleScreen",
-						"height", "I");// GETFIELD this.height
-				defaultVisitor.visitIntInsn(Opcodes.BIPUSH, 20);// bipush 20
-				defaultVisitor.visitInsn(Opcodes.ISUB);// this.height-10
-				defaultVisitor.visitLdcInsn(16777215);// LDC INTEGER 16777215
-				defaultVisitor.visitVarInsn(Opcodes.ILOAD, 9);// ILOAD 9[var9]
-				defaultVisitor.visitInsn(Opcodes.IOR);// 16777215|var9
-				defaultVisitor.visitMethodInsn(Opcodes.INVOKEVIRTUAL, "net/minecraft/client/gui/screens/TitleScreen",
-						"drawString", "(Lnet/minecraft/client/gui/Font;Ljava/lang/String;III)V", false);
+				if (is16) {
+					defaultVisitor.visitVarInsn(Opcodes.ALOAD, 0);// ALOAD 0[this]
+					defaultVisitor.visitFieldInsn(Opcodes.GETFIELD, "net/minecraft/client/gui/screens/TitleScreen",
+							"font", "Lnet/minecraft/client/gui/Font;");// GETFIELD this.font
+					defaultVisitor.visitLdcInsn("Remapped by Nickid2018");// LDC STRING
+					defaultVisitor.visitVarInsn(Opcodes.ALOAD, 0);// ALOAD 0[this]
+					defaultVisitor.visitFieldInsn(Opcodes.GETFIELD, "net/minecraft/client/gui/screens/TitleScreen",
+							"remapperX", "I");// GETFIELD this.remapperX
+					defaultVisitor.visitVarInsn(Opcodes.ALOAD, 0);// ALOAD 0[this]
+					defaultVisitor.visitFieldInsn(Opcodes.GETFIELD, "net/minecraft/client/gui/screens/TitleScreen",
+							"height", "I");// GETFIELD this.height
+					defaultVisitor.visitIntInsn(Opcodes.BIPUSH, 20);// bipush 20
+					defaultVisitor.visitInsn(Opcodes.ISUB);// this.height-10
+					defaultVisitor.visitLdcInsn(16777215);// LDC INTEGER 16777215
+					defaultVisitor.visitVarInsn(Opcodes.ILOAD, 10);// ILOAD 10[var10]
+					defaultVisitor.visitInsn(Opcodes.IOR);// 16777215|var10
+					defaultVisitor.visitMethodInsn(Opcodes.INVOKESTATIC, "net/minecraft/client/gui/screens/TitleScreen",
+							"drawString",
+							"(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/gui/Font;Ljava/lang/String;III)V",
+							false);
+				} else {
+					defaultVisitor.visitVarInsn(Opcodes.ALOAD, 0);// ALOAD 0[this]
+					defaultVisitor.visitVarInsn(Opcodes.ALOAD, 0);// ALOAD 0[this]
+					defaultVisitor.visitFieldInsn(Opcodes.GETFIELD, "net/minecraft/client/gui/screens/TitleScreen",
+							"font", "Lnet/minecraft/client/gui/Font;");// GETFIELD this.font
+					defaultVisitor.visitLdcInsn("Remapped by Nickid2018");// LDC STRING
+					defaultVisitor.visitVarInsn(Opcodes.ALOAD, 0);// ALOAD 0[this]
+					defaultVisitor.visitFieldInsn(Opcodes.GETFIELD, "net/minecraft/client/gui/screens/TitleScreen",
+							"remapperX", "I");// GETFIELD this.remapperX
+					defaultVisitor.visitVarInsn(Opcodes.ALOAD, 0);// ALOAD 0[this]
+					defaultVisitor.visitFieldInsn(Opcodes.GETFIELD, "net/minecraft/client/gui/screens/TitleScreen",
+							"height", "I");// GETFIELD this.height
+					defaultVisitor.visitIntInsn(Opcodes.BIPUSH, 20);// bipush 20
+					defaultVisitor.visitInsn(Opcodes.ISUB);// this.height-10
+					defaultVisitor.visitLdcInsn(16777215);// LDC INTEGER 16777215
+					defaultVisitor.visitVarInsn(Opcodes.ILOAD, 9);// ILOAD 9[var9]
+					defaultVisitor.visitInsn(Opcodes.IOR);// 16777215|var9
+					defaultVisitor.visitMethodInsn(Opcodes.INVOKEVIRTUAL,
+							"net/minecraft/client/gui/screens/TitleScreen", "drawString",
+							"(Lnet/minecraft/client/gui/Font;Ljava/lang/String;III)V", false);
+				}
 			}
 		}
 	}
