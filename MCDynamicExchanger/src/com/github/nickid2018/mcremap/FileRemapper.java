@@ -3,6 +3,7 @@ package com.github.nickid2018.mcremap;
 import java.io.*;
 import java.util.*;
 import java.util.zip.*;
+import java.util.function.*;
 import org.objectweb.asm.*;
 import org.objectweb.asm.tree.*;
 import org.apache.commons.io.*;
@@ -31,6 +32,8 @@ public class FileRemapper {
 		recreateManifest();
 		// Remove Modded Check
 		removeModCheck();
+		// Change Brand
+		changeBrand();
 		// zhuang beta de dai ma
 		hackTheName();
 		System.out.println("Class mapping over, now start to pack it into JAR. Please wait jar.exe packing the files.");
@@ -125,31 +128,37 @@ public class FileRemapper {
 	}
 
 	private void removeModCheck() throws IOException {
-		InputStream is = new FileInputStream(tmpLocation + "\\net\\minecraft\\client\\Minecraft.class");
-		ClassReader reader = new ClassReader(IOUtils.toByteArray(is));
-		is.close();
-		ClassWriter writer = new ClassWriter(0);
-		reader.accept(new RemoveModCheck(writer), 0);
-		OutputStream os = new FileOutputStream(tmpLocation + "\\net\\minecraft\\client\\Minecraft.class");
-		IOUtils.write(writer.toByteArray(), os);
-		os.close();
+		doHacks("net.minecraft.client.Minecraft", reader -> {
+			ClassWriter writer = new ClassWriter(0);
+			reader.accept(new RemoveModCheck(writer), 0);
+			return writer;
+		});
 	}
 
 	private void hackTheName() throws IOException {
-		InputStream is = new FileInputStream(tmpLocation + "\\net\\minecraft\\client\\gui\\screens\\TitleScreen.class");
+		doHacks("net.minecraft.client.gui.screens.TitleScreen", reader -> {
+			ClassWriter writer = new ClassWriter(0);
+			reader.accept(new ModifyTitleScreen(writer), 0);
+			return writer;
+		});
+	}
+
+	private void changeBrand() throws IOException {
+		Function<ClassReader, ClassWriter> func = reader -> {
+			ClassWriter writer = new ClassStringReplacer("vanilla", "remapped by Nickid2018");
+			reader.accept(writer, 0);
+			return writer;
+		};
+		doHacks("net.minecraft.server.MinecraftServer", func);
+		doHacks("net.minecraft.client.ClientBrandRetriever", func);
+	}
+
+	private static void doHacks(String className, Function<ClassReader, ClassWriter> func) throws IOException {
+		InputStream is = new FileInputStream(tmpLocation + "\\" + className.replace('.', '\\') + ".class");
 		ClassReader reader = new ClassReader(IOUtils.toByteArray(is));
 		is.close();
-		ClassWriter writer = new ClassWriter(0) {
-			@Override
-			public int newUTF8(String value) {
-				if (value.equals("Minecraft "))
-					return super.newUTF8("Minecraft(Remapped by Nickid2018) ");
-				return super.newUTF8(value);
-			}
-		};
-		reader.accept(writer, 0);
-		OutputStream os = new FileOutputStream(
-				tmpLocation + "\\net\\minecraft\\client\\gui\\screens\\TitleScreen.class");
+		ClassWriter writer = func.apply(reader);
+		OutputStream os = new FileOutputStream(tmpLocation + "\\" + className.replace('.', '\\') + ".class");
 		IOUtils.write(writer.toByteArray(), os);
 		os.close();
 	}
