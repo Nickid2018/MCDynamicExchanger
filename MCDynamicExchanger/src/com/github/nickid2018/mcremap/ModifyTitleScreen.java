@@ -9,7 +9,6 @@ public class ModifyTitleScreen extends ClassVisitor {
 	public ModifyTitleScreen(ClassWriter writer) {
 		super(Opcodes.ASM6, writer);
 		this.writer = writer;
-
 	}
 
 	private boolean notFieldAdded = true;
@@ -72,9 +71,11 @@ public class ModifyTitleScreen extends ClassVisitor {
 		@Override
 		public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf) {
 			super.visitMethodInsn(opcode, owner, name, desc, itf);
+			// Insert Point: Before drawString at "Copyright Mojang AB"
 			if (over && name.equals("drawString")) {
 				over = false;
 				if (is16) {
+					defaultVisitor.visitVarInsn(Opcodes.ALOAD, 1);// ALOAD 1[PoseStack]
 					defaultVisitor.visitVarInsn(Opcodes.ALOAD, 0);// ALOAD 0[this]
 					defaultVisitor.visitFieldInsn(Opcodes.GETFIELD, "net/minecraft/client/gui/screens/TitleScreen",
 							"font", "Lnet/minecraft/client/gui/Font;");// GETFIELD this.font
@@ -86,7 +87,7 @@ public class ModifyTitleScreen extends ClassVisitor {
 					defaultVisitor.visitFieldInsn(Opcodes.GETFIELD, "net/minecraft/client/gui/screens/TitleScreen",
 							"height", "I");// GETFIELD this.height
 					defaultVisitor.visitIntInsn(Opcodes.BIPUSH, 20);// bipush 20
-					defaultVisitor.visitInsn(Opcodes.ISUB);// this.height-10
+					defaultVisitor.visitInsn(Opcodes.ISUB);// this.height-20
 					defaultVisitor.visitLdcInsn(16777215);// LDC INTEGER 16777215
 					defaultVisitor.visitVarInsn(Opcodes.ILOAD, 10);// ILOAD 10[var10]
 					defaultVisitor.visitInsn(Opcodes.IOR);// 16777215|var10
@@ -107,7 +108,7 @@ public class ModifyTitleScreen extends ClassVisitor {
 					defaultVisitor.visitFieldInsn(Opcodes.GETFIELD, "net/minecraft/client/gui/screens/TitleScreen",
 							"height", "I");// GETFIELD this.height
 					defaultVisitor.visitIntInsn(Opcodes.BIPUSH, 20);// bipush 20
-					defaultVisitor.visitInsn(Opcodes.ISUB);// this.height-10
+					defaultVisitor.visitInsn(Opcodes.ISUB);// this.height-20
 					defaultVisitor.visitLdcInsn(16777215);// LDC INTEGER 16777215
 					defaultVisitor.visitVarInsn(Opcodes.ILOAD, 9);// ILOAD 9[var9]
 					defaultVisitor.visitInsn(Opcodes.IOR);// 16777215|var9

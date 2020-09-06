@@ -36,7 +36,7 @@ public class FileRemapper {
 		changeBrand();
 		// zhuang beta de dai ma
 		hackTheName();
-		System.out.println("Class mapping over, now start to pack it into JAR. Please wait jar.exe packing the files.");
+		RemapperMain.logger.info("Class mapping over, now start to pack it into JAR. Please wait jar.exe packing the files.");
 		runPack(dest);
 	}
 
@@ -145,7 +145,7 @@ public class FileRemapper {
 
 	private void changeBrand() throws IOException {
 		Function<ClassReader, ClassWriter> func = reader -> {
-			ClassWriter writer = new ClassStringReplacer("vanilla", "remapped by Nickid2018");
+			ClassWriter writer = new ClassStringReplacer("vanilla", "remapped");
 			reader.accept(writer, 0);
 			return writer;
 		};
@@ -166,7 +166,7 @@ public class FileRemapper {
 	public static void runPack(String dest) throws IOException, InterruptedException {
 		Runtime.getRuntime()
 				.exec("jar cvfm " + dest + " " + tmpLocation + "\\META-INF\\MANIFEST.MF -C " + tmpLocation + " .");
-		System.out.println("Minecraft has been remapped successfully.");
+		RemapperMain.logger.info("Minecraft has been remapped successfully.");
 	}
 
 	public String getNowFile() {

@@ -4,8 +4,7 @@ import java.io.*;
 import java.util.*;
 import java.net.*;
 import org.apache.commons.io.*;
-
-import com.github.nickid2018.util.ClassUtils;
+import com.github.nickid2018.util.*;
 
 public class OfficalFormat extends RemapperFormat {
 
