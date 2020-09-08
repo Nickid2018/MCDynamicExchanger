@@ -21,4 +21,8 @@ public class CommandResult {
 	public CommandSwitch getSwitch(String name) {
 		return switches.get(name);
 	}
+
+	public String getStringOrDefault(String name, String def) {
+		return switches.containsKey(name) ? switches.get(name).toString() : def;
+	}
 }

@@ -59,13 +59,14 @@ public class ModifyTitleScreen extends ClassVisitor {
 	public class HackRenderMethod extends MethodVisitor {
 
 		private boolean over = true;
-		private boolean is16;
+		// The render system has been rewriten in 1.16
+		private boolean above16;
 		private MethodVisitor defaultVisitor;
 
 		public HackRenderMethod(MethodVisitor defaultVisitor, boolean is16) {
 			super(Opcodes.ASM6, defaultVisitor);
 			this.defaultVisitor = defaultVisitor;
-			this.is16 = is16;
+			this.above16 = is16;
 		}
 
 		@Override
@@ -74,7 +75,7 @@ public class ModifyTitleScreen extends ClassVisitor {
 			// Insert Point: Before drawString at "Copyright Mojang AB"
 			if (over && name.equals("drawString")) {
 				over = false;
-				if (is16) {
+				if (above16) {
 					defaultVisitor.visitVarInsn(Opcodes.ALOAD, 1);// ALOAD 1[PoseStack]
 					defaultVisitor.visitVarInsn(Opcodes.ALOAD, 0);// ALOAD 0[this]
 					defaultVisitor.visitFieldInsn(Opcodes.GETFIELD, "net/minecraft/client/gui/screens/TitleScreen",

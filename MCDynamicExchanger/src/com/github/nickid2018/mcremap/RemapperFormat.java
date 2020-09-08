@@ -1,10 +1,17 @@
 package com.github.nickid2018.mcremap;
 
 import java.util.*;
+import com.github.nickid2018.mcremap.argparser.*;
 
 public abstract class RemapperFormat {
 
 	protected Map<String, RemapClass> remaps = new HashMap<>();
+
+	protected boolean detail;
+
+	public RemapperFormat(CommandResult result) {
+		detail = result.containsSwitch("-D");
+	}
 
 	public abstract void processInitMap(String position) throws Exception;
 

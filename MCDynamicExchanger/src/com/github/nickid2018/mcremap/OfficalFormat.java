@@ -5,23 +5,28 @@ import java.util.*;
 import java.net.*;
 import org.apache.commons.io.*;
 import com.github.nickid2018.util.*;
+import com.github.nickid2018.mcremap.argparser.*;
 
 public class OfficalFormat extends RemapperFormat {
 
-	private ByteArrayInputStream bais;
+	private ByteArrayInputStream fileBuffer;
 	private double all;
 
 	private Map<String, String> revClass = new HashMap<>();
+
+	public OfficalFormat(CommandResult result) {
+		super(result);
+	}
 
 	@Override
 	public void processInitMap(String position) throws Exception {
 		URL url = new URL(position);
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		IOUtils.copy(url.openStream(), baos);
-		bais = new ByteArrayInputStream(baos.toByteArray());
-		BufferedReader token = new BufferedReader(new InputStreamReader(bais));
+		fileBuffer = new ByteArrayInputStream(baos.toByteArray());
+		BufferedReader token = new BufferedReader(new InputStreamReader(fileBuffer));
 		token.mark(0);
-		all = bais.available();
+		all = fileBuffer.available();
 		String nowClass = null;
 		String toClass = null;
 		String nowStr;
@@ -37,11 +42,13 @@ public class OfficalFormat extends RemapperFormat {
 				toClass = splits[1];
 				remaps.put(toClass, new RemapClass(toClass, nowClass));
 				revClass.put(nowClass, toClass);
+				if (detail)
+					RemapperMain.logger.info("Class Entry: " + toClass + " to " + nowClass);
 			}
 		}
 		token.close();
-		bais.reset();
-		token = new BufferedReader(new InputStreamReader(bais));
+		fileBuffer.reset();
+		token = new BufferedReader(new InputStreamReader(fileBuffer));
 		RemapClass nowClazz = null;
 		while ((nowStr = token.readLine()) != null) {
 			if (nowStr.startsWith("#"))
@@ -63,11 +70,19 @@ public class OfficalFormat extends RemapperFormat {
 					}
 					nowTo.append(")");
 					nowTo.append(ClassUtils.mapToSig(descs[0], revClass));
-					nowClazz.methodMappings.put(nowTo.toString().trim(), descs[1].split("\\(")[0].trim());
+					String source = nowTo.toString().trim();
+					String to = descs[1].split("\\(")[0].trim();
+					nowClazz.methodMappings.put(source, to);
+					if (detail)
+						RemapperMain.logger.info("Method Entry: " + source + " to " + to);
 				} else {
 					// Field
 					String[] splits = now.trim().split(" -> ");
-					nowClazz.fieldMappings.put(splits[1], splits[0].split(" ")[1]);
+					String source = splits[1];
+					String to = splits[0].split(" ")[1];
+					nowClazz.fieldMappings.put(source, to);
+					if (detail)
+						RemapperMain.logger.info("Field Entry: " + source + " to " + to);
 				}
 			} else {
 				// Class
@@ -76,14 +91,16 @@ public class OfficalFormat extends RemapperFormat {
 				nowClass = splits[0];
 				toClass = splits[1];
 				nowClazz = remaps.get(toClass);
+				if (detail)
+					RemapperMain.logger.info("Now Class: " + toClass + " (" + nowClass + ")");
 			}
 		}
 	}
 
 	@Override
 	public synchronized double getProcessInValue() throws Exception {
-		if (bais == null)
+		if (fileBuffer == null)
 			return 0;
-		return 1 - ((double) bais.available()) / all;
+		return 1 - ((double) fileBuffer.available()) / all;
 	}
 }

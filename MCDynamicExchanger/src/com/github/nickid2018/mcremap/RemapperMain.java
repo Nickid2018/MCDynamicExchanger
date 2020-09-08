@@ -6,29 +6,15 @@ public class RemapperMain {
 
 	public static ISystemLogger logger;
 
-	private static String dest;
-
 	public static void main(String[] args) throws Exception {
 		logger = new DefaultConsoleLogger();
-		CommandModel model = new CommandModel();
-		UnorderSwitchTable table = new UnorderSwitchTable();
-		model.switches.add(table);
-		table.addSwitch("--output", new StringArgumentSwitch("--output"));
-		table.addSwitch("--tmpdir", new StringArgumentSwitch("--tmpdir"));
-		model.switches.add(new StringSwitch("mapping_url"));
-		model.switches.add(new StringSwitch("mc_file"));
 		try {
-			CommandResult result = model.parse(args);
-			OfficalFormat f = new OfficalFormat();
-			f.processInitMap(result.getSwitch("mapping_url").toString());
+			CommandResult result = getResult(args);
+			OfficalFormat format = new OfficalFormat(result);
+			format.processInitMap(result.getSwitch("mapping_url").toString());
 			logger.info("Generated class mapping");
 			FileRemapper remapper = new FileRemapper();
-			dest = "remapped.jar";
-			if (result.containsSwitch("--output"))
-				dest = result.getSwitch("--output").toString();
-			if (result.containsSwitch("--tmpdir"))
-				FileRemapper.tmpLocation = result.getSwitch("--tmpdir").toString();
-			remapper.remapAll(result.getSwitch("mc_file").toString(), f, dest);
+			remapper.remapAll(result, format);
 		} catch (CommandParseException e) {
 			RemapperMain.logger.error("Command is illegal!", e);
 		} catch (Throwable e) {
@@ -36,4 +22,16 @@ public class RemapperMain {
 		}
 	}
 
+	private static CommandResult getResult(String[] args) throws CommandParseException {
+		CommandModel model = new CommandModel();
+		UnorderSwitchTable table = new UnorderSwitchTable();
+		model.switches.add(table);
+		table.addLiteral(new LiteralSwitch("-Nh", true));// No hacks
+		table.addLiteral(new LiteralSwitch("-D", true));// Detail Output
+		table.addSwitch("--output", new StringArgumentSwitch("--output"));// Output File
+		table.addSwitch("--tmpdir", new StringArgumentSwitch("--tmpdir"));// Temporary Directory
+		model.switches.add(new StringSwitch("mapping_url"));// URL of mapping
+		model.switches.add(new StringSwitch("mc_file"));// Minecraft Main JAR
+		return model.parse(args);
+	}
 }

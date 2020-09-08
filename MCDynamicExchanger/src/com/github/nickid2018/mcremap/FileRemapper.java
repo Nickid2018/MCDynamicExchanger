@@ -9,17 +9,21 @@ import org.objectweb.asm.tree.*;
 import org.apache.commons.io.*;
 import com.github.nickid2018.util.*;
 import org.objectweb.asm.commons.*;
+import com.github.nickid2018.mcremap.argparser.*;
 
 public class FileRemapper {
 
-	public static String tmpLocation = System.getProperty("java.io.tmpdir") + "\\MC-Remap";
+	public String tmpLocation;
 
 	private String nowFile;
 	private double dealed = 0;
 	private double all;
+	private boolean detail;
 
-	public void remapAll(String location, RemapperFormat format, String dest) throws Exception {
-		ZipFile file = new ZipFile(new File(location));
+	public void remapAll(CommandResult result, RemapperFormat format) throws Exception {
+		tmpLocation = result.getStringOrDefault("--tmpdir", System.getProperty("java.io.tmpdir") + "\\MC-Remap");
+		detail = result.containsSwitch("-D");
+		ZipFile file = new ZipFile(new File(result.getSwitch("mc_file").toString()));
 		all = file.size() * 3;// Run 3 times
 		cleanUpDirectory();
 		// Generate Class Extends Tree
@@ -30,18 +34,22 @@ public class FileRemapper {
 		file.close();
 		// MANIFEST.MF
 		recreateManifest();
-		// Remove Modded Check
-		removeModCheck();
-		// Change Brand
-		changeBrand();
-		// zhuang beta de dai ma
-		hackTheName();
-		RemapperMain.logger.info("Class mapping over, now start to pack it into JAR. Please wait jar.exe packing the files.");
-		runPack(dest);
+		if (!result.containsSwitch("-Nh")) {
+			// Remove Modded Check
+			removeModCheck();
+			// Change Brand
+			changeBrand();
+			// Add Remapped Mark
+			hackTheName();
+		}
+		RemapperMain.logger
+				.info("Class remapping over, now start to pack it into JAR, please wait jar.exe packing the files");
+		runPack(result.getStringOrDefault("--output", "remapped.jar"));
 	}
 
-	private static final void cleanUpDirectory() throws IOException {
+	private final void cleanUpDirectory() throws IOException {
 		FileUtils.deleteDirectory(new File(tmpLocation));
+		RemapperMain.logger.info("Cleaned up temporary directory");
 	}
 
 	private final void addPlainClasses(ZipFile file, RemapperFormat format) throws IOException {
@@ -52,7 +60,7 @@ public class FileRemapper {
 			if (!(nowFile = entry.getName()).endsWith(".class"))
 				continue;
 			ClassReader reader = new ClassReader(IOUtils.toByteArray(file.getInputStream(entry)));
-			String className = reader.getClassName().replace('/', '.');
+			String className = ClassUtils.toBinaryName(reader.getClassName());
 			RemapClass clazz = format.remaps.get(className);
 			if (clazz == null) {
 				ClassNode node = new ClassNode(Opcodes.ASM6);
@@ -67,8 +75,11 @@ public class FileRemapper {
 					FieldNode fl = (FieldNode) flo;
 					clazz.fieldMappings.put(fl.name, fl.name);
 				}
+				if (detail)
+					RemapperMain.logger.info("Add unobscured class: " + className);
 			}
 		}
+		RemapperMain.logger.info("Added all unobscured classes");
 	}
 
 	private final void generateExtendTree(ZipFile file, RemapperFormat format) throws IOException {
@@ -83,7 +94,10 @@ public class FileRemapper {
 			clazz.superClasses.add(format.remaps.get(ClassUtils.toBinaryName(reader.getSuperName())));
 			for (String name : reader.getInterfaces())
 				clazz.superClasses.add(format.remaps.get(ClassUtils.toBinaryName(name)));
+			if (detail)
+				RemapperMain.logger.info("Generate inherit tree: " + reader.getClassName());
 		}
+		RemapperMain.logger.info("Generated all inherit trees");
 	}
 
 	private final void remapAllClasses(ZipFile file, RemapperFormat format) throws IOException {
@@ -104,20 +118,25 @@ public class FileRemapper {
 			reader.accept(new ClassRemapper(writer, remapper), 0);
 			String className = entry.getName().replace('/', '.');
 			className = className.substring(0, className.length() - 6);
-			write(format.remaps.get(className).mapName().replace('.', '\\') + ".class", writer.toByteArray());
+			byte[] array = writer.toByteArray();
+			if (detail)
+				RemapperMain.logger.info("Remapping class: " + className + " (Length:" + array.length + ")");
+			write(format.remaps.get(className).mapName().replace('.', '\\') + ".class", array);
 		}
+		RemapperMain.logger.info("Remapped all classes");
 	}
 
-	private static final void recreateManifest() throws IOException {
+	private void recreateManifest() throws IOException {
 		File tmpMETA_INF = new File(tmpLocation, "META-INF");
 		tmpMETA_INF.mkdir();
 		File tmpMF = new File(tmpMETA_INF, "MANIFEST.MF");
 		FileWriter writer = new FileWriter(tmpMF);
 		IOUtils.write("Manifest-Version: 1.0\r\n" + "Main-Class: net.minecraft.client.main.Main\r\n" + "", writer);
 		writer.close();
+		RemapperMain.logger.info("Recreated manifest");
 	}
 
-	private static final void write(String file, byte[] in) throws IOException {
+	private void write(String file, byte[] in) throws IOException {
 		File create = new File(tmpLocation + "\\" + file.replace('/', '\\'));
 		if (!create.getParentFile().isDirectory())
 			create.getParentFile().mkdirs();
@@ -133,6 +152,7 @@ public class FileRemapper {
 			reader.accept(new RemoveModCheck(writer), 0);
 			return writer;
 		});
+		RemapperMain.logger.info("Removed modding check");
 	}
 
 	private void hackTheName() throws IOException {
@@ -141,6 +161,7 @@ public class FileRemapper {
 			reader.accept(new ModifyTitleScreen(writer), 0);
 			return writer;
 		});
+		RemapperMain.logger.info("Modified Title Screen");
 	}
 
 	private void changeBrand() throws IOException {
@@ -151,9 +172,10 @@ public class FileRemapper {
 		};
 		doHacks("net.minecraft.server.MinecraftServer", func);
 		doHacks("net.minecraft.client.ClientBrandRetriever", func);
+		RemapperMain.logger.info("Modified Brand Tag");
 	}
 
-	private static void doHacks(String className, Function<ClassReader, ClassWriter> func) throws IOException {
+	private void doHacks(String className, Function<ClassReader, ClassWriter> func) throws IOException {
 		InputStream is = new FileInputStream(tmpLocation + "\\" + className.replace('.', '\\') + ".class");
 		ClassReader reader = new ClassReader(IOUtils.toByteArray(is));
 		is.close();
@@ -163,7 +185,7 @@ public class FileRemapper {
 		os.close();
 	}
 
-	public static void runPack(String dest) throws IOException, InterruptedException {
+	public void runPack(String dest) throws IOException, InterruptedException {
 		Runtime.getRuntime()
 				.exec("jar cvfm " + dest + " " + tmpLocation + "\\META-INF\\MANIFEST.MF -C " + tmpLocation + " .");
 		RemapperMain.logger.info("Minecraft has been remapped successfully.");
