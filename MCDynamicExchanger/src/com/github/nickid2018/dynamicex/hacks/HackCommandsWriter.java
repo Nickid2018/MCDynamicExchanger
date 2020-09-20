@@ -2,13 +2,10 @@ package com.github.nickid2018.dynamicex.hacks;
 
 import org.objectweb.asm.*;
 
-public class HackCommandsWriter extends ClassVisitor {
-
-	private ClassWriter writer;
+public class HackCommandsWriter extends AbstractHackWriter {
 
 	public HackCommandsWriter(ClassWriter writer) {
-		super(Opcodes.ASM6, writer);
-		this.writer = writer;
+		super(writer);
 	}
 
 	@Override

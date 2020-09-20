@@ -5,13 +5,10 @@ import net.minecraft.*;
 import org.objectweb.asm.*;
 import com.github.nickid2018.dynamicex.*;
 
-public class HackCrashReportWriter extends ClassVisitor {
-
-	private ClassWriter writer;
+public class HackCrashReportWriter extends AbstractHackWriter {
 
 	public HackCrashReportWriter(ClassWriter writer) {
-		super(Opcodes.ASM6, writer);
-		this.writer = writer;
+		super(writer);
 	}
 
 	@Override
