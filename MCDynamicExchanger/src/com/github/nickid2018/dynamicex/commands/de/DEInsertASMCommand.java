@@ -1,11 +1,10 @@
-package com.github.nickid2018.dynamicex.commands;
+package com.github.nickid2018.dynamicex.commands.de;
 
 import java.io.*;
 import java.util.function.*;
 import org.objectweb.asm.*;
 import java.lang.instrument.*;
 import com.mojang.brigadier.*;
-import org.apache.commons.io.*;
 import net.minecraft.commands.*;
 import com.github.nickid2018.util.*;
 import net.minecraft.network.chat.*;
@@ -14,6 +13,7 @@ import com.mojang.brigadier.exceptions.*;
 import com.mojang.brigadier.arguments.*;
 import com.github.nickid2018.dynamicex.*;
 import com.github.nickid2018.dynamicex.debug.*;
+import com.github.nickid2018.dynamicex.commands.*;
 
 public class DEInsertASMCommand {
 
@@ -29,9 +29,9 @@ public class DEInsertASMCommand {
 				.requires(context -> context.getServer().isSingleplayer() || context.hasPermission(3))
 				.then(Commands.argument("className", ClassArgumentType.classes()).then(Commands
 						.argument("lineNumber", IntegerArgumentType.integer())
-						.then(Commands.argument("isRedirectable", BoolArgumentType.bool())
-								.then(Commands.literal("print_out").then(Commands
-										.argument("isErrorStream", BoolArgumentType.bool())
+						.then(Commands.argument("isRedirectable", BoolArgumentType.bool()).then(Commands
+								.literal("print_out")
+								.then(Commands.argument("isErrorStream", BoolArgumentType.bool())
 										.then(Commands.argument("printString", StringArgumentType.greedyString())
 												.executes(DEInsertASMCommand::doInsertPrint))))
 								.then(Commands.literal("dump").executes(DEInsertASMCommand::doInsertDump))))));
@@ -70,11 +70,8 @@ public class DEInsertASMCommand {
 	private static void doInvokeReplace(String className, boolean isRedirectable, int lineNumber,
 			ToIntFunction<MethodVisitor> function) throws CommandSyntaxException {
 		try {
-			byte[] data = isRedirectable && DynamicClassesHolder.isCovered(className)
-					? DynamicClassesHolder.getCoveredClass(className).definition.getDefinitionClassFile()
-					: IOUtils.toByteArray(DEMakeASMCommand.class
-							.getResourceAsStream("/" + ClassUtils.toInternalName(className) + ".class"));
-			LineNumberInserter inserter = new LineNumberInserter(data, new int[] { lineNumber }, function);
+			LineNumberInserter inserter = new LineNumberInserter(ClassUtils.getClassBytes(className, isRedirectable),
+					new int[] { lineNumber }, function);
 			DynamicClassesHolder.exchangeClassData(className, inserter.toByteArray());
 		} catch (ClassNotFoundException e) {
 			throw INSERT_COMMAND_ERROR.create("CLASS_NOT_FOUND", e);

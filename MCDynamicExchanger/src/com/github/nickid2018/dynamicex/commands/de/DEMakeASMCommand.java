@@ -1,4 +1,4 @@
-package com.github.nickid2018.dynamicex.commands;
+package com.github.nickid2018.dynamicex.commands.de;
 
 import java.io.*;
 import com.mojang.brigadier.*;
@@ -11,6 +11,7 @@ import com.mojang.brigadier.exceptions.*;
 import com.mojang.brigadier.arguments.*;
 import com.github.nickid2018.dynamicex.*;
 import com.github.nickid2018.asmexecutor.gen.*;
+import com.github.nickid2018.dynamicex.commands.*;
 
 public class DEMakeASMCommand {
 

@@ -1,17 +1,18 @@
 package com.github.nickid2018.dynamicex.gui;
 
+import java.util.*;
 import net.minecraft.client.*;
 import net.minecraft.client.gui.*;
+import com.github.nickid2018.dynamicex.objects.*;
 
 public class ObjectInformationsOverlay extends GuiComponent {
-	
-	public static final int DEFAULT_COLOR = 0xE0E0E0;
 
-	private Minecraft minecraft;
+	public static final int DEFAULT_COLOR = 0xE0E0E0;
+	public static final int DEFAULT_BACKGROUND = 0x90505050;
+
 	private Font font;
 
 	public ObjectInformationsOverlay(Minecraft mc) {
-		minecraft = mc;
 		font = mc.font;
 	}
 
@@ -23,6 +24,31 @@ public class ObjectInformationsOverlay extends GuiComponent {
 	 * @param mayPoseStack
 	 */
 	public void renderGlobal(Object mayPoseStack) {
-		RenderInterface.renderString(mayPoseStack, font, "OHHHHH", 10, 10, DEFAULT_COLOR);
+		ObjectInfosHolder.elements.forEach((name, element) -> renderElement(mayPoseStack, name, element));
+	}
+
+	public void renderElement(Object mayPoseStack, String name, ObjectElement element) {
+		int x0 = element.x0;
+		int y0 = element.y0;
+		Map<String, String> formatted = element.getFormattedInformation();
+		Set<Map.Entry<String, String>> entries = formatted.entrySet();
+		if (entries.size() == 0)
+			return;
+		int maxHeadLength = 0, maxLength = 0;
+		for (Map.Entry<String, String> entry : entries) {
+			maxHeadLength = Math.max(maxHeadLength, font.width(entry.getKey()));
+			maxLength = Math.max(maxLength, font.width(entry.getValue()));
+		}
+		maxHeadLength += 2;
+		int maxAll = maxHeadLength + maxLength;
+		int start2 = x0 + maxHeadLength;
+		RenderInterface.renderFill(mayPoseStack, x0, y0, x0 + maxAll, y0 + 9 + 9 * entries.size(), DEFAULT_BACKGROUND);
+		RenderInterface.renderString(mayPoseStack, font, name, x0 + (maxAll - font.width(name)) / 2, y0, 0xFF0000);
+		int now = 1;
+		for (Map.Entry<String, String> entry : entries) {
+			RenderInterface.renderString(mayPoseStack, font, entry.getKey(), x0, y0 + 9 * now, DEFAULT_COLOR);
+			RenderInterface.renderString(mayPoseStack, font, entry.getValue(), start2, y0 + 9 * now, 0x00FF00);
+			now++;
+		}
 	}
 }

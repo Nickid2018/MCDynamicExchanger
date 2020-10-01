@@ -1,8 +1,18 @@
 package com.github.nickid2018.util;
 
+import java.io.*;
 import java.util.*;
+import org.apache.commons.io.*;
+import com.github.nickid2018.dynamicex.*;
 
 public class ClassUtils {
+
+	public static final byte[] getClassBytes(String className, boolean isRedirectable) throws IOException {
+		return isRedirectable && DynamicClassesHolder.isCovered(className)
+				? DynamicClassesHolder.getCoveredClass(className).definition.getDefinitionClassFile()
+				: IOUtils.toByteArray(
+						ClassUtils.class.getResourceAsStream("/" + ClassUtils.toInternalName(className) + ".class"));
+	}
 
 	public static final String toBinaryName(String name) {
 		return name.replace('/', '.');

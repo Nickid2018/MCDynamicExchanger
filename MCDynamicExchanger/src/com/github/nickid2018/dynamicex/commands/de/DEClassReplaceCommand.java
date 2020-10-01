@@ -1,4 +1,4 @@
-package com.github.nickid2018.dynamicex.commands;
+package com.github.nickid2018.dynamicex.commands.de;
 
 import java.io.*;
 import java.lang.instrument.*;
@@ -10,8 +10,9 @@ import com.mojang.brigadier.context.*;
 import com.mojang.brigadier.arguments.*;
 import com.mojang.brigadier.exceptions.*;
 import com.github.nickid2018.dynamicex.*;
+import com.github.nickid2018.dynamicex.commands.*;
 
-public class DEASMClassReplaceCommand {
+public class DEClassReplaceCommand {
 
 	public static final Dynamic2CommandExceptionType REPLACE_ERROR = new Dynamic2CommandExceptionType(
 			(errortype, error) -> {
@@ -21,15 +22,15 @@ public class DEASMClassReplaceCommand {
 			});
 
 	public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
-		dispatcher.register(Commands.literal("de:asmreplace")
+		dispatcher.register(Commands.literal("de:replace")
 				.requires(context -> context.getServer().isSingleplayer() || context.hasPermission(3))
 				.then(Commands.argument("className", ClassArgumentType.classes())
 						.then(Commands.literal("file")
-								.then(Commands.argument("filePath", StringArgumentType.greedyString()).executes(
-										context -> doReplace(context, DynamicClassesHolder::exchangeASMClass))))
+								.then(Commands.argument("filePath", StringArgumentType.greedyString())
+										.executes(context -> doReplace(context, DynamicClassesHolder::exchangeClass))))
 						.then(Commands.literal("url")
 								.then(Commands.argument("filePath", StringArgumentType.greedyString()).executes(
-										context -> doReplace(context, DynamicClassesHolder::exchangeASMClassURL))))));
+										context -> doReplace(context, DynamicClassesHolder::exchangeClassURL))))));
 	}
 
 	private static int doReplace(CommandContext<CommandSourceStack> context, BiExConsumer<String, String> command)
@@ -37,8 +38,6 @@ public class DEASMClassReplaceCommand {
 		try {
 			command.accept(ClassArgumentType.getClassName(context, "className"),
 					StringArgumentType.getString(context, "filePath"));
-		} catch (IllegalArgumentException e) {
-			throw REPLACE_ERROR.create("FILE_FORMAT_ERROR", e);
 		} catch (ClassNotFoundException e) {
 			throw REPLACE_ERROR.create("CLASS_NOT_FOUND", e);
 		} catch (IOException e) {

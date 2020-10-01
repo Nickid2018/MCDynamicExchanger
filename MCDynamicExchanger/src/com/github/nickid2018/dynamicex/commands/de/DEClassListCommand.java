@@ -1,4 +1,4 @@
-package com.github.nickid2018.dynamicex.commands;
+package com.github.nickid2018.dynamicex.commands.de;
 
 import java.util.*;
 import java.util.regex.*;

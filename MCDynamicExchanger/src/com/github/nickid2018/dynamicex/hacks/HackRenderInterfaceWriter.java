@@ -37,6 +37,22 @@ public class HackRenderInterfaceWriter extends AbstractHackWriter {
 				defaultVisitor.visitMaxs(6, 6);
 				defaultVisitor.visitEnd();
 			}
+			if (name.equals("renderFill")) {
+				if (SharedAfterLoadConstants.is16) {
+					defaultVisitor.visitVarInsn(Opcodes.ALOAD, 0);
+					defaultVisitor.visitTypeInsn(Opcodes.CHECKCAST, "Lcom/mojang/blaze3d/vertex/PoseStack;");
+				}
+				defaultVisitor.visitVarInsn(Opcodes.ILOAD, 1);
+				defaultVisitor.visitVarInsn(Opcodes.ILOAD, 2);
+				defaultVisitor.visitVarInsn(Opcodes.ILOAD, 3);
+				defaultVisitor.visitVarInsn(Opcodes.ILOAD, 4);
+				defaultVisitor.visitVarInsn(Opcodes.ILOAD, 5);
+				defaultVisitor.visitMethodInsn(Opcodes.INVOKESTATIC, "net/minecraft/client/gui/GuiComponent", "fill",
+						SharedAfterLoadConstants.is16 ? "(Lcom/mojang/math/Matrix4f;IIIII)V" : "(IIIII)V", false);
+				defaultVisitor.visitInsn(Opcodes.RETURN);
+				defaultVisitor.visitMaxs(6, 6);
+				defaultVisitor.visitEnd();
+			}
 		}
 
 	}

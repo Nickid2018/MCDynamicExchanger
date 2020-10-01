@@ -14,4 +14,7 @@ public class RenderInterface {
 	public static final void renderString(Object mayPoseStack, Font font, String string, float xpos, float ypos,
 			int color) {
 	}
+
+	public static final void renderFill(Object mayPoseStack, int x0, int y0, int x1, int y1, int color) {
+	}
 }

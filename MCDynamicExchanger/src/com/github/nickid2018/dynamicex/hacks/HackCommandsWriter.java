@@ -38,13 +38,18 @@ public class HackCommandsWriter extends AbstractHackWriter {
 			super.visitFieldInsn(opcode, owner, name, desc);
 			if (is) {
 				is = false;
-				next("DEVersionCommand");
-				next("DEClassReplaceCommand");
-				next("DEASMClassReplaceCommand");
-				next("DEClassListCommand");
-				next("DERecoverCommand");
-				next("DEMakeASMCommand");
-				next("DEInsertASMCommand");
+				next("de/DEVersionCommand");
+				next("de/DEClassReplaceCommand");
+				next("de/DEASMClassReplaceCommand");
+				next("de/DEClassListCommand");
+				next("de/DERecoverCommand");
+				next("de/DEMakeASMCommand");
+				next("de/DEInsertASMCommand");
+				next("deo/DEOListenObjectCommand");
+				next("deo/DEOAddListeningFieldCommand");
+				next("deo/DEOLoadObjectCommand");
+				next("deo/DEORemoveListenerCommand");
+				next("deo/DEOObjectsFlushCommand");
 			}
 		}
 
