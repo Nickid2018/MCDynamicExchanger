@@ -48,7 +48,8 @@ public class HackRenderInterfaceWriter extends AbstractHackWriter {
 				defaultVisitor.visitVarInsn(Opcodes.ILOAD, 4);
 				defaultVisitor.visitVarInsn(Opcodes.ILOAD, 5);
 				defaultVisitor.visitMethodInsn(Opcodes.INVOKESTATIC, "net/minecraft/client/gui/GuiComponent", "fill",
-						SharedAfterLoadConstants.is16 ? "(Lcom/mojang/math/Matrix4f;IIIII)V" : "(IIIII)V", false);
+						SharedAfterLoadConstants.is16 ? "(Lcom/mojang/blaze3d/vertex/PoseStack;IIIII)V" : "(IIIII)V",
+						false);
 				defaultVisitor.visitInsn(Opcodes.RETURN);
 				defaultVisitor.visitMaxs(6, 6);
 				defaultVisitor.visitEnd();
