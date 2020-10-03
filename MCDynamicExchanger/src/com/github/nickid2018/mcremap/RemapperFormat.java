@@ -5,7 +5,8 @@ import com.github.nickid2018.mcremap.argparser.*;
 
 public abstract class RemapperFormat {
 
-	protected Map<String, RemapClass> remaps = new HashMap<>();
+	public Map<String, RemapClass> remaps = new HashMap<>();
+	public Map<String, String> revClass = new HashMap<>();
 
 	protected boolean detail;
 

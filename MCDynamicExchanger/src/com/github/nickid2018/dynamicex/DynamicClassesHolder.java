@@ -18,8 +18,10 @@ public class DynamicClassesHolder {
 		InputStream is = new FileInputStream(file);
 		byte[] bytes = IOUtils.toByteArray(is);
 		is.close();
-		ClassDefinition definition = new ClassDefinition(Class.forName(className), bytes);
+		ClassDefinition definition = new ClassDefinition(Class.forName(className),
+				ClassNameTransformer.changeClassData(bytes));
 		DEProgramInterface.instrumention.redefineClasses(definition);
+		System.out.println("Exchanged Class: " + className);
 		dynamicClasses.put(className, new DynamicClass("file:" + file, definition));
 	}
 
@@ -32,6 +34,7 @@ public class DynamicClassesHolder {
 		genasm.make();
 		ClassDefinition definition = new ClassDefinition(Class.forName(className), genasm.generated);
 		DEProgramInterface.instrumention.redefineClasses(definition);
+		System.out.println("Exchanged Class: " + className);
 		dynamicClasses.put(className, new DynamicClass("asmfile:" + file, definition));
 	}
 
@@ -40,8 +43,10 @@ public class DynamicClassesHolder {
 		InputStream is = new URL(file).openStream();
 		byte[] bytes = IOUtils.toByteArray(is);
 		is.close();
-		ClassDefinition definition = new ClassDefinition(Class.forName(className), bytes);
+		ClassDefinition definition = new ClassDefinition(Class.forName(className),
+				ClassNameTransformer.changeClassData(bytes));
 		DEProgramInterface.instrumention.redefineClasses(definition);
+		System.out.println("Exchanged Class: " + className);
 		dynamicClasses.put(className, new DynamicClass("file-url:" + file, definition));
 	}
 
@@ -54,13 +59,16 @@ public class DynamicClassesHolder {
 		genasm.make();
 		ClassDefinition definition = new ClassDefinition(Class.forName(className), genasm.generated);
 		DEProgramInterface.instrumention.redefineClasses(definition);
+		System.out.println("Exchanged Class: " + className);
 		dynamicClasses.put(className, new DynamicClass("asmfile-url:" + file, definition));
 	}
 
 	public static final void exchangeClassData(String className, byte[] data)
 			throws IOException, ClassNotFoundException, UnmodifiableClassException {
-		ClassDefinition definition = new ClassDefinition(Class.forName(className), data);
+		ClassDefinition definition = new ClassDefinition(Class.forName(className),
+				ClassNameTransformer.changeClassData(data));
 		DEProgramInterface.instrumention.redefineClasses(definition);
+		System.out.println("Exchanged Class: " + className);
 		dynamicClasses.put(className, new DynamicClass("data:" + className, definition));
 	}
 
@@ -75,6 +83,7 @@ public class DynamicClassesHolder {
 		is.close();
 		ClassDefinition definition = new ClassDefinition(Class.forName(className), bytes);
 		DEProgramInterface.instrumention.redefineClasses(definition);
+		System.out.println("Exchanged Class: " + className);
 		dynamicClasses.remove(className);
 	}
 

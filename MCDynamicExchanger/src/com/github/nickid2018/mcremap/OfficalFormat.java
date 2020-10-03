@@ -1,7 +1,6 @@
 package com.github.nickid2018.mcremap;
 
 import java.io.*;
-import java.util.*;
 import java.net.*;
 import org.apache.commons.io.*;
 import com.github.nickid2018.util.*;
@@ -11,8 +10,6 @@ public class OfficalFormat extends RemapperFormat {
 
 	private ByteArrayInputStream fileBuffer;
 	private double all;
-
-	private Map<String, String> revClass = new HashMap<>();
 
 	public OfficalFormat(CommandResult result) {
 		super(result);
@@ -40,7 +37,7 @@ public class OfficalFormat extends RemapperFormat {
 				String[] splits = now.split(" -> ");
 				nowClass = splits[0];
 				toClass = splits[1];
-				remaps.put(toClass, new RemapClass(toClass, nowClass));
+				remaps.put(toClass, new RemapClass(toClass, nowClass, this));
 				revClass.put(nowClass, toClass);
 				if (detail)
 					RemapperMain.logger.info("Class Entry: " + toClass + " to " + nowClass);

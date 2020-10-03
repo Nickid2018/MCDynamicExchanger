@@ -27,7 +27,7 @@ public class ListeningClassHolder {
 							"com/github/nickid2018/dynamicex/objects/ObjectInfosHolder", "putInfo",
 							"(Ljava/lang/String;Ljava/lang/Object;Ljava/lang/String;Ljava/lang/Object;)Z", false);
 					mv.visitInsn(Opcodes.POP);
-				});
+				}, now.getTypeName());
 		DynamicClassesHolder.exchangeClassData(now.getTypeName(), writer.toByteArray());
 		ObjectInfosHolder.elements.put(name, element);
 		element.x0 = x;

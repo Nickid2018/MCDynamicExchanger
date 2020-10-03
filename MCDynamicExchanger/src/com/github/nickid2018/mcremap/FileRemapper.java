@@ -5,7 +5,6 @@ import java.util.*;
 import java.util.zip.*;
 import java.util.function.*;
 import org.objectweb.asm.*;
-import org.objectweb.asm.tree.*;
 import org.apache.commons.io.*;
 import com.github.nickid2018.util.*;
 import org.objectweb.asm.commons.*;
@@ -24,11 +23,8 @@ public class FileRemapper {
 		tmpLocation = result.getStringOrDefault("--tmpdir", System.getProperty("java.io.tmpdir") + "\\MC-Remap");
 		detail = result.containsSwitch("-D");
 		ZipFile file = new ZipFile(new File(result.getSwitch("mc_file").toString()));
-		all = file.size() * 3;// Run 3 times
+		all = file.size();
 		cleanUpDirectory();
-		// Generate Class Extends Tree
-		addPlainClasses(file, format);
-		generateExtendTree(file, format);
 		// Remap
 		remapAllClasses(file, format);
 		file.close();
@@ -50,54 +46,6 @@ public class FileRemapper {
 	private final void cleanUpDirectory() throws IOException {
 		FileUtils.deleteDirectory(new File(tmpLocation));
 		RemapperMain.logger.info("Cleaned up temporary directory");
-	}
-
-	private final void addPlainClasses(ZipFile file, RemapperFormat format) throws IOException {
-		Enumeration<? extends ZipEntry> entries = file.entries();
-		while (entries.hasMoreElements()) {
-			dealed++;
-			ZipEntry entry = entries.nextElement();
-			if (!(nowFile = entry.getName()).endsWith(".class"))
-				continue;
-			ClassReader reader = new ClassReader(IOUtils.toByteArray(file.getInputStream(entry)));
-			String className = ClassUtils.toBinaryName(reader.getClassName());
-			RemapClass clazz = format.remaps.get(className);
-			if (clazz == null) {
-				ClassNode node = new ClassNode(Opcodes.ASM6);
-				reader.accept(node, ClassReader.SKIP_CODE);
-				clazz = new RemapClass(className, className);
-				format.remaps.put(className, clazz);
-				for (Object mno : node.methods) {
-					MethodNode mn = (MethodNode) mno;
-					clazz.methodMappings.put(mn.name + mn.desc, mn.name);
-				}
-				for (Object flo : node.fields) {
-					FieldNode fl = (FieldNode) flo;
-					clazz.fieldMappings.put(fl.name, fl.name);
-				}
-				if (detail)
-					RemapperMain.logger.info("Add unobscured class: " + className);
-			}
-		}
-		RemapperMain.logger.info("Added all unobscured classes");
-	}
-
-	private final void generateExtendTree(ZipFile file, RemapperFormat format) throws IOException {
-		Enumeration<? extends ZipEntry> entries = file.entries();
-		while (entries.hasMoreElements()) {
-			dealed++;
-			ZipEntry entry = entries.nextElement();
-			if (!(nowFile = entry.getName()).endsWith(".class"))
-				continue;
-			ClassReader reader = new ClassReader(IOUtils.toByteArray(file.getInputStream(entry)));
-			RemapClass clazz = format.remaps.get(ClassUtils.toBinaryName(reader.getClassName()));
-			clazz.superClasses.add(format.remaps.get(ClassUtils.toBinaryName(reader.getSuperName())));
-			for (String name : reader.getInterfaces())
-				clazz.superClasses.add(format.remaps.get(ClassUtils.toBinaryName(name)));
-			if (detail)
-				RemapperMain.logger.info("Generate inherit tree: " + reader.getClassName());
-		}
-		RemapperMain.logger.info("Generated all inherit trees");
 	}
 
 	private final void remapAllClasses(ZipFile file, RemapperFormat format) throws IOException {

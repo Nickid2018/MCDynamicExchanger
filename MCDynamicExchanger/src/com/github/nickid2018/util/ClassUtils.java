@@ -3,6 +3,7 @@ package com.github.nickid2018.util;
 import java.io.*;
 import java.util.*;
 import org.apache.commons.io.*;
+import com.github.nickid2018.mcremap.*;
 import com.github.nickid2018.dynamicex.*;
 
 public class ClassUtils {
@@ -54,5 +55,43 @@ public class ClassUtils {
 		default:
 			return "L" + revClass.getOrDefault(str, str).replace('.', '/') + ";";
 		}
+	}
+
+	public static final String remapSig(String str, RemapperFormat format) {
+		StringBuilder sb = new StringBuilder();
+		boolean isClass = false;
+		int startClassChar = 0;
+		for (int i = 0; i < str.length(); i++) {
+			char ch = str.charAt(i);
+			switch (ch) {
+			case 'I':
+			case 'F':
+			case 'D':
+			case 'J':
+			case 'Z':
+			case 'S':
+			case 'B':
+			case 'C':
+			case 'V':
+			case '[':
+			case '(':
+			case ')':
+				if (!isClass)
+					sb.append(ch);
+				break;
+			case 'L':
+				if (!isClass)
+					startClassChar = i + 1;
+				isClass = true;
+				break;
+			case ';':
+				String name = str.substring(startClassChar, i);
+				RemapClass clazz = format.remaps.get(toBinaryName(name));
+				sb.append(
+						"L" + toInternalName(clazz == null || clazz.remapName == null ? name : clazz.remapName) + ";");
+				isClass = false;
+			}
+		}
+		return sb.toString();
 	}
 }

@@ -19,7 +19,7 @@ public class SharedAfterLoadConstants {
 		logger = LogManager.getLogger("Dynamic Exchanger");
 		version = Minecraft.getInstance().getLaunchedVersion();
 		try {
-			Class.forName("com.mojang.blaze3d.vertex.PoseStack");
+			Class.forName(ClassNameTransformer.getClassName("com.mojang.blaze3d.vertex.PoseStack"));
 			is16 = true;
 		} catch (ClassNotFoundException e) {
 			is16 = false;

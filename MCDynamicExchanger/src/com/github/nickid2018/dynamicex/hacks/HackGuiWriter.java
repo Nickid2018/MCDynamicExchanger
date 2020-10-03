@@ -25,7 +25,9 @@ public class HackGuiWriter extends AbstractHackWriter {
 	public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
 		if (name.equals("<init>"))
 			return new HackInitMethod(super.visitMethod(access, name, desc, signature, exceptions));
-		if (name.equals("render"))
+		if (name.equals(ClassNameTransformer.getMethodName("net.minecraft.client.gui.Gui", "render(F)V"))
+				|| name.equals(ClassNameTransformer.getMethodName("net.minecraft.client.gui.Gui",
+						"render(Lcom/mojang/blaze3d/vertex/PoseStack;F)V")))
 			return new HackRenderMethod(super.visitMethod(access, name, desc, signature, exceptions));
 		return super.visitMethod(access, name, desc, signature, exceptions);
 	}
@@ -42,8 +44,9 @@ public class HackGuiWriter extends AbstractHackWriter {
 		@Override
 		public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf) {
 			super.visitMethodInsn(opcode, owner, name, desc, itf);
-			if (opcode == Opcodes.INVOKESPECIAL && owner.equals("net/minecraft/client/gui/GuiComponent")) {
-//				aload_0->new->dup-> invokespecial->putfield     
+			if (opcode == Opcodes.INVOKESPECIAL
+					&& owner.equals(ClassNameTransformer.getResourceName("net/minecraft/client/gui/GuiComponent"))) {
+//				aload_0->new->dup-> invokespecial->putfield 
 				defaultVisitor.visitVarInsn(Opcodes.ALOAD, 0);
 				defaultVisitor.visitTypeInsn(Opcodes.NEW,
 						"com/github/nickid2018/dynamicex/gui/ObjectInformationsOverlay");
@@ -74,8 +77,14 @@ public class HackGuiWriter extends AbstractHackWriter {
 //			1180: aload_0
 //		    1181: getfield      #151                // Field subtitleOverlay:Lnet/minecraft/client/gui/components/SubtitleOverlay;
 //		    1184: invokevirtual #540                // Method net/minecraft/client/gui/components/SubtitleOverlay.render:()V
-			if (opcode == Opcodes.INVOKEVIRTUAL && owner.equals("net/minecraft/client/gui/components/SubtitleOverlay")
-					&& name.equals("render")) {
+			if (opcode == Opcodes.INVOKEVIRTUAL
+					&& owner.equals(
+							ClassNameTransformer.getResourceName("net/minecraft/client/gui/components/SubtitleOverlay"))
+					&& (name.equals(ClassNameTransformer
+							.getMethodName("net.minecraft.client.gui.components.SubtitleOverlay", "render()V"))
+							|| name.equals(ClassNameTransformer.getMethodName(
+									"net.minecraft.client.gui.components.SubtitleOverlay",
+									"render(Lcom/mojang/blaze3d/vertex/PoseStack;)V")))) {
 				defaultVisitor.visitVarInsn(Opcodes.ALOAD, 0);
 				defaultVisitor.visitFieldInsn(Opcodes.GETFIELD, "net/minecraft/client/gui/Gui", "objectScreen",
 						"Lcom/github/nickid2018/dynamicex/gui/ObjectInformationsOverlay;");
