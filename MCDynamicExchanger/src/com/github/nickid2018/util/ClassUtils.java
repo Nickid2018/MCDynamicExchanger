@@ -15,6 +15,15 @@ public class ClassUtils {
 						ClassUtils.class.getResourceAsStream("/" + ClassUtils.toInternalName(className) + ".class"));
 	}
 
+	public static final boolean isClassExists(String name) {
+		try {
+			Class.forName(name, false, Thread.currentThread().getContextClassLoader());
+			return true;
+		} catch (ClassNotFoundException e) {
+			return false;
+		}
+	}
+
 	public static final String toBinaryName(String name) {
 		return name.replace('/', '.');
 	}

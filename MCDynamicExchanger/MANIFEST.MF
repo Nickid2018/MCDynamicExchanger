@@ -4,6 +4,4 @@ Premain-Class: com.github.nickid2018.dynamicex.DEProgramInterface
 Main-Class: com.github.nickid2018.mcremap.RemapperMain
 Can-Redefine-Classes: true
 Can-Retransform-Classes: true
-Class-Path: libs/asm-all-6.0_BETA.jar
-                  ../libraries/commons-io/commons-io/2.5/commons-io-2.5.jar
 

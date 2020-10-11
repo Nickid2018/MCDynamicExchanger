@@ -20,7 +20,7 @@ public class HackRenderInterfaceWriter extends AbstractHackWriter {
 			super(Opcodes.ASM6, name.equals("<init>") ? defaultVisitor : null);
 			if (name.equals("renderString")) {
 				defaultVisitor.visitVarInsn(Opcodes.ALOAD, 1);
-				if (SharedAfterLoadConstants.is16) {
+				if (HackGuiWriter.is16) {
 					defaultVisitor.visitVarInsn(Opcodes.ALOAD, 0);
 					defaultVisitor.visitTypeInsn(Opcodes.CHECKCAST,
 							ClassNameTransformer.getQualifiedName("com/mojang/blaze3d/vertex/PoseStack"));
@@ -32,10 +32,10 @@ public class HackRenderInterfaceWriter extends AbstractHackWriter {
 				defaultVisitor.visitMethodInsn(Opcodes.INVOKEVIRTUAL,
 						ClassNameTransformer.getResourceName("net/minecraft/client/gui/Font"),
 						ClassNameTransformer.getMethodName("net.minecraft.client.gui.Font",
-								"draw" + (SharedAfterLoadConstants.is16
+								"draw" + (HackGuiWriter.is16
 										? "(Lcom/mojang/blaze3d/vertex/PoseStack;Ljava/lang/String;FFI)I"
 										: "(Ljava/lang/String;FFI)I")),
-						SharedAfterLoadConstants.is16 ? "(Lcom/mojang/blaze3d/vertex/PoseStack;Ljava/lang/String;FFI)I"
+						HackGuiWriter.is16 ? "(Lcom/mojang/blaze3d/vertex/PoseStack;Ljava/lang/String;FFI)I"
 								: "(Ljava/lang/String;FFI)I",
 						false);
 				defaultVisitor.visitInsn(Opcodes.POP);
@@ -44,7 +44,7 @@ public class HackRenderInterfaceWriter extends AbstractHackWriter {
 				defaultVisitor.visitEnd();
 			}
 			if (name.equals("renderFill")) {
-				if (SharedAfterLoadConstants.is16) {
+				if (HackGuiWriter.is16) {
 					defaultVisitor.visitVarInsn(Opcodes.ALOAD, 0);
 					defaultVisitor.visitTypeInsn(Opcodes.CHECKCAST,
 							ClassNameTransformer.getQualifiedName("com/mojang/blaze3d/vertex/PoseStack"));
@@ -56,12 +56,9 @@ public class HackRenderInterfaceWriter extends AbstractHackWriter {
 				defaultVisitor.visitVarInsn(Opcodes.ILOAD, 5);
 				defaultVisitor.visitMethodInsn(Opcodes.INVOKESTATIC,
 						ClassNameTransformer.getResourceName("net/minecraft/client/gui/GuiComponent"),
-						ClassNameTransformer.getMethodName("net.minecraft.client.gui.GuiComponent",
-								"fill" + (SharedAfterLoadConstants.is16
-										? "(Lcom/mojang/blaze3d/vertex/PoseStack;IIIII)V"
-										: "(IIIII)V")),
-						SharedAfterLoadConstants.is16 ? "(Lcom/mojang/blaze3d/vertex/PoseStack;IIIII)V" : "(IIIII)V",
-						false);
+						ClassNameTransformer.getMethodName("net.minecraft.client.gui.GuiComponent", "fill"
+								+ (HackGuiWriter.is16 ? "(Lcom/mojang/blaze3d/vertex/PoseStack;IIIII)V" : "(IIIII)V")),
+						HackGuiWriter.is16 ? "(Lcom/mojang/blaze3d/vertex/PoseStack;IIIII)V" : "(IIIII)V", false);
 				defaultVisitor.visitInsn(Opcodes.RETURN);
 				defaultVisitor.visitMaxs(6, 6);
 				defaultVisitor.visitEnd();

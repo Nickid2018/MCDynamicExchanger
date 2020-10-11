@@ -10,6 +10,8 @@ public class HackGuiWriter extends AbstractHackWriter {
 	}
 
 	private boolean notFieldAdded = true;
+	
+	public static boolean is16 = false;
 
 	@Override
 	public FieldVisitor visitField(int access, String name, String desc, String signature, Object value) {
@@ -26,9 +28,12 @@ public class HackGuiWriter extends AbstractHackWriter {
 		if (name.equals("<init>"))
 			return new HackInitMethod(super.visitMethod(access, name, desc, signature, exceptions));
 		if (name.equals(ClassNameTransformer.getMethodName("net.minecraft.client.gui.Gui", "render(F)V"))
-				|| name.equals(ClassNameTransformer.getMethodName("net.minecraft.client.gui.Gui",
-						"render(Lcom/mojang/blaze3d/vertex/PoseStack;F)V")))
+				|| (name.equals(ClassNameTransformer.getMethodName("net.minecraft.client.gui.Gui",
+						"render(Lcom/mojang/blaze3d/vertex/PoseStack;F)V")))) {
+			is16 = name.equals(ClassNameTransformer.getMethodName("net.minecraft.client.gui.Gui",
+					"render(Lcom/mojang/blaze3d/vertex/PoseStack;F)V"));
 			return new HackRenderMethod(super.visitMethod(access, name, desc, signature, exceptions));
+		}
 		return super.visitMethod(access, name, desc, signature, exceptions);
 	}
 
@@ -81,14 +86,11 @@ public class HackGuiWriter extends AbstractHackWriter {
 					&& owner.equals(
 							ClassNameTransformer.getResourceName("net/minecraft/client/gui/components/SubtitleOverlay"))
 					&& (name.equals(ClassNameTransformer
-							.getMethodName("net.minecraft.client.gui.components.SubtitleOverlay", "render()V"))
-							|| name.equals(ClassNameTransformer.getMethodName(
-									"net.minecraft.client.gui.components.SubtitleOverlay",
-									"render(Lcom/mojang/blaze3d/vertex/PoseStack;)V")))) {
+							.getMethodName("net.minecraft.client.gui.components.SubtitleOverlay", "render()V")))) {
 				defaultVisitor.visitVarInsn(Opcodes.ALOAD, 0);
 				defaultVisitor.visitFieldInsn(Opcodes.GETFIELD, "net/minecraft/client/gui/Gui", "objectScreen",
 						"Lcom/github/nickid2018/dynamicex/gui/ObjectInformationsOverlay;");
-				if (SharedAfterLoadConstants.is16) {
+				if (is16) {
 					// PoseStack Version
 					defaultVisitor.visitVarInsn(Opcodes.ALOAD, 1);
 				} else {

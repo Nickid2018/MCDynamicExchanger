@@ -17,6 +17,11 @@ public class StringArgumentSwitch extends CommandSwitch {
 		return value;
 	}
 
+	public StringArgumentSwitch setValue(String str) {
+		value = str;
+		return this;
+	}
+
 	@Override
 	public boolean isThisSwitch(String switchName) {
 		return name.equals(switchName);

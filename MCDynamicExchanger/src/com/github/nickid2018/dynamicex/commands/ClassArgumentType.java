@@ -12,6 +12,7 @@ import com.mojang.brigadier.context.*;
 import com.mojang.brigadier.arguments.*;
 import com.mojang.brigadier.exceptions.*;
 import com.mojang.brigadier.suggestion.*;
+import com.github.nickid2018.dynamicex.*;
 
 public class ClassArgumentType implements ArgumentType<String> {
 
@@ -28,8 +29,10 @@ public class ClassArgumentType implements ArgumentType<String> {
 	@Override
 	public String parse(StringReader reader) throws CommandSyntaxException {
 		String clazz = reader.readUnquotedString();
-		if(!CLASSES_LOADED.contains(clazz))
+		if (!CLASSES_LOADED.contains(clazz))
 			throw CLASS_UNKNOWN.create(clazz);
+		if(!ClassNameTransformer.isRemapped())
+			return ClassNameTransformer.getClassName(clazz);
 		return clazz;
 	}
 
@@ -42,8 +45,11 @@ public class ClassArgumentType implements ArgumentType<String> {
 	}
 
 	static {
-		doFindPackage("com");
-		doFindPackage("net");
+		if (ClassNameTransformer.isRemapped()) {
+			doFindPackage("com");
+			doFindPackage("net");
+		} else
+			CLASSES_LOADED.addAll(ClassNameTransformer.helper.classes.keySet());
 	}
 
 	private static void doFindPackage(String packageName) {

@@ -1,5 +1,6 @@
 package com.github.nickid2018.mcremap;
 
+import com.github.nickid2018.util.*;
 import com.github.nickid2018.mcremap.argparser.*;
 
 public class RemapperMain {
@@ -8,6 +9,18 @@ public class RemapperMain {
 
 	public static void main(String[] args) throws Exception {
 		logger = new DefaultConsoleLogger();
+		if (!AddClassPath.tryToLoadMCLibrary("commons-io/commons-io")) {
+			logger.info("Cannot load library \"commons-io\","
+					+ " please ensure your running directory is right and your Minecraft has been downloaded.");
+			return;
+		}
+		AddClassPath.addClassPathInDirs("dynamicexchanger/libs");
+		if (!ClassUtils.isClassExists("org.objectweb.asm.Opcodes")) {
+			DownloadUtils.downloadResource(
+					"https://repository.ow2.org/nexus/content/repositories/releases/org/ow2/asm/asm-all/6.0_BETA/asm-all-6.0_BETA.jar",
+					"dynamicexchanger/libs/asm-all-6.0_BETA.jar");
+			AddClassPath.addClassPathInDirs("dynamicexchanger/libs");
+		}
 		try {
 			CommandResult result = getResult(args);
 			OfficalFormat format = new OfficalFormat(result);
