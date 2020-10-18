@@ -24,7 +24,10 @@ public class ObjectInformationsOverlay extends GuiComponent {
 	 * @param mayPoseStack
 	 */
 	public void renderGlobal(Object mayPoseStack) {
-		ObjectInfosHolder.elements.forEach((name, element) -> renderElement(mayPoseStack, name, element));
+		Set<String> tmp = ObjectInfosHolder.elements.keySet();
+		for (String name : tmp) {
+			renderElement(mayPoseStack, name, ObjectInfosHolder.elements.get(name));
+		}
 	}
 
 	long last = System.currentTimeMillis();

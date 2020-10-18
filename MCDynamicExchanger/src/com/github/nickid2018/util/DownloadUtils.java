@@ -14,7 +14,8 @@ public class DownloadUtils {
 				file.createNewFile();
 			System.out.println("Downloading resource \"" + url + "\"");
 			URLConnection connect = urlFile.openConnection();
-			InputStream is = connect.getInputStream();
+			CountInputStream is = new CountInputStream(connect.getInputStream());
+			System.out.println("Connection has been created");
 			Thread t = new Thread(() -> {
 				try {
 					OutputStream stream = new FileOutputStream(file);
@@ -24,13 +25,15 @@ public class DownloadUtils {
 				} catch (IOException e) {
 					System.err.println("Cannot download resource \"" + url + "\"");
 					e.printStackTrace();
+					file.delete();
 				}
 			});
 			t.start();
 			while (t.isAlive()) {
-				Thread.sleep(2000);
-				System.out.println("Downloading Progress: " + is.available() + "B to read, "
-						+ connect.getContentLength() + "B in total");
+				Thread.sleep(1000);
+				is.getDeltaRead();
+				System.out.println("Downloading Progress: " + is.getReaded() + "B readed, " + connect.getContentLength()
+						+ "B in total, Speed: " + formatSpeed(is.getSpeed()));
 			}
 		} catch (Exception e) {
 			System.err.println("Cannot download resource \"" + url + "\"");
@@ -38,5 +41,15 @@ public class DownloadUtils {
 			return false;
 		}
 		return true;
+	}
+
+	private static String formatSpeed(double speed) {
+		if (speed <= 1024)
+			return speed + "B/s";
+		if (speed <= 1048576)
+			return speed / 1024 + "KiB/s";
+		if (speed <= 1073741824)
+			return speed / 1073741824 + "MiB/s";
+		return "Unbelievable Speed!!";
 	}
 }

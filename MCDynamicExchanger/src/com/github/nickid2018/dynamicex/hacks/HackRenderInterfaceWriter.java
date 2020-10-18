@@ -35,7 +35,9 @@ public class HackRenderInterfaceWriter extends AbstractHackWriter {
 								"draw" + (HackGuiWriter.is16
 										? "(Lcom/mojang/blaze3d/vertex/PoseStack;Ljava/lang/String;FFI)I"
 										: "(Ljava/lang/String;FFI)I")),
-						HackGuiWriter.is16 ? "(Lcom/mojang/blaze3d/vertex/PoseStack;Ljava/lang/String;FFI)I"
+						HackGuiWriter.is16
+								? "(" + ClassNameTransformer.getQualifiedName("com/mojang/blaze3d/vertex/PoseStack")
+										+ "Ljava/lang/String;FFI)I"
 								: "(Ljava/lang/String;FFI)I",
 						false);
 				defaultVisitor.visitInsn(Opcodes.POP);
@@ -58,12 +60,15 @@ public class HackRenderInterfaceWriter extends AbstractHackWriter {
 						ClassNameTransformer.getResourceName("net/minecraft/client/gui/GuiComponent"),
 						ClassNameTransformer.getMethodName("net.minecraft.client.gui.GuiComponent", "fill"
 								+ (HackGuiWriter.is16 ? "(Lcom/mojang/blaze3d/vertex/PoseStack;IIIII)V" : "(IIIII)V")),
-						HackGuiWriter.is16 ? "(Lcom/mojang/blaze3d/vertex/PoseStack;IIIII)V" : "(IIIII)V", false);
+						HackGuiWriter.is16
+								? "(" + ClassNameTransformer.getQualifiedName("com/mojang/blaze3d/vertex/PoseStack")
+										+ "IIIII)V"
+								: "(IIIII)V",
+						false);
 				defaultVisitor.visitInsn(Opcodes.RETURN);
 				defaultVisitor.visitMaxs(6, 6);
 				defaultVisitor.visitEnd();
 			}
 		}
-
 	}
 }

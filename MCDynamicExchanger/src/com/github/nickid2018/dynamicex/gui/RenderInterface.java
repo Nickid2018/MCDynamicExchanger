@@ -13,8 +13,10 @@ public class RenderInterface {
 
 	public static final void renderString(Object mayPoseStack, Font font, String string, float xpos, float ypos,
 			int color) {
+		System.out.println("renderSrting: didn't be replaced!");
 	}
 
 	public static final void renderFill(Object mayPoseStack, int x0, int y0, int x1, int y1, int color) {
+		System.out.println("renderFill: didn't be replaced!");
 	}
 }

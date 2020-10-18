@@ -10,7 +10,7 @@ public class HackGuiWriter extends AbstractHackWriter {
 	}
 
 	private boolean notFieldAdded = true;
-	
+
 	public static boolean is16 = false;
 
 	@Override
@@ -59,8 +59,9 @@ public class HackGuiWriter extends AbstractHackWriter {
 				defaultVisitor.visitVarInsn(Opcodes.ALOAD, 1);
 				defaultVisitor.visitMethodInsn(Opcodes.INVOKESPECIAL,
 						"com/github/nickid2018/dynamicex/gui/ObjectInformationsOverlay", "<init>",
-						"(Lnet/minecraft/client/Minecraft;)V", false);
-				defaultVisitor.visitFieldInsn(Opcodes.PUTFIELD, "net/minecraft/client/gui/Gui", "objectScreen",
+						"(" + ClassNameTransformer.getQualifiedName("net/minecraft/client/Minecraft") + ")V", false);
+				defaultVisitor.visitFieldInsn(Opcodes.PUTFIELD,
+						ClassNameTransformer.getResourceName("net/minecraft/client/gui/Gui"), "objectScreen",
 						"Lcom/github/nickid2018/dynamicex/gui/ObjectInformationsOverlay;");
 			}
 		}
@@ -88,7 +89,8 @@ public class HackGuiWriter extends AbstractHackWriter {
 					&& (name.equals(ClassNameTransformer
 							.getMethodName("net.minecraft.client.gui.components.SubtitleOverlay", "render()V")))) {
 				defaultVisitor.visitVarInsn(Opcodes.ALOAD, 0);
-				defaultVisitor.visitFieldInsn(Opcodes.GETFIELD, "net/minecraft/client/gui/Gui", "objectScreen",
+				defaultVisitor.visitFieldInsn(Opcodes.GETFIELD,
+						ClassNameTransformer.getResourceName("net/minecraft/client/gui/Gui"), "objectScreen",
 						"Lcom/github/nickid2018/dynamicex/gui/ObjectInformationsOverlay;");
 				if (is16) {
 					// PoseStack Version

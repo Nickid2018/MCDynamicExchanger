@@ -138,7 +138,10 @@ public class ClassNameTransformer {
 					String versionName = getVersionName();
 					String name = "dynamicexchanger/mappings/" + versionName + ".txt";
 					if (!new File(name).exists())
-						DownloadUtils.downloadResource(getDownloadMapName(), name);
+						if (!DownloadUtils.downloadResource(getDownloadMapName(), name)) {
+							System.err.println("Resource downloading failed, please restrart the program!");
+							System.exit(0);
+						}
 					doMapGenerate(name);
 					doDeserialize(versionName + ".map");
 				}
