@@ -32,8 +32,8 @@ public class DownloadUtils {
 			while (t.isAlive()) {
 				Thread.sleep(1000);
 				is.getDeltaRead();
-				System.out.println("Downloading Progress: " + is.getReaded() + "B readed, " + connect.getContentLength()
-						+ "B in total, Speed: " + formatSpeed(is.getSpeed()));
+				System.out.println("Downloading Progress: " + getSize(is.getReaded()) + " readed, "
+						+ getSize(connect.getContentLength()) + " in total, Speed: " + formatSpeed(is.getSpeed()));
 			}
 		} catch (Exception e) {
 			System.err.println("Cannot download resource \"" + url + "\"");
@@ -51,5 +51,15 @@ public class DownloadUtils {
 		if (speed <= 1073741824)
 			return speed / 1073741824 + "MiB/s";
 		return "Unbelievable Speed!!";
+	}
+
+	private static String getSize(double size) {
+		if (size <= 1024)
+			return size + "B";
+		if (size <= 1048576)
+			return size / 1024 + "KiB";
+		if (size <= 1073741824)
+			return size / 1073741824 + "MiB";
+		return size / 1099511627776.0 + "GiB";
 	}
 }

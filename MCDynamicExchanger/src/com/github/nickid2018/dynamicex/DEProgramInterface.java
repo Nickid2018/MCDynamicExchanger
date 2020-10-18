@@ -1,5 +1,6 @@
 package com.github.nickid2018.dynamicex;
 
+import java.io.*;
 import java.lang.instrument.*;
 import com.github.nickid2018.util.*;
 import com.github.nickid2018.dynamicex.hacks.*;
@@ -10,6 +11,8 @@ public class DEProgramInterface {
 
 	public static void premain(String preargs, Instrumentation inst) {
 		instrumention = inst;
+		checkDir("dynamicexchanger/libs");
+		checkDir("dynamicexchanger/mappings");
 		AddClassPath.addClassPathInDirs("dynamicexchanger/libs");
 		if (!ClassUtils.isClassExists("org.objectweb.asm.Opcodes")) {
 			if (DownloadUtils.downloadResource(
@@ -34,5 +37,11 @@ public class DEProgramInterface {
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
+	}
+
+	private static void checkDir(String name) {
+		File file = new File(name);
+		if (!file.isDirectory())
+			file.mkdir();
 	}
 }
