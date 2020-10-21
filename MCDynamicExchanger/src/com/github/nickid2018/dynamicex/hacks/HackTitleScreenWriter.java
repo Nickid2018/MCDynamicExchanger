@@ -18,9 +18,6 @@ public class HackTitleScreenWriter extends AbstractHackWriter {
 		if (x == Integer.MIN_VALUE) {
 			x = (Minecraft.getInstance().screen.width
 					- font.width("Warning: This JAR has been modified by MCDynamicExchanger")) / 2;
-			System.out.println(x);
-			System.out.println(mayPoseStack);
-			System.out.println(font);
 		}
 		RenderInterface.renderString(mayPoseStack, font, "Warning: This JAR has been modified by MCDynamicExchanger", x,
 				5, 0xFF0000);
@@ -53,7 +50,8 @@ public class HackTitleScreenWriter extends AbstractHackWriter {
 		@Override
 		public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf) {
 			super.visitMethodInsn(opcode, owner, name, desc, itf);
-			if (write) {
+			if (write && owner
+					.equals(ClassNameTransformer.getResourceName("net/minecraft/client/gui/screens/TitleScreen"))) {
 				if (is16) {
 					if (name.equals(ClassNameTransformer.getMethodName("net.minecraft.client.gui.screens.TitleScreen",
 							"drawString(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/gui/Font;Ljava/lang/String;III)V"))) {

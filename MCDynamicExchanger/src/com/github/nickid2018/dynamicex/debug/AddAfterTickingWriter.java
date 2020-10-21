@@ -17,14 +17,15 @@ public class AddAfterTickingWriter extends ClassVisitor {
 		this.consumer = consumer;
 		reader = new ClassReader(file);
 		cv = writer = new ClassWriter(0);
-		String nowClass = ObjectsSet.INSTANCE.nameMap.get(className);
+		String nowClass = ObjectsSet.INSTANCE.getSourceClassName(className);
 		methodName = ClassNameTransformer.getMethodName(nowClass, "tick()V");
 		reader.accept(this, 0);
 	}
 
 	@Override
 	public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
-		return name.equals(methodName) ? new HackMethod(super.visitMethod(access, name, desc, signature, exceptions))
+		return name.equals(methodName) && desc.equals("()V")
+				? new HackMethod(super.visitMethod(access, name, desc, signature, exceptions))
 				: super.visitMethod(access, name, desc, signature, exceptions);
 	}
 

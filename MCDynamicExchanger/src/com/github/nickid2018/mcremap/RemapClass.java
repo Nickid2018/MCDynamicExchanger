@@ -38,7 +38,7 @@ public class RemapClass implements Serializable {
 			if (ret != null)
 				return ret;
 		}
-		return null;
+		return name;
 	}
 
 	public final String findMethod(String nameWithDesc) {

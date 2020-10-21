@@ -28,7 +28,10 @@ public class AddClassPath {
 
 	public static final boolean addClassPathInDirs(File path) {
 		boolean yes = false;
-		for (File file : path.listFiles()) {
+		File[] files = path.listFiles();
+		if (files == null)
+			return false;
+		for (File file : files) {
 			yes |= addClassPath(file);
 		}
 		return yes;

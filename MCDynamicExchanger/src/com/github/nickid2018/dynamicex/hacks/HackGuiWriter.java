@@ -30,9 +30,10 @@ public class HackGuiWriter extends AbstractHackWriter {
 		if (name.equals(ClassNameTransformer.getMethodName("net.minecraft.client.gui.Gui", "render(F)V"))
 				|| (name.equals(ClassNameTransformer.getMethodName("net.minecraft.client.gui.Gui",
 						"render(Lcom/mojang/blaze3d/vertex/PoseStack;F)V")))) {
-			is16 = name.equals(ClassNameTransformer.getMethodName("net.minecraft.client.gui.Gui",
-					"render(Lcom/mojang/blaze3d/vertex/PoseStack;F)V"));
-			return new HackRenderMethod(super.visitMethod(access, name, desc, signature, exceptions));
+			is16 |= desc.endsWith(";F)V");
+			return desc.endsWith("F)V")
+					? new HackRenderMethod(super.visitMethod(access, name, desc, signature, exceptions))
+					: super.visitMethod(access, name, desc, signature, exceptions);
 		}
 		return super.visitMethod(access, name, desc, signature, exceptions);
 	}
@@ -83,11 +84,16 @@ public class HackGuiWriter extends AbstractHackWriter {
 //			1180: aload_0
 //		    1181: getfield      #151                // Field subtitleOverlay:Lnet/minecraft/client/gui/components/SubtitleOverlay;
 //		    1184: invokevirtual #540                // Method net/minecraft/client/gui/components/SubtitleOverlay.render:()V
+			System.out.println(owner + name + desc);
 			if (opcode == Opcodes.INVOKEVIRTUAL
 					&& owner.equals(
 							ClassNameTransformer.getResourceName("net/minecraft/client/gui/components/SubtitleOverlay"))
-					&& (name.equals(ClassNameTransformer
-							.getMethodName("net.minecraft.client.gui.components.SubtitleOverlay", "render()V")))) {
+					&& ((name
+							.equals(ClassNameTransformer
+									.getMethodName("net.minecraft.client.gui.components.SubtitleOverlay", "render()V"))
+							|| (name.equals(ClassNameTransformer.getMethodName(
+									"net.minecraft.client.gui.components.SubtitleOverlay",
+									"render(Lcom/mojang/blaze3d/vertex/PoseStack;)V")))))) {
 				defaultVisitor.visitVarInsn(Opcodes.ALOAD, 0);
 				defaultVisitor.visitFieldInsn(Opcodes.GETFIELD,
 						ClassNameTransformer.getResourceName("net/minecraft/client/gui/Gui"), "objectScreen",

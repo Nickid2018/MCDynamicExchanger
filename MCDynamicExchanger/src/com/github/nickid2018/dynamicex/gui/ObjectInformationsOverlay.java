@@ -30,8 +30,6 @@ public class ObjectInformationsOverlay extends GuiComponent {
 		}
 	}
 
-	long last = System.currentTimeMillis();
-
 	public void renderElement(Object mayPoseStack, String name, ObjectElement element) {
 		int x0 = element.x0;
 		int y0 = element.y0;
@@ -55,9 +53,5 @@ public class ObjectInformationsOverlay extends GuiComponent {
 			RenderInterface.renderString(mayPoseStack, font, entry.getValue(), start2, y0 + 9 * now, 0x00FF00);
 			now++;
 		}
-	}
-
-	static {
-		System.out.println("Information Overlay added.");
 	}
 }

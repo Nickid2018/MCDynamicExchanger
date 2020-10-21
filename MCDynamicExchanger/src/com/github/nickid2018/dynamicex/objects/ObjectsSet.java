@@ -54,6 +54,12 @@ public class ObjectsSet {
 				"net.minecraft.server.level.ServerPlayer");
 	}
 
+	public String getSourceClassName(String className) {
+		if (!nameMap.containsKey(className))
+			nameMap.put(className, ClassNameTransformer.findSourceName(className));
+		return nameMap.get(className);
+	}
+
 	public void flushBase() {
 
 	}
