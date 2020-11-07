@@ -31,6 +31,8 @@ public class DEProgramInterface {
 		HackGuiWriter.loadAccess();
 		HackRenderInterfaceWriter.loadAccess();
 		HackTitleScreenWriter.loadAccess();
+		HackCommandsListWriter.loadAccess();
+		HackLocalPlayerWriter.loadAccess();
 		try {
 			Class.forName("com.github.nickid2018.dynamicex.SharedAfterLoadConstants", false,
 					Thread.currentThread().getContextClassLoader());

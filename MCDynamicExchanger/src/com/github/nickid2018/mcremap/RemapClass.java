@@ -2,8 +2,7 @@ package com.github.nickid2018.mcremap;
 
 import java.io.*;
 import java.util.*;
-
-import com.github.nickid2018.util.ClassUtils;
+import com.github.nickid2018.util.*;
 
 public class RemapClass implements Serializable {
 
@@ -38,7 +37,7 @@ public class RemapClass implements Serializable {
 			if (ret != null)
 				return ret;
 		}
-		return name;
+		return null;
 	}
 
 	public final String findMethod(String nameWithDesc) {

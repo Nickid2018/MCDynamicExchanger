@@ -44,22 +44,26 @@ public class DownloadUtils {
 	}
 
 	private static String formatSpeed(double speed) {
-		if (speed <= 1024)
-			return speed + "B/s";
-		if (speed <= 1048576)
-			return speed / 1024 + "KiB/s";
-		if (speed <= 1073741824)
-			return speed / 1073741824 + "MiB/s";
+		if (speed <= 1024 * 512)
+			return dealWithDouble(speed) + "B/s";
+		if (speed <= 1048576 * 512)
+			return dealWithDouble(speed / 1024) + "KiB/s";
+		if (speed <= 1073741824 * 512)
+			return dealWithDouble(speed / 1073741824) + "MiB/s";
 		return "Unbelievable Speed!!";
 	}
 
+	private static double dealWithDouble(double in) {
+		return (int) (in * 10) / 10.0;
+	}
+
 	private static String getSize(double size) {
-		if (size <= 1024)
-			return size + "B";
-		if (size <= 1048576)
-			return size / 1024 + "KiB";
-		if (size <= 1073741824)
-			return size / 1073741824 + "MiB";
-		return size / 1099511627776.0 + "GiB";
+		if (size <= 1024 * 512)
+			return dealWithDouble(size) + "B";
+		if (size <= 1048576 * 512)
+			return dealWithDouble(size / 1024) + "KiB";
+		if (size <= 1073741824 * 512)
+			return dealWithDouble(size / 1073741824) + "MiB";
+		return dealWithDouble(size / 1099511627776.0) + "GiB";
 	}
 }

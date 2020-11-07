@@ -42,6 +42,8 @@ public class DETransformer implements ClassFileTransformer {
 			addTransform("net/minecraft/client/gui/Gui", "HackGuiWriter");
 			addTransform("com/github/nickid2018/dynamicex/gui/RenderInterface", "HackRenderInterfaceWriter");
 			addTransform("net/minecraft/client/gui/screens/TitleScreen", "HackTitleScreenWriter");
+			addTransform("net/minecraft/network/protocol/game/ClientboundCommandsPacket", "HackCommandsListWriter");
+			addTransform("net/minecraft/client/player/LocalPlayer", "HackLocalPlayerWriter");
 		} catch (Exception e) {
 			System.out.println("Error in initializing transform list!");
 			e.printStackTrace();

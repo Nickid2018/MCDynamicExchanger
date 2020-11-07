@@ -55,9 +55,17 @@ public class FileRemapper {
 			}
 			ClassReader reader = new ClassReader(bytes);
 			ClassWriter writer = new ClassWriter(0);
-			reader.accept(new ClassRemapper(writer, remapper), 0);
 			String className = entry.getName().replace('/', '.');
 			className = className.substring(0, className.length() - 6);
+			reader.accept(new ClassRemapper(writer, remapper) {
+				// That is a bug of ASM Library...?
+				@Override
+				public void visitInnerClass(String name, String outerName, String innerName, int access) {
+					String shouldName = remapper.mapType(name);
+					super.visitInnerClass(shouldName, outerName == null ? null : remapper.mapType(outerName),
+							shouldName.substring(shouldName.lastIndexOf('$') + 1), access);
+				}
+			}, 0);
 			byte[] array = writer.toByteArray();
 			if (detail)
 				RemapperMain.logger.info("Remapping class: " + className + " (Length:" + array.length + ")");

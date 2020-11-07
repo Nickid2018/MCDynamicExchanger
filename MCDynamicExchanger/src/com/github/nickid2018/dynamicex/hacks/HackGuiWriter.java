@@ -84,7 +84,6 @@ public class HackGuiWriter extends AbstractHackWriter {
 //			1180: aload_0
 //		    1181: getfield      #151                // Field subtitleOverlay:Lnet/minecraft/client/gui/components/SubtitleOverlay;
 //		    1184: invokevirtual #540                // Method net/minecraft/client/gui/components/SubtitleOverlay.render:()V
-			System.out.println(owner + name + desc);
 			if (opcode == Opcodes.INVOKEVIRTUAL
 					&& owner.equals(
 							ClassNameTransformer.getResourceName("net/minecraft/client/gui/components/SubtitleOverlay"))
