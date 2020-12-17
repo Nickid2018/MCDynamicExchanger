@@ -7,7 +7,8 @@ import org.objectweb.asm.*;
 import org.objectweb.asm.tree.*;
 import org.apache.commons.io.*;
 import com.github.nickid2018.util.*;
-import com.github.nickid2018.mcremap.argparser.*;
+import com.github.nickid2018.ProgramMain;
+import com.github.nickid2018.argparser.*;
 
 public class ClassTreeGenerator {
 
@@ -56,10 +57,10 @@ public class ClassTreeGenerator {
 					clazz.fieldMappings.put(fl.name, fl.name);
 				}
 				if (detail)
-					RemapperMain.logger.info("Add unobscured class: " + className);
+					ProgramMain.logger.info("Add unobscured class: " + className);
 			}
 		}
-		RemapperMain.logger.info("Added all unobscured classes");
+		ProgramMain.logger.info("Added all unobscured classes");
 	}
 
 	private final void generateExtendTree(ZipFile file, RemapperFormat format) throws IOException {
@@ -75,9 +76,9 @@ public class ClassTreeGenerator {
 			for (String name : reader.getInterfaces())
 				clazz.superClasses.add(format.remaps.get(ClassUtils.toBinaryName(name)));
 			if (detail)
-				RemapperMain.logger.info("Generate inherit tree: " + reader.getClassName());
+				ProgramMain.logger.info("Generate inherit tree: " + reader.getClassName());
 		}
-		RemapperMain.logger.info("Generated all inherit trees");
+		ProgramMain.logger.info("Generated all inherit trees");
 	}
 
 	private final void doOutputRemap(InputStream mf, String path, RemapperFormat format) throws IOException {

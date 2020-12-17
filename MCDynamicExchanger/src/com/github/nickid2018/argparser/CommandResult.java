@@ -1,4 +1,4 @@
-package com.github.nickid2018.mcremap.argparser;
+package com.github.nickid2018.argparser;
 
 import java.util.*;
 
@@ -24,5 +24,9 @@ public class CommandResult {
 
 	public String getStringOrDefault(String name, String def) {
 		return switches.containsKey(name) ? switches.get(name).toString() : def;
+	}
+
+	public void merge(CommandResult result) {
+		switches.putAll(result.switches);
 	}
 }

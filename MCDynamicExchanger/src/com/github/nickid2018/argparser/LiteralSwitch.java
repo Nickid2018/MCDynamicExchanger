@@ -1,4 +1,4 @@
-package com.github.nickid2018.mcremap.argparser;
+package com.github.nickid2018.argparser;
 
 public class LiteralSwitch extends CommandSwitch {
 

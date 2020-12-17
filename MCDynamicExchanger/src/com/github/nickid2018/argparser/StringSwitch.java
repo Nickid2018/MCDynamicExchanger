@@ -1,12 +1,17 @@
-package com.github.nickid2018.mcremap.argparser;
+package com.github.nickid2018.argparser;
 
-public class StringArgumentSwitch extends CommandSwitch {
+public class StringSwitch extends CommandSwitch {
 
 	private final String name;
 	private String value;
 
-	public StringArgumentSwitch(String name) {
+	public StringSwitch(String name) {
 		this.name = name;
+	}
+
+	private StringSwitch(String name, String value) {
+		this.name = name;
+		this.value = value;
 	}
 
 	public String getName() {
@@ -17,24 +22,19 @@ public class StringArgumentSwitch extends CommandSwitch {
 		return value;
 	}
 
-	public StringArgumentSwitch setValue(String str) {
-		value = str;
-		return this;
-	}
-
 	@Override
-	public boolean isThisSwitch(String switchName) {
-		return name.equals(switchName);
+	public final boolean isThisSwitch(String switchName) {
+		return true;
 	}
 
 	@Override
 	public String getSwitchName(String name) {
-		return name;
+		return this.name;
 	}
 
 	@Override
 	public final boolean isOptional() {
-		return true;
+		return false;
 	}
 
 	@Override
@@ -44,17 +44,16 @@ public class StringArgumentSwitch extends CommandSwitch {
 
 	@Override
 	public final int requireArguments() {
-		return 1;
+		return 0;
 	}
 
 	@Override
 	public final void nextArgument(int index, String value) {
-		this.value = value;
 	}
 
 	@Override
 	public CommandSwitch getSwitchInstance(String name) {
-		return new StringArgumentSwitch(name);
+		return new StringSwitch(this.name, name);
 	}
 
 	@Override

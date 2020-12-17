@@ -5,11 +5,12 @@ import java.util.*;
 import java.util.zip.*;
 import java.util.function.*;
 import org.objectweb.asm.*;
+import com.github.nickid2018.*;
 import org.apache.commons.io.*;
 import com.github.nickid2018.util.*;
 import org.objectweb.asm.commons.*;
 import java.io.ByteArrayOutputStream;
-import com.github.nickid2018.mcremap.argparser.*;
+import com.github.nickid2018.argparser.*;
 
 public class FileRemapper {
 
@@ -57,27 +58,28 @@ public class FileRemapper {
 			ClassWriter writer = new ClassWriter(0);
 			String className = entry.getName().replace('/', '.');
 			className = className.substring(0, className.length() - 6);
-			reader.accept(new ClassRemapper(writer, remapper) {
-				// That is a bug of ASM Library...?
-				@Override
-				public void visitInnerClass(String name, String outerName, String innerName, int access) {
-					String shouldName = remapper.mapType(name);
-					super.visitInnerClass(shouldName, outerName == null ? null : remapper.mapType(outerName),
-							shouldName.substring(shouldName.lastIndexOf('$') + 1), access);
-				}
-			}, 0);
+//			reader.accept(new ClassRemapper(writer, remapper) {
+//				// That is a bug of ASM Library...?
+//				@Override
+//				public void visitInnerClass(String name, String outerName, String innerName, int access) {
+//					String shouldName = remapper.mapType(name);
+//					super.visitInnerClass(shouldName, outerName == null ? null : remapper.mapType(outerName),
+//							shouldName.substring(shouldName.lastIndexOf('$') + 1), access);
+//				}
+//			}, 0);
+			reader.accept(new ClassRemapper(writer, remapper), 0);
 			byte[] array = writer.toByteArray();
 			if (detail)
-				RemapperMain.logger.info("Remapping class: " + className + " (Length:" + array.length + ")");
+				ProgramMain.logger.info("Remapping class: " + className + " (Length:" + array.length + ")");
 			write(format.remaps.get(className).mapName().replace('.', '/') + ".class", array);
 		}
-		RemapperMain.logger.info("Remapped all classes");
+		ProgramMain.logger.info("Remapped all classes");
 	}
 
 	private void recreateManifest() throws IOException {
 		write("META-INF/MANIFEST.MF",
 				"Manifest-Version: 1.0\r\nMain-Class: net.minecraft.client.main.Main\r\n".getBytes());
-		RemapperMain.logger.info("Recreated manifest");
+		ProgramMain.logger.info("Recreated manifest");
 	}
 
 	private Map<String, ByteArrayOutputStream> buffers = new HashMap<>();
@@ -95,7 +97,7 @@ public class FileRemapper {
 			reader.accept(new RemoveModCheck(writer), 0);
 			return writer;
 		});
-		RemapperMain.logger.info("Removed modding check");
+		ProgramMain.logger.info("Removed modding check");
 	}
 
 	private void hackTheName() throws IOException {
@@ -104,7 +106,7 @@ public class FileRemapper {
 			reader.accept(new ModifyTitleScreen(writer), 0);
 			return writer;
 		});
-		RemapperMain.logger.info("Modified Title Screen");
+		ProgramMain.logger.info("Modified Title Screen");
 	}
 
 	private void changeBrand() throws IOException {
@@ -115,7 +117,7 @@ public class FileRemapper {
 		};
 		doHacks("net.minecraft.server.MinecraftServer", func);
 		doHacks("net.minecraft.client.ClientBrandRetriever", func);
-		RemapperMain.logger.info("Modified Brand Tag");
+		ProgramMain.logger.info("Modified Brand Tag");
 	}
 
 	private void doHacks(String className, Function<ClassReader, ClassWriter> func) throws IOException {
@@ -127,7 +129,7 @@ public class FileRemapper {
 	}
 
 	public void runPack(String dest) throws IOException, InterruptedException {
-		RemapperMain.logger.info("Packing into JAR...");
+		ProgramMain.logger.info("Packing into JAR...");
 		File destf = new File(dest);
 		if (!destf.exists())
 			destf.createNewFile();
@@ -138,7 +140,7 @@ public class FileRemapper {
 			zos.write(buffers.get(entry).toByteArray());
 		}
 		zos.close();
-		RemapperMain.logger.info("Minecraft has been remapped successfully.");
+		ProgramMain.logger.info("Minecraft has been remapped successfully.");
 	}
 
 	public String getNowFile() {

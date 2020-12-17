@@ -4,7 +4,8 @@ import java.io.*;
 import java.net.*;
 import org.apache.commons.io.*;
 import com.github.nickid2018.util.*;
-import com.github.nickid2018.mcremap.argparser.*;
+import com.github.nickid2018.ProgramMain;
+import com.github.nickid2018.argparser.*;
 
 public class OfficalFormat extends RemapperFormat {
 
@@ -40,7 +41,7 @@ public class OfficalFormat extends RemapperFormat {
 				remaps.put(toClass, new RemapClass(toClass, nowClass, this));
 				revClass.put(nowClass, toClass);
 				if (detail)
-					RemapperMain.logger.info("Class Entry: " + toClass + " to " + nowClass);
+					ProgramMain.logger.info("Class Entry: " + toClass + " to " + nowClass);
 			}
 		}
 		token.close();
@@ -71,7 +72,7 @@ public class OfficalFormat extends RemapperFormat {
 					String to = descs[1].split("\\(")[0].trim();
 					nowClazz.methodMappings.put(source, to);
 					if (detail)
-						RemapperMain.logger.info("Method Entry: " + source + " to " + to);
+						ProgramMain.logger.info("Method Entry: " + source + " to " + to);
 				} else {
 					// Field
 					String[] splits = now.trim().split(" -> ");
@@ -79,7 +80,7 @@ public class OfficalFormat extends RemapperFormat {
 					String to = splits[0].split(" ")[1];
 					nowClazz.fieldMappings.put(source, to);
 					if (detail)
-						RemapperMain.logger.info("Field Entry: " + source + " to " + to);
+						ProgramMain.logger.info("Field Entry: " + source + " to " + to);
 				}
 			} else {
 				// Class
@@ -89,7 +90,7 @@ public class OfficalFormat extends RemapperFormat {
 				toClass = splits[1];
 				nowClazz = remaps.get(toClass);
 				if (detail)
-					RemapperMain.logger.info("Now Class: " + toClass + " (" + nowClass + ")");
+					ProgramMain.logger.info("Now Class: " + toClass + " (" + nowClass + ")");
 			}
 		}
 	}

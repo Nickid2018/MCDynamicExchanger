@@ -1,7 +1,7 @@
 package com.github.nickid2018.mcremap;
 
 import java.util.*;
-import com.github.nickid2018.mcremap.argparser.*;
+import com.github.nickid2018.argparser.*;
 
 public abstract class RemapperFormat {
 

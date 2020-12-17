@@ -18,6 +18,7 @@ public class AddClassPath {
 			addURL.invoke(loader, path.toURI().toURL());
 			return true;
 		} catch (Exception e) {
+			System.err.println("Warning: cannot load library " + path);
 			return false;
 		}
 	}

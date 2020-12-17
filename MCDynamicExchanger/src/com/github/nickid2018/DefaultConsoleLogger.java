@@ -1,4 +1,4 @@
-package com.github.nickid2018.mcremap;
+package com.github.nickid2018;
 
 public class DefaultConsoleLogger implements ISystemLogger {
 
@@ -12,6 +12,10 @@ public class DefaultConsoleLogger implements ISystemLogger {
 		System.err.println(string);
 		System.err.println("Details:");
 		error.printStackTrace();
+	}
+
+	@Override
+	public void flush() {
 	}
 
 }

@@ -8,8 +8,11 @@ import org.objectweb.asm.*;
 import net.minecraft.client.*;
 import com.github.nickid2018.util.*;
 import org.objectweb.asm.commons.*;
+
+import com.github.nickid2018.DefaultConsoleLogger;
+import com.github.nickid2018.ProgramMain;
+import com.github.nickid2018.argparser.*;
 import com.github.nickid2018.mcremap.*;
-import com.github.nickid2018.mcremap.argparser.*;
 
 public class ClassNameTransformer {
 
@@ -99,7 +102,7 @@ public class ClassNameTransformer {
 	}
 
 	private static void doMapGenerate(String path) throws Exception {
-		RemapperMain.logger = new DefaultConsoleLogger();
+		ProgramMain.logger = new DefaultConsoleLogger();
 		CommandResult result = new CommandResult();
 		result.putSwitch("mc_file", new StringArgumentSwitch("mc_file").setValue(getMinecraftPath()));
 		result.putSwitch("--outrev",
