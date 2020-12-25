@@ -66,7 +66,7 @@ public class CompareProgram {
 		newV.close();
 	}
 
-	public static void compareSimple(String oldVersion, String newVersion) throws IOException {
+	public static void compareSimple(String oldVersion, String newVersion, boolean detailed) throws IOException {
 		logger = new SortedConsoleLogger();
 		if (!AddClassPath.tryToLoadMCLibrary("commons-io/commons-io")) {
 			logger.info("Cannot load library \"commons-io\","
@@ -78,7 +78,8 @@ public class CompareProgram {
 			while (program.hasNext()) {
 				CompareResult result = program.next();
 				if (result.type != CompareResultType.NONE)
-					logger.info(result.getMessage());
+					logger.info(result.getMessage()
+							+ (detailed ? "[Old: " + result.oldMD5 + " New: " + result.newMD5 + "]" : ""));
 			}
 			program.close();
 		} catch (Throwable e) {

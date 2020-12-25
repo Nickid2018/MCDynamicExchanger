@@ -17,7 +17,7 @@ public class ClassUtils {
 
 	public static final boolean isClassExists(String name) {
 		try {
-			Class.forName(name, false, Thread.currentThread().getContextClassLoader());
+			Class.forName(name);
 			return true;
 		} catch (ClassNotFoundException e) {
 			return false;

@@ -7,19 +7,23 @@ public class CompareResult {
 
 	public CompareResultType type;
 	public String file;
+	public String oldMD5;
+	public String newMD5;
 
 	public CompareResult(String file, InputStream oldV, InputStream newV) {
 		this.file = file;
 		if (oldV == null) {
 			type = CompareResultType.NEW_FILE;
+			newMD5 = MD5Compute.getMD5(newV);
 			return;
 		}
 		if (newV == null) {
 			type = CompareResultType.DELETE_FILE;
+			oldMD5 = MD5Compute.getMD5(oldV);
 			return;
 		}
-		String oldMD5 = MD5Compute.getMD5(oldV);
-		String newMD5 = MD5Compute.getMD5(newV);
+		oldMD5 = MD5Compute.getMD5(oldV);
+		newMD5 = MD5Compute.getMD5(newV);
 		type = oldMD5.equals(newMD5) ? CompareResultType.NONE : CompareResultType.MODIFY;
 	}
 

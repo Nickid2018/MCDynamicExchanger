@@ -18,7 +18,7 @@ public class ProgramMain {
 			CommandResult result = model.parse(args);
 			if (result.containsSwitch("compare"))
 				CompareProgram.compareSimple(result.getSwitch("old_version").toString(),
-						result.getSwitch("new_version").toString());
+						result.getSwitch("new_version").toString(), result.containsSwitch("-D"));
 			else if (result.containsSwitch("decompile"))
 				DecompileProgram.decompileSimple(result.getSwitch("source_file").toString(),
 						result.getStringOrDefault("--output", "decompiled.jar"), result.containsSwitch("-D"));
@@ -31,6 +31,9 @@ public class ProgramMain {
 
 	private static CommandModel getComparatorModel() throws CommandParseException {
 		CommandModel model = new CommandModel();
+		UnorderSwitchTable table = new UnorderSwitchTable();
+		model.switches.add(table);
+		table.addLiteral(new LiteralSwitch("-D", true));// Detail Output
 		model.switches.add(new StringSwitch("old_version"));
 		model.switches.add(new StringSwitch("new_version"));
 		return model;

@@ -43,7 +43,7 @@ public class RemapProgram {
 					"dynamicexchanger/libs/asm-9.0.jar");
 			AddClassPath.addClassPathInDirs("dynamicexchanger/libs");
 		}
-		if (!ClassUtils.isClassExists("org.objectweb.asm.commons.Remapper")) {
+		if (!ClassUtils.isClassExists("org.objectweb.asm.commons.ClassRemapper")) {
 			failed |= !DownloadUtils.downloadResource(
 					"https://repo1.maven.org/maven2/org/ow2/asm/asm-commons/9.0/asm-commons-9.0.jar",
 					"dynamicexchanger/libs/asm-commons-9.0.jar");
