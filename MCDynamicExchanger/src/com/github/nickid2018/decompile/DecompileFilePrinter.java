@@ -1,16 +1,35 @@
 package com.github.nickid2018.decompile;
 
 import java.io.*;
+import java.util.*;
 import java.nio.charset.*;
+import com.github.nickid2018.*;
 import org.jd.core.v1.api.printer.*;
 
 public class DecompileFilePrinter implements Printer {
 
 	private StringWriter writer;
 	private static final String lineSeparator = System.getProperty("line.separator");
+	private static final Calendar INSTANCE = Calendar.getInstance();
 
-	public void next() {
+	public void next(String fileName, boolean noInfos, long fileSize) {
 		writer = new StringWriter();
+		if (noInfos)
+			return;
+		writer.write("/*" + lineSeparator);
+		writer.write(" * This file is decompiled by MCDynamicExchanger." + lineSeparator);
+		writer.write(" * This file can only be used to learn the code and you bear the risk of using this file."
+				+ lineSeparator);
+		writer.write(" * You may copy and use this file for your internal, reference purposes." + lineSeparator);
+		writer.write(" * ====== Decompiler Information ======" + lineSeparator);
+		writer.write(" * MCDynamicExchanger version " + ProgramMain.VERSION + lineSeparator);
+		writer.write(" * Decompile backend library: JD-Core" + lineSeparator);
+		writer.write(" * ====== Build Information ======" + lineSeparator);
+		writer.write(" * Source File: " + fileName + lineSeparator);
+		writer.write(" * Build Time: " + String.format("%tc", INSTANCE) + lineSeparator);
+		writer.write(" * File Length: " + fileSize + lineSeparator);
+		writer.write(" *" + lineSeparator);
+		writer.write(" */" + lineSeparator);
 	}
 
 	public byte[] getBytes() {

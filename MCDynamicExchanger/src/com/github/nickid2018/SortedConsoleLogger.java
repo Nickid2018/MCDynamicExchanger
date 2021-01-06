@@ -3,7 +3,7 @@ package com.github.nickid2018;
 import java.util.*;
 
 public class SortedConsoleLogger implements ISystemLogger {
-	
+
 	private Set<String> lines = new TreeSet<>();
 
 	@Override
@@ -25,5 +25,4 @@ public class SortedConsoleLogger implements ISystemLogger {
 		lines.clear();
 	}
 
-	
 }

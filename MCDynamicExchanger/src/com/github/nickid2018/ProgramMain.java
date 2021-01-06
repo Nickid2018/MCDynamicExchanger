@@ -8,9 +8,12 @@ import com.github.nickid2018.decompile.*;
 
 public class ProgramMain {
 
+	public static final String VERSION = "1.0 beta.7";
+
 	public static ISystemLogger logger;
 
 	public static void main(String[] args) throws Exception {
+		long time = System.currentTimeMillis();
 		AddClassPath.addClassPathInDirs("dynamicexchanger/libs");
 		CommandModel model = getRemapperModel().subCommand("compare", getComparatorModel()).subCommand("decompile",
 				getDecompilerModel());
@@ -20,13 +23,13 @@ public class ProgramMain {
 				CompareProgram.compareSimple(result.getSwitch("old_version").toString(),
 						result.getSwitch("new_version").toString(), result.containsSwitch("-D"));
 			else if (result.containsSwitch("decompile"))
-				DecompileProgram.decompileSimple(result.getSwitch("source_file").toString(),
-						result.getStringOrDefault("--output", "decompiled.jar"), result.containsSwitch("-D"));
+				DecompileProgram.decompileSimple(result);
 			else
 				RemapProgram.doSimpleRemap(result);
 		} catch (CommandParseException e) {
 			(logger = new DefaultConsoleLogger()).error("Command is illegal!", e);
 		}
+		logger.info("Time used: " + (System.currentTimeMillis() - time) + "ms");
 	}
 
 	private static CommandModel getComparatorModel() throws CommandParseException {
@@ -45,6 +48,8 @@ public class ProgramMain {
 		model.switches.add(table);
 		table.addSwitch("--output", new StringArgumentSwitch("--output"));// Output File
 		table.addLiteral(new LiteralSwitch("-D", true));// Detail Output
+		table.addLiteral(new LiteralSwitch("-Ni", true));// No Infos
+		table.addLiteral(new LiteralSwitch("-Ro", true));// Resource Output
 		model.switches.add(new StringSwitch("source_file"));
 		return model;
 	}

@@ -10,7 +10,7 @@ public abstract class AbstractHackWriter extends ClassVisitor {
 		super(Opcodes.ASM6, writer);
 		this.writer = writer;
 	}
-	
+
 	public static void loadAccess() {
 	}
 }

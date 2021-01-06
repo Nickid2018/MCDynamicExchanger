@@ -9,7 +9,7 @@ public final class ASMClassHolder {
 	public static final void addClass(ASMClass clazz) {
 		classes.add(clazz);
 	}
-	
+
 	public static final void deleteClass(ASMClass clazz) {
 		classes.remove(clazz);
 	}

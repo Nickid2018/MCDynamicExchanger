@@ -5,13 +5,15 @@ import java.util.*;
 import java.util.zip.*;
 import org.jd.core.v1.*;
 import com.github.nickid2018.*;
+import org.apache.commons.io.*;
 import com.github.nickid2018.util.*;
+import com.github.nickid2018.argparser.*;
 
 import static com.github.nickid2018.ProgramMain.logger;
 
 public class DecompileProgram {
 
-	public static void decompileSimple(String sourceJar, String to, boolean detailed) {
+	public static void decompileSimple(CommandResult result) {
 		logger = new DefaultConsoleLogger();
 		if (!AddClassPath.tryToLoadMCLibrary("commons-io/commons-io")) {
 			logger.info("Cannot load library \"commons-io\","
@@ -24,10 +26,12 @@ public class DecompileProgram {
 			return;
 		}
 		try {
-			long time = System.currentTimeMillis();
+			String sourceJar = result.getSwitch("source_file").toString();
+			String to = result.getStringOrDefault("--output", "decompiled.jar");
+			boolean detailed = result.containsSwitch("-D");
+			boolean noInfos = result.containsSwitch("-Ni");
+			boolean resourceOutput = result.containsSwitch("-Ro");
 			Map<String, Object> config = new HashMap<>();
-			config.put("realignmentlinenumber", true);
-			config.put("showdefaultconstructor", false);
 			ClassFileToJavaSourceDecompiler decompiler = new ClassFileToJavaSourceDecompiler();
 			ZipFile file = new ZipFile(sourceJar);
 			ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(to));
@@ -39,12 +43,22 @@ public class DecompileProgram {
 				if (entry.isDirectory())
 					continue;
 				String name = entry.getName();
-				if (!name.endsWith(".class") || name.contains("$"))
+				if (!name.endsWith(".class")) {
+					if (resourceOutput) {
+						zos.putNextEntry(entry);
+						IOUtils.copy(file.getInputStream(entry), zos);
+						if (detailed) {
+							logger.info("Resource Entry: " + entry.getName());
+						}
+					}
+					continue;
+				}
+				if (name.contains("$"))
 					continue;
 				String internalName = name.substring(0, name.length() - 6);
 				ZipEntry output = new ZipEntry(internalName + ".java");
 				zos.putNextEntry(output);
-				printer.next();
+				printer.next(internalName, noInfos, entry.getCompressedSize());
 				decompiler.decompile(loader, printer, internalName, config);
 				zos.write(printer.getBytes());
 				if (detailed) {
@@ -52,7 +66,6 @@ public class DecompileProgram {
 				}
 			}
 			zos.close();
-			logger.info("Time used: " + (System.currentTimeMillis() - time) + "ms");
 		} catch (Throwable e) {
 			logger.error("Unknown error has been thrown!", e);
 		}

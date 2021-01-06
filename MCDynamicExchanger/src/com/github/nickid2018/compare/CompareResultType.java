@@ -14,7 +14,7 @@ public enum CompareResultType {
 	private CompareResultType(Function<String, String> formatAction) {
 		this.formatAction = formatAction;
 	}
-	
+
 	String format(String s) {
 		return formatAction.apply(s);
 	}

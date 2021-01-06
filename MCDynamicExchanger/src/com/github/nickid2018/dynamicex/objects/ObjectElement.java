@@ -10,10 +10,10 @@ public abstract class ObjectElement {
 
 	// Scale
 	public float scale;
-	
-	public Map<String,String> nameAlias = new HashMap<>();
+
+	public Map<String, String> nameAlias = new HashMap<>();
 
 	public abstract boolean putInformation(Object from, String name, Object value);
-	
-	public abstract Map<String,String> getFormattedInformation();
+
+	public abstract Map<String, String> getFormattedInformation();
 }

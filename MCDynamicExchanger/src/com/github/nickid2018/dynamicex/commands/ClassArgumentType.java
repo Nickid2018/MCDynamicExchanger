@@ -31,7 +31,7 @@ public class ClassArgumentType implements ArgumentType<String> {
 		String clazz = reader.readUnquotedString();
 		if (!CLASSES_LOADED.contains(clazz))
 			throw CLASS_UNKNOWN.create(clazz);
-		if(!ClassNameTransformer.isRemapped())
+		if (!ClassNameTransformer.isRemapped())
 			return ClassNameTransformer.getClassName(clazz);
 		return clazz;
 	}

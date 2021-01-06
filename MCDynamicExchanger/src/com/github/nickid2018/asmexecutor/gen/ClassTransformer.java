@@ -108,8 +108,6 @@ public class ClassTransformer extends ClassVisitor {
 			throw new RuntimeException(e);
 		}
 	}
-	
-	
 
 	public static class ClassMethodWriter extends MethodTransformer.MethodWriter {
 

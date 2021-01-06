@@ -238,7 +238,8 @@ public class MethodGenerator {
 				String[] sps = detail.split(" ", 3);
 				switch (sps[1].toLowerCase()) {
 				case "string":
-					mwriter.visitLdcInsn(sps.length == 3 ? sps[2].replaceAll("\r", "").replaceAll("\\\\NEWLINE\\\\", "\n") : "");
+					mwriter.visitLdcInsn(
+							sps.length == 3 ? sps[2].replaceAll("\r", "").replaceAll("\\\\NEWLINE\\\\", "\n") : "");
 					break;
 				case "class":
 					mwriter.visitLdcInsn(Type.getObjectType(sps[2].trim()));

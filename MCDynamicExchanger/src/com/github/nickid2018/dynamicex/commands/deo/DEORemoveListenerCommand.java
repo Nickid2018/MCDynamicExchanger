@@ -20,7 +20,7 @@ public class DEORemoveListenerCommand {
 
 	private static int remove(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
 		String name = StringArgumentType.getString(context, "name");
-		if(!ObjectInfosHolder.elements.containsKey(name))
+		if (!ObjectInfosHolder.elements.containsKey(name))
 			throw REMOVE_COMMAND_ERROR.create(name);
 		ObjectInfosHolder.elements.remove(name);
 		context.getSource().sendSuccess(new TextComponent("\u00A7ASucceeded in removing listener."), true);

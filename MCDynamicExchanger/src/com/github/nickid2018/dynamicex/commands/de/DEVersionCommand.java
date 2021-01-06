@@ -13,7 +13,7 @@ public class DEVersionCommand {
 			return 1;
 		}));
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public static void registerClient(CommandDispatcher<SharedSuggestionProvider> dispatcher) {
 		@SuppressWarnings("rawtypes")

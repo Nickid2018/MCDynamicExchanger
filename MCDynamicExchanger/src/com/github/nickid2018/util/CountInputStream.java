@@ -25,7 +25,7 @@ public class CountInputStream extends InputStream {
 		time = System.currentTimeMillis();
 		return deltaReaded;
 	}
-	
+
 	public double getSpeed() {
 		return speed;
 	}
