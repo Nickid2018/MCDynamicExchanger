@@ -78,7 +78,7 @@ public class OfficalFormat extends RemapperFormat {
 					String[] splits = now.trim().split(" -> ");
 					String source = splits[1];
 					String to = splits[0].split(" ")[1];
-					nowClazz.fieldMappings.put(source, to);
+					nowClazz.fieldMappings.put(source + ClassUtils.mapToSig(splits[0].split(" ")[0], revClass), to);
 					if (detail)
 						ProgramMain.logger.info("Field Entry: " + source + " to " + to);
 				}

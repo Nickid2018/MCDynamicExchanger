@@ -5,6 +5,7 @@ import java.util.*;
 import java.util.zip.*;
 import com.github.nickid2018.*;
 import com.github.nickid2018.util.*;
+import com.github.nickid2018.argparser.*;
 
 import static com.github.nickid2018.ProgramMain.logger;
 
@@ -15,11 +16,13 @@ public class CompareProgram {
 	public Enumeration<? extends ZipEntry> newVersionEntries;
 	private ZipFile oldV;
 	private ZipFile newV;
+	private boolean excludeRes;
 
-	public CompareProgram(String oldVersion, String newVersion) throws IOException {
+	public CompareProgram(String oldVersion, String newVersion, boolean excludeRes) throws IOException {
 		oldV = new ZipFile(oldVersion);
 		newV = new ZipFile(newVersion);
 		newVersionEntries = newV.entries();
+		this.excludeRes = excludeRes;
 		initOldVersion();
 	}
 
@@ -27,29 +30,27 @@ public class CompareProgram {
 		Enumeration<? extends ZipEntry> oldEntries = oldV.entries();
 		while (oldEntries.hasMoreElements()) {
 			ZipEntry entry = oldEntries.nextElement();
-			String name = entry.getName().replace('/', '.');
-			if (!name.endsWith(".class"))
+			String name = entry.getName();
+			boolean isClass = name.endsWith(".class");
+			if (!isClass && excludeRes)
 				continue;
-			name = name.substring(0, name.length() - 6);
+			name = (isClass ? name.replace('/', '.') : name).substring(0, name.length() - (isClass ? 6 : 0));
 			oldVersionEntries.put(name, oldV.getInputStream(entry));
 			files.add(name);
 		}
 	}
 
 	public boolean hasNext() {
-		return !oldVersionEntries.isEmpty() && newVersionEntries.hasMoreElements();
+		return !oldVersionEntries.isEmpty() || newVersionEntries.hasMoreElements();
 	}
 
 	public CompareResult next() throws IOException {
-		if (newVersionEntries.hasMoreElements()) {
-			String name = "";
-			ZipEntry entry = null;
-			while (!name.endsWith(".class") && newVersionEntries.hasMoreElements()) {
-				entry = newVersionEntries.nextElement();
-				name = entry.getName().replace('/', '.');
-			}
-			if (name.endsWith(".class")) {
-				name = name.substring(0, name.length() - 6);
+		while (newVersionEntries.hasMoreElements()) {
+			ZipEntry entry = newVersionEntries.nextElement();
+			String name = entry.getName();
+			boolean isClass = name.endsWith(".class");
+			if (isClass || !excludeRes) {
+				name = (isClass ? name.replace('/', '.') : name).substring(0, name.length() - (isClass ? 6 : 0));
 				files.remove(name);
 				return new CompareResult(name, oldVersionEntries.remove(name), newV.getInputStream(entry));
 			}
@@ -66,20 +67,24 @@ public class CompareProgram {
 		newV.close();
 	}
 
-	public static void compareSimple(String oldVersion, String newVersion, boolean detailed) throws IOException {
+	public static void compareSimple(CommandResult res) throws IOException {
 		logger = new SortedConsoleLogger();
-		if (!AddClassPath.tryToLoadMCLibrary("commons-io/commons-io")) {
+		if (!(ClassUtils.isClassExists("org.apache.commons.io.IOUtils")
+				|| AddClassPath.tryToLoadMCLibrary("commons-io/commons-io"))) {
 			logger.info("Cannot load library \"commons-io\","
 					+ " please ensure your running directory is right and your Minecraft has been downloaded.");
+			logger.flush();
 			return;
 		}
 		try {
-			CompareProgram program = new CompareProgram(oldVersion, newVersion);
+			CompareProgram program = new CompareProgram(res.getSwitch("old_version").toString(),
+					res.getSwitch("new_version").toString(), !res.containsSwitch("-Rs"));
 			while (program.hasNext()) {
 				CompareResult result = program.next();
 				if (result.type != CompareResultType.NONE)
 					logger.info(result.getMessage()
-							+ (detailed ? "[Old: " + result.oldMD5 + " New: " + result.newMD5 + "]" : ""));
+							+ (res.containsSwitch("-D") ? "[Old: " + result.oldMD5 + " New: " + result.newMD5 + "]"
+									: ""));
 			}
 			program.close();
 		} catch (Throwable e) {

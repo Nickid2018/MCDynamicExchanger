@@ -15,7 +15,8 @@ public class DecompileProgram {
 
 	public static void decompileSimple(CommandResult result) {
 		logger = new DefaultConsoleLogger();
-		if (!AddClassPath.tryToLoadMCLibrary("commons-io/commons-io")) {
+		if (!(ClassUtils.isClassExists("org.apache.commons.io.IOUtils")
+				&& AddClassPath.tryToLoadMCLibrary("commons-io/commons-io"))) {
 			logger.info("Cannot load library \"commons-io\","
 					+ " please ensure your running directory is right and your Minecraft has been downloaded.");
 			return;

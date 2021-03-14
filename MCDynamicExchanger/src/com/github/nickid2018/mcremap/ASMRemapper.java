@@ -25,7 +25,7 @@ public class ASMRemapper extends Remapper {
 		RemapClass clazz = format.remaps.get(ClassUtils.toBinaryName(owner));
 		if (clazz == null)
 			return name;
-		String get = clazz.findField(name);
+		String get = clazz.findField(name + desc);
 		return get == null ? name : get;
 	}
 

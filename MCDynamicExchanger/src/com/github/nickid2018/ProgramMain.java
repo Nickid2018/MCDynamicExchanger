@@ -20,8 +20,7 @@ public class ProgramMain {
 		try {
 			CommandResult result = model.parse(args);
 			if (result.containsSwitch("compare"))
-				CompareProgram.compareSimple(result.getSwitch("old_version").toString(),
-						result.getSwitch("new_version").toString(), result.containsSwitch("-D"));
+				CompareProgram.compareSimple(result);
 			else if (result.containsSwitch("decompile"))
 				DecompileProgram.decompileSimple(result);
 			else
@@ -37,6 +36,7 @@ public class ProgramMain {
 		UnorderSwitchTable table = new UnorderSwitchTable();
 		model.switches.add(table);
 		table.addLiteral(new LiteralSwitch("-D", true));// Detail Output
+		table.addLiteral(new LiteralSwitch("-Rs", true));// Resource Compare
 		model.switches.add(new StringSwitch("old_version"));
 		model.switches.add(new StringSwitch("new_version"));
 		return model;
