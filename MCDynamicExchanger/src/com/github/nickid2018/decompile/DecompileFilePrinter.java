@@ -34,7 +34,8 @@ public class DecompileFilePrinter implements Printer {
 
 	public byte[] getBytes() {
 		// An interesting thing..
-		return writer.toString().replace("\u2603", "variable").getBytes(Charset.forName("UTF-8"));
+		return writer.toString().replace("\u2603", "variable").replace("â˜ƒ", "variable")
+				.getBytes(Charset.forName("UTF-8"));
 	}
 
 	@Override

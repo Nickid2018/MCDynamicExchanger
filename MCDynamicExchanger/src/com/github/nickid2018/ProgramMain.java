@@ -26,9 +26,9 @@ public class ProgramMain {
 			else
 				RemapProgram.doSimpleRemap(result);
 		} catch (CommandParseException e) {
-			(logger = new DefaultConsoleLogger()).error("Command is illegal!", e);
+			(logger = new DefaultConsoleLogger()).error(I18N.getText("command.illegal"), e);
 		}
-		logger.info("Time used: " + (System.currentTimeMillis() - time) + "ms");
+		logger.info(I18N.getText("time.used", System.currentTimeMillis() - time));
 	}
 
 	private static CommandModel getComparatorModel() throws CommandParseException {

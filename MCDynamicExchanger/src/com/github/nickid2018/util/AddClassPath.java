@@ -28,19 +28,24 @@ public class AddClassPath {
 	}
 
 	public static final boolean addClassPathInDirs(File path) {
-		boolean yes = false;
+		boolean yes = true;
 		File[] files = path.listFiles();
 		if (files == null)
 			return false;
 		for (File file : files) {
-			yes |= addClassPath(file);
+			if (!file.getName().endsWith(".jar"))
+				continue;
+			if (file.isDirectory())
+				yes &= addClassPathInDirs(file);
+			else
+				yes &= addClassPath(file);
 		}
 		return yes;
 	}
 
 	public static final boolean tryToLoadMCLibrary(String name) {
 		File library = new File("libraries/" + name);
-		if (!library.exists())
+		if (!library.isDirectory())
 			return false;
 		File dirLoad = new File(library, library.list()[0]);
 		return addClassPathInDirs(dirLoad);

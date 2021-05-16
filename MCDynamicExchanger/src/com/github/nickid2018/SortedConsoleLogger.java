@@ -15,7 +15,7 @@ public class SortedConsoleLogger implements ISystemLogger {
 	public void error(String string, Throwable error) {
 		flush();
 		System.err.println(string);
-		System.err.println("Details:");
+		System.err.println(I18N.getText("error.detail"));
 		error.printStackTrace();
 	}
 
@@ -23,6 +23,11 @@ public class SortedConsoleLogger implements ISystemLogger {
 	public void flush() {
 		lines.forEach(System.out::println);
 		lines.clear();
+	}
+
+	@Override
+	public void formattedInfo(String str) {
+		info(I18N.getText(str));
 	}
 
 }

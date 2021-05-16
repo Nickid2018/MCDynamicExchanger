@@ -2,12 +2,14 @@ package com.github.nickid2018.compare;
 
 import java.util.function.*;
 
+import com.github.nickid2018.I18N;
+
 public enum CompareResultType {
 
-	NONE((f) -> null), //
-	NEW_FILE((f) -> "New File: " + f), // New File
-	DELETE_FILE((f) -> "Delete File: " + f), // Delete File
-	MODIFY((f) -> "Modify File: " + f); // Modify File
+	NONE(f -> null), //
+	NEW_FILE(f -> I18N.getText("compare.newfile", f)), // New File
+	DELETE_FILE(f -> I18N.getText("compare.delete", f)), // Delete File
+	MODIFY(f -> I18N.getText("compare.modify", f)); // Modify File
 
 	private Function<String, String> formatAction;
 

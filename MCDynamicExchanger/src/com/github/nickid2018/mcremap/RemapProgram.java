@@ -14,11 +14,11 @@ public class RemapProgram {
 		try {
 			OfficalFormat format = new OfficalFormat(result);
 			format.processInitMap(result.getSwitch("mapping_url").toString());
-			logger.info("Generated class mapping");
+			logger.formattedInfo("remap.readmap.over");
 			ClassTreeGenerator generator = new ClassTreeGenerator();
 			generator.runGenerate(result, format);
 			if (result.containsSwitch("-Dy")) {
-				logger.info("Dry Run successfully.");
+				logger.formattedInfo("remap.dryrun");
 				return;
 			}
 			if (!(result.containsSwitch("--outmap") || result.containsSwitch("--outrev"))) {
@@ -26,17 +26,15 @@ public class RemapProgram {
 				remapper.remapAll(result, format);
 			}
 		} catch (Throwable e) {
-			logger.error("Unknown error has been thrown!", e);
+			logger.error(I18N.getText("error.unknown"), e);
 		}
 	}
 
 	private static void checkFiles() {
 		boolean failed = false;
-		AddClassPath.addClassPathInDirs("dynamicexchanger/libs");
-		if (!(ClassUtils.isClassExists("org.apache.commons.io.IOUtils")
-				&& AddClassPath.tryToLoadMCLibrary("commons-io/commons-io"))) {
-			logger.info("Cannot load library \"commons-io\","
-					+ " please ensure your running directory is right and your Minecraft has been downloaded.");
+		if (!ClassUtils.isClassExists("org.apache.commons.io.IOUtils")
+				&& !AddClassPath.tryToLoadMCLibrary("commons-io/commons-io")) {
+			logger.formattedInfo("error.libraries.io");
 			failed = true;
 		}
 		if (!ClassUtils.isClassExists("org.objectweb.asm.Opcodes")) {
@@ -63,7 +61,7 @@ public class RemapProgram {
 			AddClassPath.addClassPathInDirs("dynamicexchanger/libs");
 		}
 		if (failed) {
-			logger.info("Cannot launch the program: lost some libraries.");
+			logger.formattedInfo("error.libraries.lost");
 			System.exit(-1);
 		}
 	}

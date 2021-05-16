@@ -15,15 +15,13 @@ public class DecompileProgram {
 
 	public static void decompileSimple(CommandResult result) {
 		logger = new DefaultConsoleLogger();
-		if (!(ClassUtils.isClassExists("org.apache.commons.io.IOUtils")
-				&& AddClassPath.tryToLoadMCLibrary("commons-io/commons-io"))) {
-			logger.info("Cannot load library \"commons-io\","
-					+ " please ensure your running directory is right and your Minecraft has been downloaded.");
+		if (!ClassUtils.isClassExists("org.apache.commons.io.IOUtils")
+				&& !AddClassPath.tryToLoadMCLibrary("commons-io/commons-io")) {
+			logger.formattedInfo("error.libraries.io");
 			return;
 		}
 		if (!ClassUtils.isClassExists("org.jd.core.v1.ClassFileToJavaSourceDecompiler")) {
-			logger.info("Cannot load library \"jd-core\", please ensure the jd-core library has been put in libs.");
-			logger.info("jd-core download page: https://bintray.com/java-decompiler/maven/org.jd%3Ajd-core/1.1.3");
+			logger.formattedInfo("error.libraries.jdcore");
 			return;
 		}
 		try {
@@ -49,7 +47,7 @@ public class DecompileProgram {
 						zos.putNextEntry(entry);
 						IOUtils.copy(file.getInputStream(entry), zos);
 						if (detailed) {
-							logger.info("Resource Entry: " + entry.getName());
+							logger.info(I18N.getText("decompile.resource", entry.getName()));
 						}
 					}
 					continue;
@@ -63,12 +61,12 @@ public class DecompileProgram {
 				decompiler.decompile(loader, printer, internalName, config);
 				zos.write(printer.getBytes());
 				if (detailed) {
-					logger.info("Decompiled Class: " + internalName);
+					logger.info(I18N.getText("decompile.classover", internalName));
 				}
 			}
 			zos.close();
 		} catch (Throwable e) {
-			logger.error("Unknown error has been thrown!", e);
+			logger.error(I18N.getText("error.unknown"), e);
 		}
 	}
 }

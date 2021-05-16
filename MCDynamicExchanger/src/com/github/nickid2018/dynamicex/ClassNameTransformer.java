@@ -124,7 +124,7 @@ public class ClassNameTransformer {
 			try {
 				System.out.println("Recognized the client is \"vanilla\" version.");
 				helper = RemapClassSerializeHelper.getInstance();
-				String md5 = MD5Compute.getMD5(ClassNameTransformer.class.getResourceAsStream("/META-INF/MOJANGCS.SF"));
+				String md5 = SHA256Compute.getSHA256(ClassNameTransformer.class.getResourceAsStream("/META-INF/MOJANGCS.SF"));
 				System.out.println("The MD5 of the SF file is " + md5);
 				boolean finded = false;
 				for (String file : new File("dynamicexchanger/mappings").list()) {

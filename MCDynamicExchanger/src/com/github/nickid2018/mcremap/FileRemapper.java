@@ -32,8 +32,6 @@ public class FileRemapper {
 		// MANIFEST.MF
 		recreateManifest();
 		if (!result.containsSwitch("-Nh")) {
-			// Remove Modded Check
-			removeModCheck();
 			// Change Brand
 			changeBrand();
 			// Add Remapped Mark
@@ -70,16 +68,16 @@ public class FileRemapper {
 			reader.accept(new ClassRemapper(writer, remapper), 0);
 			byte[] array = writer.toByteArray();
 			if (detail)
-				ProgramMain.logger.info("Remapping class: " + className + " (Length:" + array.length + ")");
+				ProgramMain.logger.info(I18N.getText("remap.classremap.processing", className, array.length));
 			write(format.remaps.get(className).mapName().replace('.', '/') + ".class", array);
 		}
-		ProgramMain.logger.info("Remapped all classes");
+		ProgramMain.logger.formattedInfo("remap.classremap.over");
 	}
 
 	private void recreateManifest() throws IOException {
 		write("META-INF/MANIFEST.MF",
 				"Manifest-Version: 1.0\r\nMain-Class: net.minecraft.client.main.Main\r\n".getBytes());
-		ProgramMain.logger.info("Recreated manifest");
+		ProgramMain.logger.formattedInfo("remap.mod.manifest");
 	}
 
 	private Map<String, ByteArrayOutputStream> buffers = new HashMap<>();
@@ -91,22 +89,13 @@ public class FileRemapper {
 		buffers.put(file, os);
 	}
 
-	private void removeModCheck() throws IOException {
-		doHacks("net.minecraft.client.Minecraft", reader -> {
-			ClassWriter writer = new ClassWriter(0);
-			reader.accept(new RemoveModCheck(writer), 0);
-			return writer;
-		});
-		ProgramMain.logger.info("Removed modding check");
-	}
-
 	private void hackTheName() throws IOException {
 		doHacks("net.minecraft.client.gui.screens.TitleScreen", reader -> {
 			ClassWriter writer = new ClassWriter(0);
 			reader.accept(new ModifyTitleScreen(writer), 0);
 			return writer;
 		});
-		ProgramMain.logger.info("Modified Title Screen");
+		ProgramMain.logger.formattedInfo("remap.mod.title");
 	}
 
 	private void changeBrand() throws IOException {
@@ -117,7 +106,7 @@ public class FileRemapper {
 		};
 		doHacks("net.minecraft.server.MinecraftServer", func);
 		doHacks("net.minecraft.client.ClientBrandRetriever", func);
-		ProgramMain.logger.info("Modified Brand Tag");
+		ProgramMain.logger.formattedInfo("remap.mod.brand");
 	}
 
 	private void doHacks(String className, Function<ClassReader, ClassWriter> func) throws IOException {
@@ -129,7 +118,7 @@ public class FileRemapper {
 	}
 
 	public void runPack(String dest) throws IOException, InterruptedException {
-		ProgramMain.logger.info("Packing into JAR...");
+		ProgramMain.logger.formattedInfo("remap.pack");
 		File destf = new File(dest);
 		if (!destf.exists())
 			destf.createNewFile();
@@ -140,7 +129,7 @@ public class FileRemapper {
 			zos.write(buffers.get(entry).toByteArray());
 		}
 		zos.close();
-		ProgramMain.logger.info("Minecraft has been remapped successfully.");
+		ProgramMain.logger.formattedInfo("remap.over");
 	}
 
 	public String getNowFile() {

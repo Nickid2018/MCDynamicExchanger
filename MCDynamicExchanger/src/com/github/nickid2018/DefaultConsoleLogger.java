@@ -15,6 +15,11 @@ public class DefaultConsoleLogger implements ISystemLogger {
 	}
 
 	@Override
+	public void formattedInfo(String str) {
+		info(I18N.getText(str));
+	}
+
+	@Override
 	public void flush() {
 	}
 

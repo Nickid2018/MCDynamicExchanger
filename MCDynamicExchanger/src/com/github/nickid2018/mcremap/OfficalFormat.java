@@ -2,9 +2,9 @@ package com.github.nickid2018.mcremap;
 
 import java.io.*;
 import java.net.*;
+import com.github.nickid2018.*;
 import org.apache.commons.io.*;
 import com.github.nickid2018.util.*;
-import com.github.nickid2018.ProgramMain;
 import com.github.nickid2018.argparser.*;
 
 public class OfficalFormat extends RemapperFormat {
@@ -41,7 +41,7 @@ public class OfficalFormat extends RemapperFormat {
 				remaps.put(toClass, new RemapClass(toClass, nowClass, this));
 				revClass.put(nowClass, toClass);
 				if (detail)
-					ProgramMain.logger.info("Class Entry: " + toClass + " to " + nowClass);
+					ProgramMain.logger.info(I18N.getText("remap.readmap.classentry", toClass, nowClass));
 			}
 		}
 		token.close();
@@ -72,7 +72,7 @@ public class OfficalFormat extends RemapperFormat {
 					String to = descs[1].split("\\(")[0].trim();
 					nowClazz.methodMappings.put(source, to);
 					if (detail)
-						ProgramMain.logger.info("Method Entry: " + source + " to " + to);
+						ProgramMain.logger.info(I18N.getText("remap.readmap.methodentry", source, to));
 				} else {
 					// Field
 					String[] splits = now.trim().split(" -> ");
@@ -80,7 +80,7 @@ public class OfficalFormat extends RemapperFormat {
 					String to = splits[0].split(" ")[1];
 					nowClazz.fieldMappings.put(source + ClassUtils.mapToSig(splits[0].split(" ")[0], revClass), to);
 					if (detail)
-						ProgramMain.logger.info("Field Entry: " + source + " to " + to);
+						ProgramMain.logger.info(I18N.getText("remap.readmap.fieldentry", source, to));
 				}
 			} else {
 				// Class
@@ -90,7 +90,7 @@ public class OfficalFormat extends RemapperFormat {
 				toClass = splits[1];
 				nowClazz = remaps.get(toClass);
 				if (detail)
-					ProgramMain.logger.info("Now Class: " + toClass + " (" + nowClass + ")");
+					ProgramMain.logger.info(I18N.getText("remap.readmap.nowclass", toClass, nowClass));
 			}
 		}
 	}

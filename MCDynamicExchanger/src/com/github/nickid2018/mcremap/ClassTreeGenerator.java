@@ -4,10 +4,10 @@ import java.io.*;
 import java.util.*;
 import java.util.zip.*;
 import org.objectweb.asm.*;
+import com.github.nickid2018.*;
 import org.objectweb.asm.tree.*;
 import org.apache.commons.io.*;
 import com.github.nickid2018.util.*;
-import com.github.nickid2018.ProgramMain;
 import com.github.nickid2018.argparser.*;
 
 public class ClassTreeGenerator {
@@ -44,8 +44,8 @@ public class ClassTreeGenerator {
 			String className = ClassUtils.toBinaryName(reader.getClassName());
 			RemapClass clazz = format.remaps.get(className);
 			if (clazz == null) {
-				ClassNode node = new ClassNode(Opcodes.ASM6);
-				reader.accept(node, ClassReader.SKIP_CODE);
+				ClassNode node = new ClassNode(Opcodes.ASM9);
+				reader.accept(node, 0);
 				clazz = new RemapClass(className, className, format);
 				format.remaps.put(className, clazz);
 				for (Object mno : node.methods) {
@@ -57,10 +57,10 @@ public class ClassTreeGenerator {
 					clazz.fieldMappings.put(fl.name, fl.name);
 				}
 				if (detail)
-					ProgramMain.logger.info("Add unobscured class: " + className);
+					ProgramMain.logger.info(I18N.getText("remap.genmap.addclasses.processing", className));
 			}
 		}
-		ProgramMain.logger.info("Added all unobscured classes");
+		ProgramMain.logger.formattedInfo("remap.genmap.addclasses.over");
 	}
 
 	private final void generateExtendTree(ZipFile file, RemapperFormat format) throws IOException {
@@ -76,9 +76,9 @@ public class ClassTreeGenerator {
 			for (String name : reader.getInterfaces())
 				clazz.superClasses.add(format.remaps.get(ClassUtils.toBinaryName(name)));
 			if (detail)
-				ProgramMain.logger.info("Generate inherit tree: " + reader.getClassName());
+				ProgramMain.logger.info(I18N.getText("remap.genmap.geninherit.processing", reader.getClassName()));
 		}
-		ProgramMain.logger.info("Generated all inherit trees");
+		ProgramMain.logger.formattedInfo("remap.genmap.geninherit.over");
 	}
 
 	private final void doOutputRemap(InputStream mf, String path, RemapperFormat format) throws IOException {

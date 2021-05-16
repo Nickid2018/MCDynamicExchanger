@@ -69,10 +69,9 @@ public class CompareProgram {
 
 	public static void compareSimple(CommandResult res) throws IOException {
 		logger = new SortedConsoleLogger();
-		if (!(ClassUtils.isClassExists("org.apache.commons.io.IOUtils")
-				|| AddClassPath.tryToLoadMCLibrary("commons-io/commons-io"))) {
-			logger.info("Cannot load library \"commons-io\","
-					+ " please ensure your running directory is right and your Minecraft has been downloaded.");
+		if (!ClassUtils.isClassExists("org.apache.commons.io.IOUtils")
+				&& !AddClassPath.tryToLoadMCLibrary("commons-io/commons-io")) {
+			logger.formattedInfo("error.libraries.io");
 			logger.flush();
 			return;
 		}
@@ -81,14 +80,16 @@ public class CompareProgram {
 					res.getSwitch("new_version").toString(), !res.containsSwitch("-Rs"));
 			while (program.hasNext()) {
 				CompareResult result = program.next();
+				if (result == null)
+					continue;
 				if (result.type != CompareResultType.NONE)
 					logger.info(result.getMessage()
-							+ (res.containsSwitch("-D") ? "[Old: " + result.oldMD5 + " New: " + result.newMD5 + "]"
+							+ (res.containsSwitch("-D") ? "[SHA-256: " + result.oldSHA256 + " -> " + result.newSHA256 + "]"
 									: ""));
 			}
 			program.close();
 		} catch (Throwable e) {
-			logger.error("Unknown error has been thrown!", e);
+			logger.error(I18N.getText("error.unknown"), e);
 		}
 		logger.flush();
 	}
