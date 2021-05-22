@@ -1,0 +1,46 @@
+用法：
+
+	1) ... [options] <mapping_url> <mc_file>
+	2) ... compare [options] <old_version> <new_version>
+	3) ... decompile [options] <source_file>
+	4) ... help
+	
+全局开关：
+
+	--lang <locale> 设置语言环境
+	-D 输出详细信息（依具体命令而定）
+	
+1) 反混淆所有文件
+
+	参数：
+		<mapping_url> 混淆表的URL
+		<mc_file> Minecraft文件位置
+		
+	开关：
+		-Nh 阻止代码修改
+		-Dy 执行但不进行反混淆
+		--output <output> 设置输出文件
+		--tmpdir <tempdir> 设置临时文件目录*
+		--outmap <file> 输出格式化的混淆文件表*
+		--outrev <file> 输出格式化的反混淆文件表*
+		// *未启用
+		
+2) 对比两版本之间的文件差异
+
+	参数：
+		<old_version> 旧版本文件
+		<new_version> 新版本文件
+		
+	开关：
+		-Rs 同时对比资源文件
+		
+3) 反编译所有类文件
+
+	参数：
+		<source_file> Minecraft的JAR文件（建议先进行反混淆）
+		
+	开关：
+		-Ni 不写入文件头部注释信息
+		-Ro 同时输出资源文件
+		
+4) 显示此帮助信息

@@ -7,7 +7,7 @@ public class ModifyTitleScreen extends ClassVisitor {
 	private ClassWriter writer;
 
 	public ModifyTitleScreen(ClassWriter writer) {
-		super(Opcodes.ASM6, writer);
+		super(Opcodes.ASM9, writer);
 		this.writer = writer;
 	}
 

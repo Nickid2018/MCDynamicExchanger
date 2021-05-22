@@ -28,6 +28,8 @@ public class CommandModel {
 		int nowIndex = 0;
 		boolean meetLast = false;
 		boolean childTrigger = false;
+		if (switches.isEmpty())
+			return result;
 		CommandSwitch now = switches.elementAt(0);
 		CommandSwitch writingIn = null;
 		for (String token : args) {

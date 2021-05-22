@@ -1,5 +1,7 @@
 package com.github.nickid2018;
 
+import java.nio.charset.*;
+import org.apache.commons.io.*;
 import com.github.nickid2018.util.*;
 import com.github.nickid2018.compare.*;
 import com.github.nickid2018.mcremap.*;
@@ -15,17 +17,28 @@ public class ProgramMain {
 	public static void main(String[] args) throws Exception {
 		long time = System.currentTimeMillis();
 		AddClassPath.addClassPathInDirs("dynamicexchanger/libs");
-		CommandModel model = getRemapperModel().subCommand("compare", getComparatorModel()).subCommand("decompile",
-				getDecompilerModel());
+		CommandModel model = getRemapperModel().subCommand("compare", getComparatorModel())
+				.subCommand("decompile", getDecompilerModel()).subCommand("help", new CommandModel());
 		try {
 			CommandResult result = model.parse(args);
-			if (result.containsSwitch("compare"))
+			I18N.init(result.getStringOrDefault("--lang", null));
+			if (result.containsSwitch("help")) {
+				if (!ClassUtils.isClassExists("org.apache.commons.io.IOUtils")
+						&& !AddClassPath.tryToLoadMCLibrary("commons-io/commons-io")) {
+					logger.formattedInfo("error.libraries.io");
+				} else
+					(logger = new DefaultConsoleLogger()).info(
+							IOUtils.toString(ProgramMain.class.getResource("/assets/lang/helps/" + I18N.NOW + ".lang"),
+									Charset.forName("UTF-8")));
+			} else if (result.containsSwitch("compare"))
 				CompareProgram.compareSimple(result);
 			else if (result.containsSwitch("decompile"))
 				DecompileProgram.decompileSimple(result);
 			else
 				RemapProgram.doSimpleRemap(result);
 		} catch (CommandParseException e) {
+			if (I18N.LANG == null)
+				I18N.init(null);
 			(logger = new DefaultConsoleLogger()).error(I18N.getText("command.illegal"), e);
 		}
 		logger.info(I18N.getText("time.used", System.currentTimeMillis() - time));
@@ -35,6 +48,7 @@ public class ProgramMain {
 		CommandModel model = new CommandModel();
 		UnorderSwitchTable table = new UnorderSwitchTable();
 		model.switches.add(table);
+		table.addSwitch("--lang", new StringArgumentSwitch("--lang"));
 		table.addLiteral(new LiteralSwitch("-D", true));// Detail Output
 		table.addLiteral(new LiteralSwitch("-Rs", true));// Resource Compare
 		model.switches.add(new StringSwitch("old_version"));
@@ -46,6 +60,7 @@ public class ProgramMain {
 		CommandModel model = new CommandModel();
 		UnorderSwitchTable table = new UnorderSwitchTable();
 		model.switches.add(table);
+		table.addSwitch("--lang", new StringArgumentSwitch("--lang"));
 		table.addSwitch("--output", new StringArgumentSwitch("--output"));// Output File
 		table.addLiteral(new LiteralSwitch("-D", true));// Detail Output
 		table.addLiteral(new LiteralSwitch("-Ni", true));// No Infos
@@ -58,6 +73,7 @@ public class ProgramMain {
 		CommandModel model = new CommandModel();
 		UnorderSwitchTable table = new UnorderSwitchTable();
 		model.switches.add(table);
+		table.addSwitch("--lang", new StringArgumentSwitch("--lang"));
 		table.addLiteral(new LiteralSwitch("-Nh", true));// No hacks
 		table.addLiteral(new LiteralSwitch("-D", true));// Detail Output
 		table.addLiteral(new LiteralSwitch("-Dy", true));// Dry Run

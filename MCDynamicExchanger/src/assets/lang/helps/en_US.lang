@@ -1,0 +1,46 @@
+Usage:
+
+	1) ... [options] <mapping_url> <mc_file>
+	2) ... compare [options] <old_version> <new_version>
+	3) ... decompile [options] <source_file>
+	4) ... help
+	
+Universal Options:
+
+	--lang <locale> Set the locale
+	-D Output detail messages
+	
+1) Remap Minecraft class files
+
+	Arguments:
+		<mapping_url> The URL of the obfuscation map
+		<mc_file> Minecraft file
+		
+	Options:
+		-Nh Cancel hack process (title/brand)
+		-Dy Dry run
+		--output <output> Set the output file
+		--tmpdir <tempdir> Set the temporary file location*
+		--outmap <file> Output formatted output map file*
+		--outrev <file> Output formatted reverse output map file*
+		// *Unused
+		
+2) Compare files between two versions
+
+	Arguments:
+		<old_version> File of old version
+		<new_version> File of new version
+		
+	Options:
+		-Rs Compare resource files
+		
+3) Decompile Minecraft class files
+
+	Arguments:
+		<source_file> Minecraft jar file (Remapped)
+		
+	Options:
+		-Ni Hide file information writing
+		-Ro Output resource files
+		
+4) Display this help message
