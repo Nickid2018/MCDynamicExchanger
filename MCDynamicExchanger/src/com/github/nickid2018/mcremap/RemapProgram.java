@@ -3,6 +3,7 @@ package com.github.nickid2018.mcremap;
 import com.github.nickid2018.*;
 import com.github.nickid2018.util.*;
 import com.github.nickid2018.argparser.*;
+import com.github.nickid2018.util.download.*;
 
 import static com.github.nickid2018.ProgramMain.logger;
 
@@ -37,32 +38,29 @@ public class RemapProgram {
 			logger.formattedInfo("error.libraries.io");
 			failed = true;
 		}
-		if (!ClassUtils.isClassExists("org.objectweb.asm.Opcodes")) {
-			failed |= !DownloadUtils.downloadResource("https://repo1.maven.org/maven2/org/ow2/asm/asm/9.0/asm-9.0.jar",
+		if (!ClassUtils.isClassExists("org.objectweb.asm.Opcodes"))
+			DownloadService.downloadResource("asm", "https://repo1.maven.org/maven2/org/ow2/asm/asm/9.0/asm-9.0.jar",
 					"dynamicexchanger/libs/asm-9.0.jar");
-			AddClassPath.addClassPathInDirs("dynamicexchanger/libs");
-		}
-		if (!ClassUtils.isClassExists("org.objectweb.asm.commons.ClassRemapper")) {
-			failed |= !DownloadUtils.downloadResource(
+		if (!ClassUtils.isClassExists("org.objectweb.asm.commons.ClassRemapper"))
+			DownloadService.downloadResource("asm-commons",
 					"https://repo1.maven.org/maven2/org/ow2/asm/asm-commons/9.0/asm-commons-9.0.jar",
 					"dynamicexchanger/libs/asm-commons-9.0.jar");
-			AddClassPath.addClassPathInDirs("dynamicexchanger/libs");
-		}
-		if (!ClassUtils.isClassExists("org.objectweb.asm.tree.analysis.Analyzer")) {
-			failed |= !DownloadUtils.downloadResource(
+		if (!ClassUtils.isClassExists("org.objectweb.asm.tree.analysis.Analyzer"))
+			DownloadService.downloadResource("asm-analysis",
 					"https://repo1.maven.org/maven2/org/ow2/asm/asm-analysis/9.0/asm-analysis-9.0.jar",
 					"dynamicexchanger/libs/asm-analysis-9.0.jar");
-			AddClassPath.addClassPathInDirs("dynamicexchanger/libs");
-		}
-		if (!ClassUtils.isClassExists("org.objectweb.asm.tree.ClassNode")) {
-			failed |= !DownloadUtils.downloadResource(
+		if (!ClassUtils.isClassExists("org.objectweb.asm.tree.ClassNode"))
+			DownloadService.downloadResource("asm-tree",
 					"https://repo1.maven.org/maven2/org/ow2/asm/asm-tree/9.0/asm-tree-9.0.jar",
 					"dynamicexchanger/libs/asm-tree-9.0.jar");
-			AddClassPath.addClassPathInDirs("dynamicexchanger/libs");
-		}
+		DownloadService.startDownloadInfoOutput();
+		failed |= !DownloadService.waitDownloadOver();
+		failed |= !DownloadService.FAILED_DOWNLOAD.isEmpty();
+		DownloadService.stopDownloadInfoOutput();
 		if (failed) {
 			logger.formattedInfo("error.libraries.lost");
 			System.exit(-1);
 		}
+		AddClassPath.addClassPathInDirs("dynamicexchanger/libs");
 	}
 }

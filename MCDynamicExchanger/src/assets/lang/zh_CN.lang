@@ -1,5 +1,7 @@
 #Common
 time.used=程序执行耗时: %s ms
+download.start=开始下载%s
+download.over=完成下载%s
 
 #Errors
 command.illegal=无效的命令格式！\n请运行"... help"以获得程序命令行用法
@@ -11,6 +13,9 @@ error.libraries.cfr=无法加载"cfr"类库，请确保此类库放置在libs目
 error.libraries.lost=无法启动程序：缺失类库
 error.decompile.unsupport=不支持的反混淆器： %s
 error.decompile.cfr=在反编译%s时发生错误： %s
+error.download=%s下载失败：%s
+error.downloadmc.version=未找到对应版本：%s
+error.downloadmc.sha1dismatch=下载完成但文件SHA1值不匹配，下载失败
 
 #Remapper
 remap.readmap.classentry=类 %s 反混淆为 %s
@@ -39,3 +44,9 @@ compare.modify=修改文件： %s
 #Decompiler
 decompile.resource=资源文件： %s
 decompile.classover=反编译类： %s
+
+#MCDownloader
+download.versionjson=版本JSON文件位于%s
+download.mcjarfile=MC JAR文件位于%s
+download.mcmap=MC混淆映射表位于%s
+download.allover=下载完成

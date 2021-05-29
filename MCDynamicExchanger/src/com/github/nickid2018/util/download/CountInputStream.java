@@ -1,4 +1,4 @@
-package com.github.nickid2018.util;
+package com.github.nickid2018.util.download;
 
 import java.io.*;
 
@@ -39,7 +39,6 @@ public class CountInputStream extends InputStream {
 
 	@Override
 	public void close() throws IOException {
-		super.close();
 		stream.close();
 	}
 }

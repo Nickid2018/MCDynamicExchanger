@@ -14,16 +14,16 @@ public class CompareResult {
 		this.file = file;
 		if (oldV == null) {
 			type = CompareResultType.NEW_FILE;
-			newSHA256 = SHA256Compute.getSHA256(newV);
+			newSHA256 = SHACompute.getSHA256(newV);
 			return;
 		}
 		if (newV == null) {
 			type = CompareResultType.DELETE_FILE;
-			oldSHA256 = SHA256Compute.getSHA256(oldV);
+			oldSHA256 = SHACompute.getSHA256(oldV);
 			return;
 		}
-		oldSHA256 = SHA256Compute.getSHA256(oldV);
-		newSHA256 = SHA256Compute.getSHA256(newV);
+		oldSHA256 = SHACompute.getSHA256(oldV);
+		newSHA256 = SHACompute.getSHA256(newV);
 		type = oldSHA256.equals(newSHA256) ? CompareResultType.NONE : CompareResultType.MODIFY;
 	}
 

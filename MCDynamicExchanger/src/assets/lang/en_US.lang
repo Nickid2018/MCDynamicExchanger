@@ -1,5 +1,7 @@
 #Common
 time.used=Time used: %s ms
+download.start=Start downloading %s
+download.over=Downloaded %s
 
 #Errors
 command.illegal=Command is illegal!\nPlease run "... help" to get more usage
@@ -11,6 +13,9 @@ error.libraries.cfr=Cannot load library "cfr", please ensure the cfr library has
 error.libraries.lost=Cannot launch the program: lost some libraries.
 error.decompile.unsupport=Unsupported decompiler: %s
 error.decompile.cfr=Exception occurred in decompiling %s: %s
+error.download=%s download failed: %s
+error.downloadmc.version=Version not found: %s
+error.downloadmc.sha1dismatch=Download over but SHA1 value mismatched
 
 #Remapper
 remap.readmap.classentry=Class Entry: %s to %s
@@ -39,3 +44,9 @@ compare.modify=Modify File: %s
 #Decompiler
 decompile.resource=Resource Entry: %s
 decompile.classover=Decompiled Class: %s
+
+#MCDownloader
+download.versionjson=Version JSON at %s
+download.mcjarfile=MC JAR file at %s
+download.mcmap=MC obfuscate map at %s
+download.allover=Download over.

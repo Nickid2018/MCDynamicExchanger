@@ -7,6 +7,8 @@ import com.github.nickid2018.compare.*;
 import com.github.nickid2018.mcremap.*;
 import com.github.nickid2018.argparser.*;
 import com.github.nickid2018.decompile.*;
+import com.github.nickid2018.util.download.*;
+import com.github.nickid2018.mcfiledownload.*;
 
 public class ProgramMain {
 
@@ -17,8 +19,9 @@ public class ProgramMain {
 	public static void main(String[] args) throws Exception {
 		long time = System.currentTimeMillis();
 		AddClassPath.addClassPathInDirs("dynamicexchanger/libs");
-		CommandModel model = getRemapperModel().subCommand("compare", getComparatorModel())
-				.subCommand("decompile", getDecompilerModel()).subCommand("help", new CommandModel());
+		CommandModel model = getRemapperModel().subCommand("download", getDownloaderModel())
+				.subCommand("compare", getComparatorModel()).subCommand("decompile", getDecompilerModel())
+				.subCommand("help", new CommandModel());
 		try {
 			CommandResult result = model.parse(args);
 			I18N.init(result.getStringOrDefault("--lang", null));
@@ -34,6 +37,8 @@ public class ProgramMain {
 				CompareProgram.compareSimple(result);
 			else if (result.containsSwitch("decompile"))
 				DecompileProgram.decompileSimple(result);
+			else if (result.containsSwitch("download"))
+				MCFileDownloader.downloadMCFileSimple(result);
 			else
 				RemapProgram.doSimpleRemap(result);
 		} catch (CommandParseException e) {
@@ -42,6 +47,7 @@ public class ProgramMain {
 			(logger = new DefaultConsoleLogger()).error(I18N.getText("command.illegal"), e);
 		}
 		logger.info(I18N.getText("time.used", System.currentTimeMillis() - time));
+		DownloadService.stopExecutors();
 	}
 
 	private static CommandModel getComparatorModel() throws CommandParseException {
@@ -67,6 +73,17 @@ public class ProgramMain {
 		table.addLiteral(new LiteralSwitch("-Ni", true));// No Infos
 		table.addLiteral(new LiteralSwitch("-Ro", true));// Resource Output
 		model.switches.add(new StringSwitch("source_file"));
+		return model;
+	}
+
+	private static CommandModel getDownloaderModel() throws CommandParseException {
+		CommandModel model = new CommandModel();
+		UnorderSwitchTable table = new UnorderSwitchTable();
+		model.switches.add(table);
+		table.addSwitch("--lang", new StringArgumentSwitch("--lang"));
+		table.addSwitch("--dir", new StringArgumentSwitch("--dir"));
+		table.addLiteral(new LiteralSwitch("-D", true));// Detail Output
+		model.switches.add(new StringSwitch("version"));
 		return model;
 	}
 

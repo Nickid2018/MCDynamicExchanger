@@ -6,13 +6,12 @@ import java.util.jar.*;
 import com.google.gson.*;
 import org.objectweb.asm.*;
 import net.minecraft.client.*;
+import com.github.nickid2018.*;
 import com.github.nickid2018.util.*;
 import org.objectweb.asm.commons.*;
-
-import com.github.nickid2018.DefaultConsoleLogger;
-import com.github.nickid2018.ProgramMain;
 import com.github.nickid2018.argparser.*;
 import com.github.nickid2018.mcremap.*;
+import com.github.nickid2018.util.download.*;
 
 public class ClassNameTransformer {
 
@@ -124,7 +123,8 @@ public class ClassNameTransformer {
 			try {
 				System.out.println("Recognized the client is \"vanilla\" version.");
 				helper = RemapClassSerializeHelper.getInstance();
-				String md5 = SHA256Compute.getSHA256(ClassNameTransformer.class.getResourceAsStream("/META-INF/MOJANGCS.SF"));
+				String md5 = SHACompute
+						.getSHA256(ClassNameTransformer.class.getResourceAsStream("/META-INF/MOJANGCS.SF"));
 				System.out.println("The MD5 of the SF file is " + md5);
 				boolean finded = false;
 				for (String file : new File("dynamicexchanger/mappings").list()) {
@@ -140,11 +140,16 @@ public class ClassNameTransformer {
 				if (!finded) {
 					String versionName = getVersionName();
 					String name = "dynamicexchanger/mappings/" + versionName + ".txt";
-					if (!new File(name).exists())
-						if (!DownloadUtils.downloadResource(getDownloadMapName(), name)) {
+					if (!new File(name).exists()) {
+						DownloadService.downloadResource(versionName + " mapping", getDownloadMapName(), name);
+						DownloadService.startDownloadInfoOutput();
+						if (!DownloadService.waitDownloadOver() || !DownloadService.FAILED_DOWNLOAD.isEmpty()) {
+							DownloadService.stopDownloadInfoOutput();
 							System.err.println("Resource downloading failed, please restrart the program!");
 							System.exit(0);
 						}
+						DownloadService.stopDownloadInfoOutput();
+					}
 					doMapGenerate(name);
 					doDeserialize(versionName + ".map");
 				}

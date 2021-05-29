@@ -10,7 +10,7 @@ public class DefaultConsoleLogger implements ISystemLogger {
 	@Override
 	public void error(String string, Throwable error) {
 		System.err.println(string);
-		System.err.println("Details:");
+		System.err.println(I18N.getText("error.detail"));
 		error.printStackTrace();
 	}
 

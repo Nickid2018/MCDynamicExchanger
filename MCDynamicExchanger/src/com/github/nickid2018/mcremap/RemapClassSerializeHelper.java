@@ -21,7 +21,7 @@ public class RemapClassSerializeHelper {
 		reverse = false;
 		this.classes = classes;
 		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(path));
-		oos.writeUTF(SHA256Compute.getSHA256(mf));
+		oos.writeUTF(SHACompute.getSHA256(mf));
 		oos.writeObject(classes);
 		oos.writeObject(inheritTree);
 		oos.close();
@@ -31,7 +31,7 @@ public class RemapClassSerializeHelper {
 		reverse = true;
 		this.classes = classes;
 		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(path));
-		oos.writeUTF(SHA256Compute.getSHA256(mf));
+		oos.writeUTF(SHACompute.getSHA256(mf));
 		oos.writeObject(reverseMap());
 		oos.writeObject(inheritTree);
 		oos.close();
