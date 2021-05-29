@@ -1,4 +1,4 @@
-package com.github.nickid2018.mcremap;
+package com.github.nickid2018.mcremap.optimize;
 
 import org.objectweb.asm.*;
 

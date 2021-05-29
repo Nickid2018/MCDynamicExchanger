@@ -1,4 +1,4 @@
-package com.github.nickid2018.decompile;
+package com.github.nickid2018.decompile.jdcore;
 
 import java.io.*;
 import java.util.zip.*;

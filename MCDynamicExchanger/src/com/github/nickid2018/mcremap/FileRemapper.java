@@ -8,13 +8,11 @@ import org.objectweb.asm.*;
 import com.github.nickid2018.*;
 import org.apache.commons.io.*;
 import com.github.nickid2018.util.*;
-import org.objectweb.asm.commons.*;
 import java.io.ByteArrayOutputStream;
 import com.github.nickid2018.argparser.*;
+import com.github.nickid2018.mcremap.optimize.*;
 
 public class FileRemapper {
-
-	public String tmpLocation;
 
 	private String nowFile;
 	private double dealed = 0;
@@ -22,8 +20,11 @@ public class FileRemapper {
 	private boolean detail;
 
 	public void remapAll(CommandResult result, RemapperFormat format) throws Exception {
-		tmpLocation = result.getStringOrDefault("--tmpdir", System.getProperty("java.io.tmpdir") + "\\MC-Remap");
 		detail = result.containsSwitch("-D");
+		OptimizedMethodRemapper
+				.setMode(LocalRenameMode.getMode(result.getStringOrDefault("--localRename", "type_count")));
+		if (result.containsSwitch("-Nl"))
+			OptimizedMethodRemapper.setNoLineNumbers();
 		ZipFile file = new ZipFile(new File(result.getSwitch("mc_file").toString()));
 		all = file.size();
 		// Remap
@@ -56,16 +57,7 @@ public class FileRemapper {
 			ClassWriter writer = new ClassWriter(0);
 			String className = entry.getName().replace('/', '.');
 			className = className.substring(0, className.length() - 6);
-//			reader.accept(new ClassRemapper(writer, remapper) {
-//				// That is a bug of ASM Library...?
-//				@Override
-//				public void visitInnerClass(String name, String outerName, String innerName, int access) {
-//					String shouldName = remapper.mapType(name);
-//					super.visitInnerClass(shouldName, outerName == null ? null : remapper.mapType(outerName),
-//							shouldName.substring(shouldName.lastIndexOf('$') + 1), access);
-//				}
-//			}, 0);
-			reader.accept(new ClassRemapper(writer, remapper), 0);
+			reader.accept(new OptimizedClassRemapper(writer, remapper), 0);
 			byte[] array = writer.toByteArray();
 			if (detail)
 				ProgramMain.logger.info(I18N.getText("remap.classremap.processing", className, array.length));

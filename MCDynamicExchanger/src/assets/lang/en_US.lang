@@ -2,12 +2,15 @@
 time.used=Time used: %s ms
 
 #Errors
-command.illegal=Command is illegal!
+command.illegal=Command is illegal!\nPlease run "... help" to get more usage
 error.detail=Details:
 error.unknown=Unknown error has been thrown!
 error.libraries.io=Cannot load library "commons-io" please ensure your running directory is right and your Minecraft has been downloaded.
 error.libraries.jdcore=Cannot load library "jd-core", please ensure the jd-core library has been put in libs.\njd-core download page: https://bintray.com/java-decompiler/maven/org.jd%3Ajd-core/1.1.3
+error.libraries.cfr=Cannot load library "cfr", please ensure the cfr library has been put in libs.\ncfr download page: https://benf.org/other/cfr/
 error.libraries.lost=Cannot launch the program: lost some libraries.
+error.decompile.unsupport=Unsupported decompiler: %s
+error.decompile.cfr=Exception occurred in decompiling %s: %s
 
 #Remapper
 remap.readmap.classentry=Class Entry: %s to %s

@@ -10,7 +10,7 @@ import com.github.nickid2018.decompile.*;
 
 public class ProgramMain {
 
-	public static final String VERSION = "1.0 beta.7";
+	public static final String VERSION = "1.0 beta.8";
 
 	public static ISystemLogger logger;
 
@@ -37,7 +37,7 @@ public class ProgramMain {
 			else
 				RemapProgram.doSimpleRemap(result);
 		} catch (CommandParseException e) {
-			if (I18N.LANG == null)
+			if (I18N.NOW == null)
 				I18N.init(null);
 			(logger = new DefaultConsoleLogger()).error(I18N.getText("command.illegal"), e);
 		}
@@ -61,6 +61,7 @@ public class ProgramMain {
 		UnorderSwitchTable table = new UnorderSwitchTable();
 		model.switches.add(table);
 		table.addSwitch("--lang", new StringArgumentSwitch("--lang"));
+		table.addSwitch("--backend", new StringArgumentSwitch("--backend"));
 		table.addSwitch("--output", new StringArgumentSwitch("--output"));// Output File
 		table.addLiteral(new LiteralSwitch("-D", true));// Detail Output
 		table.addLiteral(new LiteralSwitch("-Ni", true));// No Infos
@@ -74,11 +75,12 @@ public class ProgramMain {
 		UnorderSwitchTable table = new UnorderSwitchTable();
 		model.switches.add(table);
 		table.addSwitch("--lang", new StringArgumentSwitch("--lang"));
+		table.addLiteral(new LiteralSwitch("-Nl", true));
 		table.addLiteral(new LiteralSwitch("-Nh", true));// No hacks
 		table.addLiteral(new LiteralSwitch("-D", true));// Detail Output
 		table.addLiteral(new LiteralSwitch("-Dy", true));// Dry Run
+		table.addSwitch("--localRename", new StringArgumentSwitch("--localRename"));
 		table.addSwitch("--output", new StringArgumentSwitch("--output"));// Output File
-		table.addSwitch("--tmpdir", new StringArgumentSwitch("--tmpdir"));// Temporary Directory
 		table.addSwitch("--outmap", new StringArgumentSwitch("--outmap"));// Output Formatted Output Map File
 		table.addSwitch("--outrev", new StringArgumentSwitch("--outrev"));// Output Formatted Reverse Output Map File
 																			// (For vanilla version mapping)

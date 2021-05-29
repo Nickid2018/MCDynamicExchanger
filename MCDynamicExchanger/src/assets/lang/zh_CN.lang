@@ -2,12 +2,15 @@
 time.used=程序执行耗时: %s ms
 
 #Errors
-command.illegal=无效的命令格式
+command.illegal=无效的命令格式！\n请运行"... help"以获得程序命令行用法
 error.detail=具体信息：
 error.unknown=发生未知错误！
 error.libraries.io=无法加载"commons-io"类库，请确保在正确的目录下运行或检查Minecraft文件完整性
 error.libraries.jdcore=无法加载"jd-core"类库，请确保此类库放置在libs目录下\n类库下载页：https://bintray.com/java-decompiler/maven/org.jd%3Ajd-core/1.1.3
+error.libraries.cfr=无法加载"cfr"类库，请确保此类库放置在libs目录下\n类库下载页：https://benf.org/other/cfr/
 error.libraries.lost=无法启动程序：缺失类库
+error.decompile.unsupport=不支持的反混淆器： %s
+error.decompile.cfr=在反编译%s时发生错误： %s
 
 #Remapper
 remap.readmap.classentry=类 %s 反混淆为 %s

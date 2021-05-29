@@ -8,6 +8,7 @@ Usage:
 Universal Options:
 
 	--lang <locale> Set the locale
+		e.g. --lang en_US
 	-D Output detail messages
 	
 1) Remap Minecraft class files
@@ -19,8 +20,14 @@ Universal Options:
 	Options:
 		-Nh Cancel hack process (title/brand)
 		-Dy Dry run
+		-Nl No line number information
 		--output <output> Set the output file
-		--tmpdir <tempdir> Set the temporary file location*
+		--localRename <mode> Set local variable naming mode
+			mode can be:
+				none - Not modify
+				erase - Erase all local variable information
+				var_count - Name variables in an order of variable count
+				type_count(Default) - Name variables in an order of types
 		--outmap <file> Output formatted output map file*
 		--outrev <file> Output formatted reverse output map file*
 		// *Unused
@@ -42,5 +49,10 @@ Universal Options:
 	Options:
 		-Ni Hide file information writing
 		-Ro Output resource files
+		--backend <backend> Set the decompiler
+			Supported decompiler: cfr, jd-core(default)
+			For CFR, arguments separated by commas can be passed to the decompiler,
+				plus signs will be parsed as spaces
+			e.g. --backend cfr:--help
 		
 4) Display this help message

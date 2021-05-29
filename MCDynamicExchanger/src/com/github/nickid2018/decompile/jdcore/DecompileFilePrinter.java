@@ -1,4 +1,4 @@
-package com.github.nickid2018.decompile;
+package com.github.nickid2018.decompile.jdcore;
 
 import java.io.*;
 import java.util.*;
@@ -27,15 +27,13 @@ public class DecompileFilePrinter implements Printer {
 		writer.write(" * ====== Build Information ======" + lineSeparator);
 		writer.write(" * Source File: " + fileName + lineSeparator);
 		writer.write(" * Build Time: " + String.format("%tc", INSTANCE) + lineSeparator);
-		writer.write(" * File Length: " + fileSize + lineSeparator);
 		writer.write(" *" + lineSeparator);
 		writer.write(" */" + lineSeparator);
 	}
 
 	public byte[] getBytes() {
 		// An interesting thing..
-		return writer.toString().replace("\u2603", "variable").replace("â˜ƒ", "variable")
-				.getBytes(Charset.forName("UTF-8"));
+		return writer.toString().getBytes(Charset.forName("UTF-8"));
 	}
 
 	@Override
