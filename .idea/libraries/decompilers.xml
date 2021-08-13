@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="decompilers">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/../../Minecraft/.minecraft/dynamicexchanger/libs" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+    <jarDirectory url="file://$PROJECT_DIR$/../../Minecraft/.minecraft/dynamicexchanger/libs" recursive="false" />
+  </library>
+</component>

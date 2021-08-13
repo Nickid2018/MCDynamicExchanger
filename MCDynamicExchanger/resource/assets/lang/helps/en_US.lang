@@ -1,0 +1,53 @@
+Usage:
+
+	1) ... [options] <mapping_url> <mc_file>
+	2) ... compare [options] <old_version> <new_version>
+	3) ... decompile [options] <source_file>
+	4) ... help
+	
+Universal Options:
+
+	--lang <locale> Set the locale
+		e.g. --lang en_US
+	-D Output detail messages
+	
+1) Remap Minecraft class files
+
+	Arguments:
+		<mapping_url> The URL of the obfuscation map
+		<mc_file> Minecraft file
+		
+	Options:
+		-Nh Cancel hack process (title/brand)
+		-Dy Dry run
+		-Nl No line number information
+		--output <output> Set the output file
+		--outmap <file> Output formatted output map file*
+		--outrev <file> Output formatted reverse output map file*
+		// *Unused
+		
+2) Compare files between two versions
+
+	Arguments:
+		<old_version> File of old version
+		<new_version> File of new version
+		
+	Options:
+		-Rs Compare resource files
+		
+3) Decompile Minecraft class files
+
+	Arguments:
+		<source_file> Minecraft jar file (Remapped)
+		
+	Options:
+		-Ni Hide file information writing
+		-Ro Output resource files
+		--indentTimes <length> Set the tab length
+		--backend <backend> Set the decompiler
+			Supported decompiler: cfr(default), jd-core
+			For CFR, arguments separated by commas can be passed to the decompiler,
+				plus signs will be parsed as spaces
+			e.g. --backend cfr:--help
+		
+4) Display this help message

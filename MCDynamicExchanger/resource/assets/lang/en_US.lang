@@ -1,0 +1,52 @@
+#Common
+time.used=Time used: %s ms
+download.start=Start downloading %s
+download.over=Downloaded %s
+
+#Errors
+command.illegal=Command is illegal!\nPlease run "... help" to get more usage
+error.detail=Details:
+error.unknown=Unknown error has been thrown!
+error.libraries.io=Cannot load library "commons-io" please ensure your running directory is right and your Minecraft has been downloaded.
+error.libraries.jdcore=Cannot load library "jd-core", please ensure the jd-core library has been put in libs.\njd-core download page: https://bintray.com/java-decompiler/maven/org.jd%3Ajd-core/1.1.3
+error.libraries.cfr=Cannot load library "cfr", please ensure the cfr library has been put in libs.\ncfr download page: https://benf.org/other/cfr/cfr-0.151.jar
+error.libraries.lost=Cannot launch the program: lost some libraries.
+error.decompile.unsupport=Unsupported decompiler: %s
+error.decompile.cfr=Exception occurred in decompiling %s: %s
+error.download=%s download failed: %s
+error.downloadmc.version=Version not found: %s
+error.downloadmc.sha1dismatch=Download over but SHA1 value mismatched
+
+#Remapper
+remap.readmap.classentry=Class Entry: %s to %s
+remap.readmap.methodentry=Method Entry: %s to %s
+remap.readmap.fieldentry=Field Entry: %s to %s
+remap.readmap.nowclass=Now Class: %s (%s)
+remap.readmap.over=Generated class mapping.
+remap.genmap.addclasses.processing=Add unobscured class: %s
+remap.genmap.addclasses.over=Added all unobscured classes.
+remap.genmap.geninherit.processing=Generate inherit tree: %s
+remap.genmap.geninherit.over=Generated all inherit trees.
+remap.dryrun=Dry Run successfully.
+remap.classremap.processing=Remapping class:  %s  (Length: %sB)
+remap.classremap.over=Remapped all classes.
+remap.mod.manifest=Recreated manifest.
+remap.mod.title=Modified Title Screen.
+remap.mod.brand=Modified Brand Tag.
+remap.pack=Packing into JAR...
+remap.over=Minecraft has been remapped successfully.
+
+#Comparator
+compare.newfile=New File: %s
+compare.delete=Delete File: %s
+compare.modify=Modify File: %s
+
+#Decompiler
+decompile.resource=Resource Entry: %s
+decompile.classover=Decompiled Class: %s
+
+#MCDownloader
+download.versionjson=Version JSON at %s
+download.mcjarfile=MC JAR file at %s
+download.mcmap=MC obfuscate map at %s
+download.allover=Download over.

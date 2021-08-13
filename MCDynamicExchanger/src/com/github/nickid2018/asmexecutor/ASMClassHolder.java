@@ -1,16 +1,17 @@
 package com.github.nickid2018.asmexecutor;
 
-import java.util.*;
+import java.util.Set;
+import java.util.TreeSet;
 
 public final class ASMClassHolder {
 
-	private static final Set<ASMClass> classes = new TreeSet<>();
+    private static final Set<ASMClass> classes = new TreeSet<>();
 
-	public static final void addClass(ASMClass clazz) {
-		classes.add(clazz);
-	}
+    public static void addClass(ASMClass clazz) {
+        classes.add(clazz);
+    }
 
-	public static final void deleteClass(ASMClass clazz) {
-		classes.remove(clazz);
-	}
+    public static void deleteClass(ASMClass clazz) {
+        classes.remove(clazz);
+    }
 }
