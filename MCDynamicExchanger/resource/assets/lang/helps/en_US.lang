@@ -3,7 +3,8 @@ Usage:
 	1) ... [options] <mapping_url> <mc_file>
 	2) ... compare [options] <old_version> <new_version>
 	3) ... decompile [options] <source_file>
-	4) ... help
+    4) ... asmifier [options] <class_url>
+	5) ... help
 	
 Universal Options:
 
@@ -49,5 +50,13 @@ Universal Options:
 			For CFR, arguments separated by commas can be passed to the decompiler,
 				plus signs will be parsed as spaces
 			e.g. --backend cfr:--help
-		
-4) Display this help message
+
+4) Parse a class file into ASM-Code
+
+	Arguments:
+		<class_url> URL of the class file
+
+	Options:
+		-output <file> Output the result into a file
+
+5) Display this help message

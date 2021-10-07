@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Created-By: Nickid2018
-Premain-Class: com.github.nickid2018.dynamicex.DEProgramInterface
-Main-Class: com.github.nickid2018.ProgramMain
+Premain-Class: io.github.nickid2018.dynamicex.DEProgramInterface
+Main-Class: io.github.nickid2018.ProgramMain
 Can-Redefine-Classes: true
 Can-Retransform-Classes: true
 

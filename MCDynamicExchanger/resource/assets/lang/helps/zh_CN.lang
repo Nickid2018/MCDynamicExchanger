@@ -3,7 +3,8 @@
 	1) ... [options] <mapping_url> <mc_file>
 	2) ... compare [options] <old_version> <new_version>
 	3) ... decompile [options] <source_file>
-	4) ... help
+    4) ... asmifier [options] <class_url>
+	5) ... help
 	
 全局开关：
 
@@ -49,5 +50,13 @@
 			对于CFR，以逗号分隔的参数可以被传递进入反编译器中，
 				其中加号将被解析为空格
 			e.g. --backend cfr:--help
+
+4) 将类文件转换为ASM库生成文件
+
+	参数：
+		<class_url> 类文件的URL
+
+	开关：
+		-output <file> 结果输出到某一文件
 		
-4) 显示此帮助信息
+5) 显示此帮助信息
