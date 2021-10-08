@@ -1,7 +1,7 @@
 package io.github.nickid2018;
 
 import io.github.nickid2018.argparser.*;
-import io.github.nickid2018.asmifier.ASMifier;
+import io.github.nickid2018.asmifier.SimpleASMifier;
 import io.github.nickid2018.compare.CompareProgram;
 import io.github.nickid2018.decompile.DecompileProgram;
 import io.github.nickid2018.mcfiledownload.MCFileDownloader;
@@ -44,7 +44,7 @@ public class ProgramMain {
             else if (result.containsSwitch("download"))
                 MCFileDownloader.downloadMCFileSimple(result);
             else if (result.containsSwitch("asmifier"))
-                ASMifier.simpleAsmify(result);
+                SimpleASMifier.simpleAsmify(result);
             else
                 RemapProgram.doSimpleRemap(result);
         } catch (CommandParseException e) {

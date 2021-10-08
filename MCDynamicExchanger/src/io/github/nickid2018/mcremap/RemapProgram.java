@@ -44,15 +44,15 @@ public class RemapProgram {
                     "dynamicexchanger/libs/asm-9.2.jar");
         if (!ClassUtils.isClassExists("org.objectweb.asm.commons.ClassRemapper"))
             DownloadService.downloadResource("asm-commons",
-                    "https://repo1.maven.org/maven2/org/ow2/asm/asm-commons/9.0/asm-commons-9.2.jar",
+                    "https://repo1.maven.org/maven2/org/ow2/asm/asm-commons/9.2/asm-commons-9.2.jar",
                     "dynamicexchanger/libs/asm-commons-9.2.jar");
         if (!ClassUtils.isClassExists("org.objectweb.asm.tree.analysis.Analyzer"))
             DownloadService.downloadResource("asm-analysis",
-                    "https://repo1.maven.org/maven2/org/ow2/asm/asm-analysis/9.0/asm-analysis-9.2.jar",
+                    "https://repo1.maven.org/maven2/org/ow2/asm/asm-analysis/9.2/asm-analysis-9.2.jar",
                     "dynamicexchanger/libs/asm-analysis-9.2.jar");
         if (!ClassUtils.isClassExists("org.objectweb.asm.tree.ClassNode"))
             DownloadService.downloadResource("asm-tree",
-                    "https://repo1.maven.org/maven2/org/ow2/asm/asm-tree/9.0/asm-tree-9.2.jar",
+                    "https://repo1.maven.org/maven2/org/ow2/asm/asm-tree/9.2/asm-tree-9.2.jar",
                     "dynamicexchanger/libs/asm-tree-9.2.jar");
         DownloadService.startDownloadInfoOutput();
         failed |= !DownloadService.waitDownloadOver();

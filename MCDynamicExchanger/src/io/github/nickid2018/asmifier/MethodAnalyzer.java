@@ -119,7 +119,7 @@ public class MethodAnalyzer extends MethodVisitor implements Opcodes {
     @Override
     public void visitIntInsn(int opcode, int operand) {
         if(opcode == NEWARRAY)
-            asmifier.line("mv.visitIntInsn(%s, %s);", "NEWARRAY", MethodOpcodes.getAsHandleType(operand));
+            asmifier.line("mv.visitIntInsn(%s, %s);", "NEWARRAY", MethodOpcodes.getAsArrayType(operand));
         else
             asmifier.line("mv.visitIntInsn(%s, %d);", MethodOpcodes.OPCODES_TABLE[opcode], operand);
     }
