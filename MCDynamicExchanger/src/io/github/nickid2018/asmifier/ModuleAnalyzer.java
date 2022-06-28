@@ -25,7 +25,7 @@ public class ModuleAnalyzer extends ModuleVisitor implements Opcodes {
     @Override
     public void visitRequire(String module, int access, String version) {
         asmifier.line("mdv.visitRequire(%s, %s, %s);", asmifier.quote(module),
-                AccessFlagCategory.fromIntToAccessFlag(access, AccessFlagCategory.MODULE_REQUIRES), asmifier.quote(version));
+                AccessFlagCategory.fromIntToAccessFlag(access, AccessFlagCategory.MODULE_REQUIRES, asmifier), asmifier.quote(version));
     }
 
     @Override
@@ -33,10 +33,10 @@ public class ModuleAnalyzer extends ModuleVisitor implements Opcodes {
         String mo = asmifier.uncountableToString(modules);
         if(modules == null)
             asmifier.line("mdv.visitExport(%s, %s);", asmifier.quote(packaze),
-                AccessFlagCategory.fromIntToAccessFlag(access, AccessFlagCategory.MODULE_EXPORT));
+                AccessFlagCategory.fromIntToAccessFlag(access, AccessFlagCategory.MODULE_EXPORT, asmifier));
         else
             asmifier.line("mdv.visitExport(%s, %s, %s);", asmifier.quote(packaze),
-                    AccessFlagCategory.fromIntToAccessFlag(access, AccessFlagCategory.MODULE_EXPORT), mo);
+                    AccessFlagCategory.fromIntToAccessFlag(access, AccessFlagCategory.MODULE_EXPORT, asmifier), mo);
     }
 
     @Override
@@ -44,10 +44,10 @@ public class ModuleAnalyzer extends ModuleVisitor implements Opcodes {
         String mo = asmifier.uncountableToString(modules);
         if(modules == null)
             asmifier.line("mdv.visitOpen(%s, %s);", asmifier.quote(packaze),
-                    AccessFlagCategory.fromIntToAccessFlag(access, AccessFlagCategory.MODULE_EXPORT));
+                    AccessFlagCategory.fromIntToAccessFlag(access, AccessFlagCategory.MODULE_EXPORT, asmifier));
         else
             asmifier.line("mdv.visitOpen(%s, %s, %s);", asmifier.quote(packaze),
-                    AccessFlagCategory.fromIntToAccessFlag(access, AccessFlagCategory.MODULE_EXPORT), mo);
+                    AccessFlagCategory.fromIntToAccessFlag(access, AccessFlagCategory.MODULE_EXPORT, asmifier), mo);
     }
 
     @Override

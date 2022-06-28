@@ -36,17 +36,39 @@ public class FileRemapper {
         if (result.containsSwitch("-Nl"))
             OptimizedMethodRemapper.setNoLineNumbers();
         ZipFile file = new ZipFile(new File(result.getSwitch("mc_file").toString()));
+        boolean isServer = result.containsSwitch("-server");
+        if (isServer && file.getEntry("META-INF/main-class") != null) {
+            File tmp = File.createTempFile("srf", null);
+            tmp.deleteOnExit();
+            ZipEntry server = null;
+            Enumeration<? extends ZipEntry> entries = file.entries();
+            while (entries.hasMoreElements()) {
+                ZipEntry now = entries.nextElement();
+                String name = now.getName();
+                if (name.startsWith("META-INF/versions/") && name.endsWith(".jar")) {
+                    server = now;
+                    break;
+                }
+            }
+            if (server == null)
+                throw new Exception("Invalid server jar");
+            ProgramMain.logger.formattedInfo("remap.unpack.server");
+            IOUtils.copy(file.getInputStream(server), new FileOutputStream(tmp));
+            file.close();
+            file = new ZipFile(tmp);
+        }
         all = file.size();
         // Remap
         remapAllClasses(file, new ASMRemapper(format), format);
         file.close();
         // MANIFEST.MF
-        recreateManifest();
+        recreateManifest(isServer);
         if (!result.containsSwitch("-Nh")) {
             // Change Brand
-            changeBrand();
-            // Add Remapped Mark
-            hackTheName();
+            changeBrand(isServer);
+            if (!isServer)
+                // Add Remapped Mark
+                hackTheName();
         }
         runPack(result.getStringOrDefault("--output", "remapped.jar"));
     }
@@ -76,9 +98,10 @@ public class FileRemapper {
         ProgramMain.logger.formattedInfo("remap.classremap.over");
     }
 
-    private void recreateManifest() throws IOException {
+    private void recreateManifest(boolean isServer) throws IOException {
         write("META-INF/MANIFEST.MF",
-                "Manifest-Version: 1.0\r\nMain-Class: net.minecraft.client.main.Main\r\n".getBytes());
+                String.format("Manifest-Version: 1.0\r\nMain-Class: %s\r\n",
+                        isServer ? "net.minecraft.server.Main" : "net.minecraft.client.main.Main").getBytes());
         ProgramMain.logger.formattedInfo("remap.mod.manifest");
     }
 
@@ -98,14 +121,15 @@ public class FileRemapper {
         ProgramMain.logger.formattedInfo("remap.mod.title");
     }
 
-    private void changeBrand() throws IOException {
+    private void changeBrand(boolean isServer) throws IOException {
         Function<ClassReader, ClassWriter> func = reader -> {
             ClassWriter writer = new ClassStringReplacer("vanilla", "remapped");
             reader.accept(writer, 0);
             return writer;
         };
         doHacks("net.minecraft.server.MinecraftServer", func);
-        doHacks("net.minecraft.client.ClientBrandRetriever", func);
+        if (!isServer)
+            doHacks("net.minecraft.client.ClientBrandRetriever", func);
         ProgramMain.logger.formattedInfo("remap.mod.brand");
     }
 

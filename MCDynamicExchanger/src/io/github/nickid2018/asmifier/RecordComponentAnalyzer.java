@@ -21,20 +21,19 @@ public class RecordComponentAnalyzer extends RecordComponentVisitor implements O
 
     @Override
     public AnnotationVisitor visitTypeAnnotation(int typeRef, TypePath typePath, String descriptor, boolean visible) {
-        String typeRefStr;
-        switch (typeRef) {
-            case TypeReference.CLASS_TYPE_PARAMETER:
-                typeRefStr = "TypeReference.CLASS_TYPE_PARAMETER";
-                break;
-            case TypeReference.CLASS_TYPE_PARAMETER_BOUND:
-                typeRefStr = "TypeReference.CLASS_TYPE_PARAMETER_BOUND";
-                break;
-            case TypeReference.CLASS_EXTENDS:
-                typeRefStr = "TypeReference.CLASS_EXTENDS";
-                break;
-            default:
-                typeRefStr = typeRef + "";
-        }
+        String typeRefStr = typeRef + "";
+        if (!asmifier.noConvertConstants)
+            switch (typeRef) {
+                case TypeReference.CLASS_TYPE_PARAMETER:
+                    typeRefStr = "TypeReference.CLASS_TYPE_PARAMETER";
+                    break;
+                case TypeReference.CLASS_TYPE_PARAMETER_BOUND:
+                    typeRefStr = "TypeReference.CLASS_TYPE_PARAMETER_BOUND";
+                    break;
+                case TypeReference.CLASS_EXTENDS:
+                    typeRefStr = "TypeReference.CLASS_EXTENDS";
+                    break;
+            }
         asmifier.line("{");
         asmifier.indent++;
         asmifier.line("AnnotationVisitor av = rcv.visitTypeAnnotation(%s, TypePath.fromString(%s), %s, %s);",

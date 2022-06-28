@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="decompilers">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/../../Minecraft/.minecraft/dynamicexchanger/libs/cfr-0.151.jar!/" />
       <root url="jar://$PROJECT_DIR$/../../Minecraft/.minecraft/dynamicexchanger/libs/jd-core-1.1.3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../Minecraft/.minecraft/dynamicexchanger/libs/cfr-0.152.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

@@ -28,6 +28,7 @@ remap.genmap.addclasses.over=Added all unobscured classes.
 remap.genmap.geninherit.processing=Generate inherit tree: %s
 remap.genmap.geninherit.over=Generated all inherit trees.
 remap.dryrun=Dry Run successfully.
+remap.unpack.server=Unpacking server core...
 remap.classremap.processing=Remapping class:  %s  (Length: %sB)
 remap.classremap.over=Remapped all classes.
 remap.mod.manifest=Recreated manifest.

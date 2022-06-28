@@ -13,6 +13,11 @@ public class OptimizedClassRemapper extends ClassRemapper {
     }
 
     @Override
+    public void visitSource(String source, String debug) {
+        super.visitSource(source, "Remapped by Nickid2018");
+    }
+
+    @Override
     protected MethodVisitor createMethodRemapper(MethodVisitor methodVisitor) {
         return new OptimizedMethodRemapper(methodVisitor, remapper);
     }

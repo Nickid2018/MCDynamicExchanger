@@ -10,6 +10,12 @@ public class ASMifier {
 
     private final ClassReader reader;
 
+    public boolean noVariableList = false;
+    public boolean noFrames = false;
+    public boolean noExtraCodes = false;
+    public boolean noLines = false;
+    public boolean noConvertConstants = false;
+
     public ASMifier(InputStream stream) throws IOException {
         reader = new ClassReader(stream);
     }
@@ -27,7 +33,7 @@ public class ASMifier {
         indent++;
         line("public static byte[] dumpClass() {");
         indent++;
-        line("ClassWriter cw = new ClassWriter(0);");
+        line("ClassWriter cw = new ClassWriter(%s);", noFrames ? "ClassWriter.COMPUTE_FRAMES" : 0);
         reader.accept(new ClassAnalyzer(this), 0);
         line("return cw.toByteArray();");
         indent--;

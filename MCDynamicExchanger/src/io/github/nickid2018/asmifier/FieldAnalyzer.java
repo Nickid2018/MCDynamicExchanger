@@ -22,7 +22,7 @@ public class FieldAnalyzer extends FieldVisitor implements Opcodes {
     @Override
     public AnnotationVisitor visitTypeAnnotation(int typeRef, TypePath typePath, String descriptor, boolean visible) {
         String typeRefStr;
-        if (typeRef == TypeReference.FIELD)
+        if (!asmifier.noConvertConstants && typeRef == TypeReference.FIELD)
             typeRefStr = "TypeReference.FIELD";
         else
             typeRefStr = typeRef + "";

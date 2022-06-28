@@ -6,8 +6,6 @@ import io.github.nickid2018.compare.CompareProgram;
 import io.github.nickid2018.decompile.DecompileProgram;
 import io.github.nickid2018.mcfiledownload.MCFileDownloader;
 import io.github.nickid2018.mcremap.RemapProgram;
-import io.github.nickid2018.util.AddClassPath;
-import io.github.nickid2018.util.ClassUtils;
 import io.github.nickid2018.util.download.DownloadService;
 import org.apache.commons.io.IOUtils;
 
@@ -16,13 +14,12 @@ import java.util.Objects;
 
 public class ProgramMain {
 
-    public static final String VERSION = "1.0 beta.8";
+    public static final String VERSION = "1.0 beta.9";
 
     public static ISystemLogger logger;
 
     public static void main(String[] args) throws Exception {
         long time = System.currentTimeMillis();
-        AddClassPath.addClassPathInDirs("dynamicexchanger/libs");
         CommandModel model = getRemapperModel().subCommand("download", getDownloaderModel())
                 .subCommand("compare", getComparatorModel()).subCommand("decompile", getDecompilerModel())
                 .subCommand("asmifier", getASMifierModel()).subCommand("help", new CommandModel());
@@ -30,12 +27,9 @@ public class ProgramMain {
             CommandResult result = model.parse(args);
             I18N.init(result.getStringOrDefault("--lang", null));
             if (result.containsSwitch("help")) {
-                if (!ClassUtils.isClassExists("org.apache.commons.io.IOUtils")
-                        && !AddClassPath.tryToLoadMCLibrary("commons-io/commons-io")) {
-                    logger.formattedInfo("error.libraries.io");
-                } else
                     (logger = new DefaultConsoleLogger()).info(
-                            IOUtils.toString(Objects.requireNonNull(ProgramMain.class.getResource("/assets/lang/helps/" + I18N.NOW + ".lang")),
+                            IOUtils.toString(Objects.requireNonNull(ProgramMain.class.getResource(
+                                    "/assets/lang/helps/" + I18N.NOW + ".lang")),
                                     StandardCharsets.UTF_8));
             } else if (result.containsSwitch("compare"))
                 CompareProgram.compareSimple(result);
@@ -98,6 +92,11 @@ public class ProgramMain {
         CommandModel model = new CommandModel();
         UnorderSwitchTable table = new UnorderSwitchTable();
         model.switches.add(table);
+        table.addLiteral(new LiteralSwitch("-Nvl", true));
+        table.addLiteral(new LiteralSwitch("-Nl", true));
+        table.addLiteral(new LiteralSwitch("-Nf", true));
+        table.addLiteral(new LiteralSwitch("-Nec", true));
+        table.addLiteral(new LiteralSwitch("-Ncc", true));
         table.addSwitch("--lang", new StringArgumentSwitch("--lang"));
         table.addSwitch("--output", new StringArgumentSwitch("--output"));
         model.switches.add(new StringSwitch("classURL"));
@@ -113,6 +112,7 @@ public class ProgramMain {
         table.addLiteral(new LiteralSwitch("-Nh", true));// No hacks
         table.addLiteral(new LiteralSwitch("-D", true));// Detail Output
         table.addLiteral(new LiteralSwitch("-Dy", true));// Dry Run
+        table.addLiteral(new LiteralSwitch("-server", true));
         table.addSwitch("--output", new StringArgumentSwitch("--output"));// Output File
         table.addSwitch("--outmap", new StringArgumentSwitch("--outmap"));// Output Formatted Output Map File
         table.addSwitch("--outrev", new StringArgumentSwitch("--outrev"));// Output Formatted Reverse Output Map File

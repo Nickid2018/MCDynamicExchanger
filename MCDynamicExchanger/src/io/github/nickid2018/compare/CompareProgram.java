@@ -3,8 +3,6 @@ package io.github.nickid2018.compare;
 import io.github.nickid2018.I18N;
 import io.github.nickid2018.SortedConsoleLogger;
 import io.github.nickid2018.argparser.CommandResult;
-import io.github.nickid2018.util.AddClassPath;
-import io.github.nickid2018.util.ClassUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,12 +31,6 @@ public class CompareProgram {
 
     public static void compareSimple(CommandResult res) {
         logger = new SortedConsoleLogger();
-        if (!ClassUtils.isClassExists("org.apache.commons.io.IOUtils")
-                && !AddClassPath.tryToLoadMCLibrary("commons-io/commons-io")) {
-            logger.formattedInfo("error.libraries.io");
-            logger.flush();
-            return;
-        }
         try {
             CompareProgram program = new CompareProgram(res.getSwitch("old_version").toString(),
                     res.getSwitch("new_version").toString(), !res.containsSwitch("-Rs"));

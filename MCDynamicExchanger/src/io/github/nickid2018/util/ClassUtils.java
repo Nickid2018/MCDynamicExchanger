@@ -7,15 +7,6 @@ import java.util.Map;
 
 public class ClassUtils {
 
-    public static boolean isClassExists(String name) {
-        try {
-            Class.forName(name, false, Thread.currentThread().getContextClassLoader());
-            return true;
-        } catch (ClassNotFoundException | NoClassDefFoundError e) {
-            return false;
-        }
-    }
-
     public static String toBinaryName(String name) {
         return name.replace('/', '.');
     }

@@ -19,6 +19,7 @@
 		<mc_file> Minecraft文件位置
 		
 	开关：
+        -server 反混淆服务器
 		-Nh 阻止代码修改
 		-Dy 执行但不进行反混淆
 		-Nl 不输出行号对应表
@@ -57,6 +58,11 @@
 		<class_url> 类文件的URL
 
 	开关：
-		-output <file> 结果输出到某一文件
+        -Nvl 不访问局部变量表
+        -Nl 不访问行号
+        -Nf 不访问栈帧
+        -Nec 不访问代码注释
+        -Ncc 不转换常量
+		--output <file> 结果输出到某一文件
 		
 5) 显示此帮助信息

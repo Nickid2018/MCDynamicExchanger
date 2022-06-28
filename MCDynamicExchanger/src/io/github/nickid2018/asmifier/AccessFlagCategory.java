@@ -12,7 +12,10 @@ public enum AccessFlagCategory {
     MODULE_REQUIRES,
     MODULE_EXPORT;
 
-    public static String fromIntToAccessFlag(int flag, AccessFlagCategory category) {
+    public static String fromIntToAccessFlag(int flag, AccessFlagCategory category, ASMifier asmifier) {
+        if(asmifier.noConvertConstants)
+            return String.valueOf(flag);
+
         Vector<String> flags = new Vector<>();
 
         if(hasFlag(flag, 0x0001) && category.ordinal() < 3)

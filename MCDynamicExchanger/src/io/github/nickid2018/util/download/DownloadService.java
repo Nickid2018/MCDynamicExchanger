@@ -2,7 +2,6 @@ package io.github.nickid2018.util.download;
 
 import io.github.nickid2018.I18N;
 import io.github.nickid2018.ProgramMain;
-import io.github.nickid2018.util.AddClassPath;
 
 import java.io.IOException;
 import java.util.Queue;
@@ -54,7 +53,6 @@ public class DownloadService {
     public static void startDownloadInfoOutput() {
         signExit = false;
         Thread infoOutputer = new Thread(() -> {
-            AddClassPath.tryToLoadMCLibrary("commons-io/commons-io");
             while (true) {
                 try {
                     Thread.sleep(1000);

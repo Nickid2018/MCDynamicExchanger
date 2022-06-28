@@ -28,6 +28,7 @@ remap.genmap.addclasses.over=所有未混淆类已添加
 remap.genmap.geninherit.processing=生成继承树 %s
 remap.genmap.geninherit.over=所有继承树已构建完成
 remap.dryrun=测试运行完成
+remap.unpack.server=解压服务器核心...
 remap.classremap.processing=反混淆类 %s (文件长度: %sB)
 remap.classremap.over=所有类已全部反混淆完成
 remap.mod.manifest=重建清单文件

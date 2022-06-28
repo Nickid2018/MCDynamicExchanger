@@ -61,7 +61,7 @@ public class AnnotationAnalyzer extends AnnotationVisitor implements Opcodes {
 
     @Override
     public void visitEnd() {
-        asmifier.line("%s.visitEnd()", name);
+        asmifier.line("%s.visitEnd();", name);
         asmifier.indent--;
         asmifier.line("}");
     }

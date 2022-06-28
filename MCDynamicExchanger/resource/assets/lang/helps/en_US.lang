@@ -19,6 +19,7 @@ Universal Options:
 		<mc_file> Minecraft file
 		
 	Options:
+        -server Remap the file as a server
 		-Nh Cancel hack process (title/brand)
 		-Dy Dry run
 		-Nl No line number information
@@ -57,6 +58,11 @@ Universal Options:
 		<class_url> URL of the class file
 
 	Options:
-		-output <file> Output the result into a file
+        -Nvl No local variables
+        -Nl No line numbers
+        -Nf No frames
+        -Nec No visit codes
+        -Ncc Don't convert constants
+		--output <file> Output the result into a file
 
 5) Display this help message

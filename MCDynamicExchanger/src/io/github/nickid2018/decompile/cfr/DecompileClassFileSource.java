@@ -35,10 +35,10 @@ public class DecompileClassFileSource implements ClassFileSource {
     @Override
     public Pair<byte[], String> getClassFileContent(String path) throws IOException {
         byte[] bytes = IOUtils.toByteArray(file.getInputStream(file.getEntry(path)));
-        ClassReader reader = new ClassReader(bytes);
-        ClassWriter writer = new ClassWriter(0);
-        reader.accept(new OptiClassVisitor(writer), 0);
-        return Pair.make(writer.toByteArray(), path);
+//        ClassReader reader = new ClassReader(bytes);
+//        ClassWriter writer = new ClassWriter(0);
+//        reader.accept(new OptiClassVisitor(writer), 0);
+        return Pair.make(bytes, path);
     }
 
 }

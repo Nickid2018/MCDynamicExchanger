@@ -25,6 +25,7 @@ public class OfficalFormat extends RemapperFormat {
     public void processInitMap(String position) throws Exception {
         URL url = new URL(position);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        System.out.println(Thread.currentThread().getContextClassLoader());
         IOUtils.copy(url.openStream(), baos);
         fileBuffer = new ByteArrayInputStream(baos.toByteArray());
         BufferedReader token = new BufferedReader(new InputStreamReader(fileBuffer));
