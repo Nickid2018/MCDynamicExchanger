@@ -1,0 +1,22 @@
+plugins {
+    id 'java'
+}
+
+group 'io.github.nickid2018'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation("commons-io:commons-io:2.11.0")
+    implementation("org.ow2.asm:asm:9.3")
+    implementation("org.ow2.asm:asm-tree:9.3")
+    implementation("org.ow2.asm:asm-analyse:9.3")
+    implementation("org.ow2.asm:asm-util:9.3")
+}
+
+test {
+    useJUnitPlatform()
+}

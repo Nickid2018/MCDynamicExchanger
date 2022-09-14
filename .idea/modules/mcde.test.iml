@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module external.linked.project.id="mcde:test" external.linked.project.path="$MODULE_DIR$/../.." external.root.project.path="$MODULE_DIR$/../.." external.system.id="GRADLE" external.system.module.group="io.github.nickid2018" external.system.module.type="sourceSet" external.system.module.version="1.0-SNAPSHOT" type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <output-test url="file://$MODULE_DIR$/../../build/classes/java/test" />
+    <exclude-output />
+    <content url="file://$MODULE_DIR$/../../src/test">
+      <sourceFolder url="file://$MODULE_DIR$/../../src/test/java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/../../src/test/resources" type="java-test-resource" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="mcde.main" />
+    <orderEntry type="library" name="Gradle: commons-io:commons-io:2.11.0" level="project" />
+    <orderEntry type="library" name="Gradle: org.ow2.asm:asm-util:9.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.ow2.asm:asm-tree:9.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.ow2.asm:asm:9.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.ow2.asm:asm-analysis:9.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.ow2.asm:asm-analyse:9.3" level="project" />
+  </component>
+  <component name="TestModuleProperties" production-module="mcde.main" />
+</module>

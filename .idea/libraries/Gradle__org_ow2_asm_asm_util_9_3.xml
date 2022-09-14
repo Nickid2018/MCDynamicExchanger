@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: org.ow2.asm:asm-util:9.3">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../Gradle-Files/caches/modules-2/files-2.1/org.ow2.asm/asm-util/9.3/9595bc05510d0bd4b610188b77333fe4851a1975/asm-util-9.3.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/../../Gradle-Files/caches/modules-2/files-2.1/org.ow2.asm/asm-util/9.3/7a969dd37607523cfd3b9d2ef1a3e78882bfe647/asm-util-9.3-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
