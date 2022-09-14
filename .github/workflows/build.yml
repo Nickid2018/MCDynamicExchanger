@@ -30,7 +30,7 @@ jobs:
       - name: Run Gradle
         run: |
           chmod +x gradlew
-          gradlew clean shadowJar -s
+          ./gradlew clean shadowJar -s
 
       - name: Upload
         uses: actions/upload-artifact@v3
