@@ -19,14 +19,13 @@ import java.util.zip.ZipOutputStream;
 
 public class FileProcessor {
 
-    public static void process(ZipFile file, File mapping, File output) throws IOException {
-        MojangFormatRemapper remapper = new MojangFormatRemapper(new FileInputStream(mapping));
+    public static void process(ZipFile file, FormatRemapper remapper, File output) throws IOException {
         addPlainClasses(file, remapper);
         generateInheritTree(file, remapper);
         runPack(output, remapAllClasses(file, remapper.getRemapper(), remapper));
     }
 
-    public static void addPlainClasses(ZipFile file, MojangFormatRemapper format) throws IOException {
+    public static void addPlainClasses(ZipFile file, FormatRemapper format) throws IOException {
         Enumeration<? extends ZipEntry> entries = file.entries();
         while (entries.hasMoreElements()) {
             ZipEntry entry = entries.nextElement();
@@ -48,7 +47,7 @@ public class FileProcessor {
         }
     }
 
-    public static void generateInheritTree(ZipFile file, MojangFormatRemapper remapper) throws IOException {
+    public static void generateInheritTree(ZipFile file, FormatRemapper remapper) throws IOException {
         Enumeration<? extends ZipEntry> entries = file.entries();
         while (entries.hasMoreElements()) {
             ZipEntry entry = entries.nextElement();
@@ -62,7 +61,7 @@ public class FileProcessor {
         }
     }
 
-    public static Map<String, byte[]> remapAllClasses(ZipFile file, ASMRemapper remapper, MojangFormatRemapper format) throws IOException {
+    public static Map<String, byte[]> remapAllClasses(ZipFile file, ASMRemapper remapper, FormatRemapper format) throws IOException {
         Map<String, byte[]> remappedData = new HashMap<>();
 
         Enumeration<? extends ZipEntry> entries = file.entries();

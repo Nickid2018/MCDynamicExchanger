@@ -84,7 +84,7 @@ public class Main {
             output = (File) commandLine.getParsedOptionValue("output");
 
         try (ZipFile file = new ZipFile(input)) {
-            FileProcessor.process(file, mapping, output);
+                FileProcessor.process(file, new MojangFormatRemapper(Files.newInputStream(mapping.toPath())), output);
         }
     }
 

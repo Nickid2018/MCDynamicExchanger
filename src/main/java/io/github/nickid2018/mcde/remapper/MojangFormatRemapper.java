@@ -3,17 +3,11 @@ package io.github.nickid2018.mcde.remapper;
 import io.github.nickid2018.mcde.util.ClassUtils;
 
 import java.io.*;
-import java.util.HashMap;
-import java.util.Map;
 
-public class MojangFormatRemapper {
-
-    public final Map<String, RemapClass> remaps = new HashMap<>();
-    public final Map<String, String> revClass = new HashMap<>();
-
-    private final ASMRemapper remapper;
+public class MojangFormatRemapper extends FormatRemapper {
 
     public MojangFormatRemapper(InputStream stream) throws IOException {
+        super();
         ByteArrayInputStream resetStream = new ByteArrayInputStream(stream.readAllBytes());
         BufferedReader reader = new BufferedReader(new InputStreamReader(resetStream));
         resetStream.mark(0);
@@ -85,9 +79,5 @@ public class MojangFormatRemapper {
                 nowClass = remaps.get(toClass);
             }
         }
-    }
-
-    public ASMRemapper getRemapper() {
-        return remapper;
     }
 }
