@@ -1,5 +1,7 @@
 package io.github.nickid2018.mcde.remapper;
 
+import io.github.nickid2018.mcde.util.ClassUtils;
+
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -60,11 +62,11 @@ public class MojangFormatRemapper {
                     if (argss.length == 2) {
                         String[] args = argss[1].split(",");
                         for (String a : args) {
-                            nowTo.append(mapToSig(a, revClass));
+                            nowTo.append(ClassUtils.mapSignature(a, revClass));
                         }
                     }
                     nowTo.append(")");
-                    nowTo.append(mapToSig(descs[0], revClass));
+                    nowTo.append(ClassUtils.mapSignature(descs[0], revClass));
                     String source = nowTo.toString().trim();
                     String to = descs[1].split("\\(")[0].trim();
                     nowClass.methodMappings.put(source, to);
@@ -73,7 +75,7 @@ public class MojangFormatRemapper {
                     String[] splits = now.trim().split(" -> ");
                     String source = splits[1];
                     String to = splits[0].split(" ")[1];
-                    nowClass.fieldMappings.put(source + "+" + mapToSig(splits[0].split(" ")[0], revClass), to);
+                    nowClass.fieldMappings.put(source + "+" + ClassUtils.mapSignature(splits[0].split(" ")[0], revClass), to);
                 }
             } else {
                 // Class
@@ -83,25 +85,6 @@ public class MojangFormatRemapper {
                 nowClass = remaps.get(toClass);
             }
         }
-    }
-
-    private String mapToSig(String str, Map<String, String> revClass) {
-        if (str.indexOf('[') >= 0) {
-            String[] sp = str.split("\\[");
-            return "[".repeat(sp.length - 1) + mapToSig(sp[0], revClass);
-        }
-        return switch (str) {
-            case "int" -> "I";
-            case "float" -> "F";
-            case "double" -> "D";
-            case "long" -> "J";
-            case "boolean" -> "Z";
-            case "short" -> "S";
-            case "byte" -> "B";
-            case "char" -> "C";
-            case "void" -> "V";
-            default -> "L" + revClass.getOrDefault(str, str).replace('.', '/') + ";";
-        };
     }
 
     public ASMRemapper getRemapper() {

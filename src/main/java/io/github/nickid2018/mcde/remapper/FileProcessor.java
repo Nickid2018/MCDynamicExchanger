@@ -22,7 +22,7 @@ public class FileProcessor {
     public static void process(ZipFile file, File mapping, File output) throws IOException {
         MojangFormatRemapper remapper = new MojangFormatRemapper(new FileInputStream(mapping));
         addPlainClasses(file, remapper);
-        generateExtendTree(file, remapper);
+        generateInheritTree(file, remapper);
         runPack(output, remapAllClasses(file, remapper.getRemapper(), remapper));
     }
 
@@ -48,7 +48,7 @@ public class FileProcessor {
         }
     }
 
-    public static void generateExtendTree(ZipFile file, MojangFormatRemapper remapper) throws IOException {
+    public static void generateInheritTree(ZipFile file, MojangFormatRemapper remapper) throws IOException {
         Enumeration<? extends ZipEntry> entries = file.entries();
         while (entries.hasMoreElements()) {
             ZipEntry entry = entries.nextElement();
