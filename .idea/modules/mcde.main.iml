@@ -10,6 +10,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Gradle: commons-io:commons-io:2.11.0" level="project" />
+    <orderEntry type="library" name="Gradle: org.ow2.asm:asm-commons:9.3" level="project" />
     <orderEntry type="library" name="Gradle: org.ow2.asm:asm-util:9.3" level="project" />
     <orderEntry type="library" name="Gradle: org.ow2.asm:asm-tree:9.3" level="project" />
     <orderEntry type="library" name="Gradle: org.ow2.asm:asm:9.3" level="project" />
