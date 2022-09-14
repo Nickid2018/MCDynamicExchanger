@@ -27,10 +27,13 @@ jobs:
           java-version: 17
           cache: gradle
 
+      - name: chmod
+        run: chmod +x gradlew
+
       - name: Run Gradle
-        run: |
-          chmod +x gradlew
-          ./gradlew clean shadowJar -s
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: shadowJar -s
 
       - name: Upload
         uses: actions/upload-artifact@v3
