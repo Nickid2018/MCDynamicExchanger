@@ -1,18 +1,21 @@
 package io.github.nickid2018.mcde.remapper;
 
+import io.github.nickid2018.mcde.format.MappingClassData;
 import org.objectweb.asm.commons.Remapper;
+
+import java.util.Map;
 
 public class ASMRemapper extends Remapper {
 
-    private final MojangFormatRemapper format;
+    private final Map<String, MappingClassData> classMap;
 
-    public ASMRemapper(MojangFormatRemapper format) {
-        this.format = format;
+    public ASMRemapper(Map<String, MappingClassData> classMap) {
+        this.classMap = classMap;
     }
 
     @Override
     public String mapMethodName(String owner, String name, String desc) {
-        RemapClass clazz = format.remaps.get(toBinaryName(owner));
+        MappingClassData clazz = classMap.get(toBinaryName(owner));
         if (clazz == null)
             return name;
         String get = clazz.findMethod(name + desc);
@@ -21,7 +24,7 @@ public class ASMRemapper extends Remapper {
 
     @Override
     public String mapFieldName(String owner, String name, String desc) {
-        RemapClass clazz = format.remaps.get(toBinaryName(owner));
+        MappingClassData clazz = classMap.get(toBinaryName(owner));
         if (clazz == null)
             return name;
         String get = clazz.findField(name + "+" + desc);
@@ -30,10 +33,13 @@ public class ASMRemapper extends Remapper {
 
     @Override
     public String map(String typeName) {
-        RemapClass clazz = format.remaps.get(toBinaryName(typeName));
+        MappingClassData clazz = classMap.get(toBinaryName(typeName));
         return clazz == null ? typeName : toInternalName(clazz.mapName());
     }
 
+    public Map<String, MappingClassData> getClassMap() {
+        return classMap;
+    }
 
     public static String toBinaryName(String name) {
         return name.replace('/', '.');

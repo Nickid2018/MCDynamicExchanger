@@ -1,0 +1,6 @@
+command.remap = Remap a Minecraft file
+command.remap.source = Minecraft JAR file
+command.remap.mapping = Obfuscate mapping
+command.remap.output = Output file
+command.remap.type = Mapping type
+command.help = Get this help message

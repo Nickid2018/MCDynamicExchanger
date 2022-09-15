@@ -24,6 +24,10 @@ dependencies {
 jar {
     manifest {
         attributes 'Main-Class': 'io.github.nickid2018.mcde.Main'
+        attributes 'Premain-Class': 'io.github.nickid2018.mcde.injector.MCProgramInjector'
+        attributes 'Agent-Class': 'io.github.nickid2018.mcde.injector.MCProgramInjector'
+        attributes 'Can-Redefine-Classes': true
+        attributes 'Can-Retransform-Classes': true
     }
 }
 

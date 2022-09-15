@@ -1,12 +1,17 @@
-package io.github.nickid2018.mcde.remapper;
+package io.github.nickid2018.mcde.format;
 
+import io.github.nickid2018.mcde.remapper.ASMRemapper;
 import io.github.nickid2018.mcde.util.ClassUtils;
 
 import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
 
-public class MojangFormatRemapper extends FormatRemapper {
+public class MojangMappingFormat extends MappingFormat {
 
-    public MojangFormatRemapper(InputStream stream) throws IOException {
+    public final Map<String, String> revClass = new HashMap<>();
+
+    public MojangMappingFormat(InputStream stream) throws IOException {
         super();
         ByteArrayInputStream resetStream = new ByteArrayInputStream(stream.readAllBytes());
         BufferedReader reader = new BufferedReader(new InputStreamReader(resetStream));
@@ -14,7 +19,7 @@ public class MojangFormatRemapper extends FormatRemapper {
         readClassTokens(reader);
         resetStream.reset();
         readComponents(reader);
-        remapper = new ASMRemapper(this);
+        toNamedMapper = new ASMRemapper(remaps);
     }
 
     private void readClassTokens(BufferedReader reader) throws IOException {
@@ -31,7 +36,7 @@ public class MojangFormatRemapper extends FormatRemapper {
                 String[] splits = now.split(" -> ");
                 nowClass = splits[0];
                 toClass = splits[1];
-                remaps.put(toClass, new RemapClass(toClass, nowClass));
+                remaps.put(toClass, new MappingClassData(toClass, nowClass));
                 revClass.put(nowClass, toClass);
             }
         }
@@ -40,7 +45,7 @@ public class MojangFormatRemapper extends FormatRemapper {
     private void readComponents(BufferedReader reader) throws IOException {
         String toClass;
         String nowStr;
-        RemapClass nowClass = new RemapClass("" ,"");
+        MappingClassData nowClass = new MappingClassData("" ,"");
         while ((nowStr = reader.readLine()) != null) {
             if (nowStr.startsWith("#"))
                 continue;
@@ -55,9 +60,8 @@ public class MojangFormatRemapper extends FormatRemapper {
                     String[] argss = descs[1].split("[()]");
                     if (argss.length == 2) {
                         String[] args = argss[1].split(",");
-                        for (String a : args) {
+                        for (String a : args)
                             nowTo.append(ClassUtils.mapSignature(a, revClass));
-                        }
                     }
                     nowTo.append(")");
                     nowTo.append(ClassUtils.mapSignature(descs[0], revClass));
