@@ -21,4 +21,12 @@ public class ClassUtils {
             default -> "L" + revClass.getOrDefault(str, str).replace('.', '/') + ";";
         };
     }
+
+    public static String toBinaryName(String name) {
+        return name.replace('/', '.');
+    }
+
+    public static String toInternalName(String name) {
+        return name.replace('.', '/');
+    }
 }

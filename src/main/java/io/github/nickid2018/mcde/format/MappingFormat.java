@@ -1,6 +1,7 @@
 package io.github.nickid2018.mcde.format;
 
 import io.github.nickid2018.mcde.remapper.ASMRemapper;
+import io.github.nickid2018.mcde.util.ClassUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,7 +33,7 @@ public abstract class MappingFormat {
 
     public void createToSourceMapper() {
         for (String clazz : remaps.keySet()) {
-            String className = ASMRemapper.toBinaryName(toNamedMapper.map(clazz));
+            String className = ClassUtils.toBinaryName(toNamedMapper.map(clazz));
             if (!revMap.containsKey(className))
                 revMap.put(className, createRevClass(remaps.get(clazz), revMap));
         }

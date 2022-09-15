@@ -1,6 +1,7 @@
 package io.github.nickid2018.mcde.remapper;
 
 import io.github.nickid2018.mcde.format.MappingClassData;
+import io.github.nickid2018.mcde.util.ClassUtils;
 import org.objectweb.asm.commons.Remapper;
 
 import java.util.Map;
@@ -15,7 +16,7 @@ public class ASMRemapper extends Remapper {
 
     @Override
     public String mapMethodName(String owner, String name, String desc) {
-        MappingClassData clazz = classMap.get(toBinaryName(owner));
+        MappingClassData clazz = classMap.get(ClassUtils.toBinaryName(owner));
         if (clazz == null)
             return name;
         String get = clazz.findMethod(name + desc);
@@ -24,7 +25,7 @@ public class ASMRemapper extends Remapper {
 
     @Override
     public String mapFieldName(String owner, String name, String desc) {
-        MappingClassData clazz = classMap.get(toBinaryName(owner));
+        MappingClassData clazz = classMap.get(ClassUtils.toBinaryName(owner));
         if (clazz == null)
             return name;
         String get = clazz.findField(name + "+" + desc);
@@ -33,19 +34,12 @@ public class ASMRemapper extends Remapper {
 
     @Override
     public String map(String typeName) {
-        MappingClassData clazz = classMap.get(toBinaryName(typeName));
-        return clazz == null ? typeName : toInternalName(clazz.mapName());
+        MappingClassData clazz = classMap.get(ClassUtils.toBinaryName(typeName));
+        return clazz == null ? typeName : ClassUtils.toInternalName(clazz.mapName());
     }
 
     public Map<String, MappingClassData> getClassMap() {
         return classMap;
     }
 
-    public static String toBinaryName(String name) {
-        return name.replace('/', '.');
-    }
-
-    public static String toInternalName(String name) {
-        return name.replace('.', '/');
-    }
 }

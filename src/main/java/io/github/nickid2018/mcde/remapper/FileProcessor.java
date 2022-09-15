@@ -2,6 +2,7 @@ package io.github.nickid2018.mcde.remapper;
 
 import io.github.nickid2018.mcde.format.MappingClassData;
 import io.github.nickid2018.mcde.format.MappingFormat;
+import io.github.nickid2018.mcde.util.ClassUtils;
 import org.apache.commons.io.IOUtils;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
@@ -51,8 +52,7 @@ public class FileProcessor {
 
     private static String byteToHex(byte[] bytes) {
         StringBuilder result = new StringBuilder(bytes.length * 2);
-        for (int i = 0; i < bytes.length; ++i) {
-            byte b = bytes[i];
+        for (byte b : bytes) {
             result.append(Character.forDigit(b >> 4 & 15, 16));
             result.append(Character.forDigit(b & 15, 16));
         }
@@ -72,7 +72,7 @@ public class FileProcessor {
             if (!entry.getName().endsWith(".class"))
                 continue;
             ClassReader reader = new ClassReader(IOUtils.toByteArray(file.getInputStream(entry)));
-            String className = ASMRemapper.toBinaryName(reader.getClassName());
+            String className = ClassUtils.toBinaryName(reader.getClassName());
             MappingClassData clazz = format.getToNamedClass(className);
             if (clazz == null) {
                 ClassNode node = new ClassNode(Opcodes.ASM9);
@@ -94,12 +94,11 @@ public class FileProcessor {
             if (!entry.getName().endsWith(".class"))
                 continue;
             ClassReader reader = new ClassReader(IOUtils.toByteArray(file.getInputStream(entry)));
-            MappingClassData clazz = format.getToNamedClass(ASMRemapper.toBinaryName(reader.getClassName()));
-            clazz.superClasses.add(format.getToNamedClass(ASMRemapper.toBinaryName(reader.getSuperName())));
+            MappingClassData clazz = format.getToNamedClass(ClassUtils.toBinaryName(reader.getClassName()));
+            clazz.superClasses.add(format.getToNamedClass(ClassUtils.toBinaryName(reader.getSuperName())));
             for (String name : reader.getInterfaces())
-                clazz.superClasses.add(format.getToNamedClass(ASMRemapper.toBinaryName(name)));
+                clazz.superClasses.add(format.getToNamedClass(ClassUtils.toBinaryName(name)));
         }
-        format.createToSourceMapper();
     }
 
     public static Map<String, byte[]> remapAllClasses(ZipFile file, ASMRemapper remapper, MappingFormat format) throws IOException {
@@ -118,10 +117,10 @@ public class FileProcessor {
             }
             ClassReader reader = new ClassReader(bytes);
             ClassWriter writer = new ClassWriter(0);
-            String className = ASMRemapper.toBinaryName(entry.getName());
+            String className = ClassUtils.toBinaryName(entry.getName());
             className = className.substring(0, className.length() - 6);
             reader.accept(new ClassRemapperFix(writer, remapper), 0);
-            remappedData.put(ASMRemapper.toInternalName(format.getToNamedClass(className).mapName()) + ".class",
+            remappedData.put(ClassUtils.toInternalName(format.getToNamedClass(className).mapName()) + ".class",
                     writer.toByteArray());
         }
 

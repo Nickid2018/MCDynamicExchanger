@@ -1,6 +1,7 @@
 package io.github.nickid2018.mcde.format;
 
 import io.github.nickid2018.mcde.remapper.ASMRemapper;
+import io.github.nickid2018.mcde.util.ClassUtils;
 import io.github.nickid2018.mcde.util.I18N;
 
 import java.io.BufferedReader;
@@ -27,8 +28,8 @@ public class YarnMappingFormat extends MappingFormat {
             String[] args = line.trim().split("[\t ]");
             if (args[0].equalsIgnoreCase("c")) {
                 // Class Line: c official intermediary named
-                String sourceName = ASMRemapper.toBinaryName(args[1]);
-                mappingClassData = new MappingClassData(sourceName, ASMRemapper.toBinaryName(args[3]));
+                String sourceName = ClassUtils.toBinaryName(args[1]);
+                mappingClassData = new MappingClassData(sourceName, ClassUtils.toBinaryName(args[3]));
                 remaps.put(sourceName, mappingClassData);
             } else if (args[0].equalsIgnoreCase("f"))
                 // Field line: f desc official intermediary named

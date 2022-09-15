@@ -41,5 +41,6 @@ public class MCProgramInjector {
             FileProcessor.addPlainClasses(file, format);
             FileProcessor.generateInheritTree(file, format);
         }
+        format.createToSourceMapper();
     }
 }
