@@ -10,8 +10,8 @@ public class I18N {
 
     private static final Properties translations = new Properties();
 
-    public static String getTranslation(String key) {
-        return (String) translations.get(key);
+    public static String getTranslation(String key, String... args) {
+        return ((String) translations.getOrDefault(key, key)).formatted((Object[]) args);
     }
 
     static {

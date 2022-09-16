@@ -6,25 +6,29 @@ import io.github.nickid2018.mcde.format.MojangMappingFormat;
 import io.github.nickid2018.mcde.format.YarnMappingFormat;
 import io.github.nickid2018.mcde.util.ConsumerE;
 import io.github.nickid2018.mcde.util.I18N;
+import io.github.nickid2018.mcde.util.Pair;
+import io.github.nickid2018.mcde.util.ZipUtils;
 import org.apache.commons.cli.*;
+import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.nio.file.Files;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.zip.ZipFile;
 
 public class Main {
 
-    public static final Map<Options, ConsumerE<CommandLine>> parsers = new HashMap<>();
+    public static final List<Pair<Options, ConsumerE<CommandLine>>> parsers = new ArrayList<>();
 
     public static void main(String[] args) {
-        parsers.put(initOptionHelp(), Main::doHelp);
-        parsers.put(initOptionRemap(), Main::doRemap);
-        for (Options options : parsers.keySet())
+        parsers.add(new Pair<>(initOptionHelp(), Main::doHelp));
+        parsers.add(new Pair<>(initOptionRemap(), Main::doRemap));
+        parsers.add(new Pair<>(initOptionDecompile(), Main::doDecompile));
+        for (Pair<Options, ConsumerE<CommandLine>> pairs : parsers)
             try {
-                CommandLine commandLine = new DefaultParser().parse(options, args);
-                parsers.get(options).accept(commandLine);
+                CommandLine commandLine = new DefaultParser().parse(pairs.left(), args);
+                pairs.right().accept(commandLine);
                 return;
             } catch (ParseException ignored) {
             } catch (Exception e) {
@@ -33,12 +37,20 @@ public class Main {
         showHelp();
     }
 
+    public static void log(String message) {
+        System.out.println(message);
+    }
+    public static void err(String message, Throwable throwable) {
+        System.err.println(message);
+        throwable.printStackTrace();
+    }
+
     private static void showHelp() {
         HelpFormatter formatter = new HelpFormatter();
         formatter.setWidth(110);
 
-        for (Options options : parsers.keySet())
-            formatter.printHelp("java -jar mcde.jar", options, true);
+        for (Pair<Options, ConsumerE<CommandLine>> pairs : parsers)
+            formatter.printHelp("java -jar mcde.jar", pairs.left(), true);
     }
 
     private static Options initOptionRemap() {
@@ -50,22 +62,18 @@ public class Main {
 
         Option input = new Option("i", "input", true, I18N.getTranslation("command.remap.source"));
         input.setRequired(true);
-        input.setType(File.class);
         remapOptions.addOption(input);
 
         Option inputMapping = new Option("m", "mapping", true, I18N.getTranslation("command.remap.mapping"));
         inputMapping.setRequired(true);
-        input.setType(File.class);
         remapOptions.addOption(inputMapping);
 
         Option output = new Option("o", "output", true, I18N.getTranslation("command.remap.output"));
         output.setRequired(false);
-        input.setType(File.class);
         remapOptions.addOption(output);
 
         Option type = new Option("t", "type", true, I18N.getTranslation("command.remap.type"));
         type.setRequired(false);
-        input.setType(String.class);
         remapOptions.addOption(type);
 
 
@@ -74,6 +82,24 @@ public class Main {
         remapOptions.addOption(server);
 
         return remapOptions;
+    }
+
+    private static Options initOptionDecompile() {
+        Options decompileOptions = new Options();
+
+        Option decompile = new Option("decompile", false, I18N.getTranslation("command.decompile"));
+        decompile.setRequired(true);
+        decompileOptions.addOption(decompile);
+
+        Option input = new Option("i", "input", true, I18N.getTranslation("command.decompile.source"));
+        input.setRequired(true);
+        decompileOptions.addOption(input);
+
+        Option output = new Option("o", "output", true, I18N.getTranslation("command.decompile.output"));
+        output.setRequired(false);
+        decompileOptions.addOption(output);
+
+        return decompileOptions;
     }
 
     private static Options initOptionHelp() {
@@ -105,6 +131,25 @@ public class Main {
             else
                 FileProcessor.process(file, format, output);
         }
+    }
+
+    private static void doDecompile(CommandLine commandLine) throws Exception {
+        File input = new File(commandLine.getOptionValue("input"));
+        File output = new File("decompiled.jar");
+        if (commandLine.hasOption("output"))
+            output = new File(commandLine.getOptionValue("output"));
+
+        org.benf.cfr.reader.Main.main(new String[] {
+                input.getAbsolutePath(),
+                "--outputpath", output.getAbsolutePath() + "-files",
+                "--comments", "false",
+                "--silent", "true",
+                "--clobber", "true"
+        });
+
+        ZipUtils.zipFolders(output.getAbsolutePath() + "-files", output.getAbsolutePath());
+
+        FileUtils.deleteDirectory(new File(output.getAbsolutePath() + "-files"));
     }
 
     private static void doHelp(CommandLine commandLine) {

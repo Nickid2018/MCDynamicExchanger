@@ -1,9 +1,12 @@
-command.remap = 反混淆Minecraft
+command.remap = 反混淆Minecraft的标志
 command.remap.source = Minecraft JAR文件
 command.remap.mapping = 混淆映射表
 command.remap.output = 输出文件
 command.remap.type = 映射表类型
 command.remap.server = 反混淆服务端核心
+command.decompile = 反编译Minecraft的标志
+command.decompile.source = 输入文件
+command.decompile.output = 输出文件
 command.help = 获得此帮助信息
 
 error.mapping.format = 错误的混淆映射表格式

@@ -12,7 +12,6 @@ public class MojangMappingFormat extends MappingFormat {
     public final Map<String, String> revClass = new HashMap<>();
 
     public MojangMappingFormat(InputStream stream) throws IOException {
-        super();
         ByteArrayInputStream resetStream = new ByteArrayInputStream(stream.readAllBytes());
         BufferedReader reader = new BufferedReader(new InputStreamReader(resetStream));
         resetStream.mark(0);

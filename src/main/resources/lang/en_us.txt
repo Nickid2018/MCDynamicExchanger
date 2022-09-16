@@ -1,6 +1,12 @@
-command.remap = Remap a Minecraft file
+command.remap = Flag of remapping a Minecraft file
 command.remap.source = Minecraft JAR file
 command.remap.mapping = Obfuscate mapping
 command.remap.output = Output file
 command.remap.type = Mapping type
+command.remap.server = Deobfuscate server
+command.decompile = Flag of decompiling a Minecraft file
+command.decompile.source = Input file
+command.decompile.output = Output file
 command.help = Get this help message
+
+error.mapping.format = Invalid mapping format
