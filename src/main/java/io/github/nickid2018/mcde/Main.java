@@ -34,15 +34,18 @@ public class Main {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        err("error.argument", null);
         showHelp();
     }
 
-    public static void log(String message) {
-        System.out.println(message);
+    public static void log(String message, Object... args) {
+        System.out.println(I18N.getTranslation(message, args));
     }
-    public static void err(String message, Throwable throwable) {
-        System.err.println(message);
-        throwable.printStackTrace();
+
+    public static void err(String message, Throwable throwable, Object... args) {
+        System.err.println(I18N.getTranslation(message, args));
+        if (throwable != null)
+            throwable.printStackTrace();
     }
 
     private static void showHelp() {
@@ -118,19 +121,24 @@ public class Main {
         File output = new File("remapped.jar");
         if (commandLine.hasOption("output"))
             output = new File(commandLine.getOptionValue("output"));
+        log("process.remap.start");
 
         try (ZipFile file = new ZipFile(input)) {
             String type = commandLine.hasOption("type") ? commandLine.getOptionValue("type") : "mojang";
+            log("process.remap.mapping");
             MappingFormat format = switch (type) {
                 case "mojang" -> new MojangMappingFormat(Files.newInputStream(mapping.toPath()));
                 case "yarn" -> new YarnMappingFormat(Files.newInputStream(mapping.toPath()));
-                default -> throw new IllegalArgumentException(I18N.getTranslation("error.mapping.format"));
+                default -> throw new IllegalArgumentException(I18N.getTranslation("error.mapping.unsupported"));
             };
+            log("process.remap.mapping.done");
             if (commandLine.hasOption("server"))
                 FileProcessor.processServer(file, format, output);
             else
-                FileProcessor.process(file, format, output);
+                FileProcessor.process(file, format, output, false);
         }
+
+        log("process.remap.success");
     }
 
     private static void doDecompile(CommandLine commandLine) throws Exception {

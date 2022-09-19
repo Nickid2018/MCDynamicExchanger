@@ -1,8 +1,10 @@
 package io.github.nickid2018.mcde.remapper;
 
+import io.github.nickid2018.mcde.Main;
 import io.github.nickid2018.mcde.format.MappingClassData;
 import io.github.nickid2018.mcde.format.MappingFormat;
 import io.github.nickid2018.mcde.util.ClassUtils;
+import io.github.nickid2018.mcde.util.I18N;
 import org.apache.commons.io.IOUtils;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
@@ -27,6 +29,7 @@ import java.util.zip.ZipOutputStream;
 public class FileProcessor {
 
     public static void processServer(ZipFile file, MappingFormat remapper, File output) throws Exception {
+        Main.log("process.remap.server");
         String versionData = IOUtils.toString(
                 file.getInputStream(file.getEntry("META-INF/versions.list")), StandardCharsets.UTF_8);
         String[] extractData = versionData.split("\t", 3);
@@ -34,8 +37,9 @@ public class FileProcessor {
         IOUtils.copy(file.getInputStream(file.getEntry("META-INF/versions/" + extractData[2])),
                 new FileOutputStream(tempZip));
         checkIntegrity(tempZip.toPath(), extractData[0]);
+        Main.log("process.remap.server.done");
         try (ZipFile server = new ZipFile(tempZip)) {
-            process(server, remapper, output);
+            process(server, remapper, output, true);
         }
         tempZip.delete();
     }
@@ -46,7 +50,7 @@ public class FileProcessor {
             output.transferTo(new DigestOutputStream(OutputStream.nullOutputStream(), digest));
             String actualHash = byteToHex(digest.digest());
             if (!actualHash.equalsIgnoreCase(expectedHash))
-                throw new IOException("Expected file %s to have hash %s, but got %s".formatted(file, expectedHash, actualHash));
+                throw new IOException(I18N.getTranslation("error.remap.serverhash", expectedHash, actualHash));
         }
     }
 
@@ -59,10 +63,14 @@ public class FileProcessor {
         return result.toString();
     }
 
-    public static void process(ZipFile file, MappingFormat remapper, File output) throws IOException {
+    public static void process(ZipFile file, MappingFormat remapper, File output, boolean server) throws IOException {
+        Main.log("process.remap.inheritance");
         addPlainClasses(file, remapper);
         generateInheritTree(file, remapper);
-        runPack(output, remapAllClasses(file, remapper.getToNamedMapper(), remapper));
+        Main.log("process.remap.inheritance.done");
+        Main.log("process.remap.output");
+        runPack(output, remapAllClasses(file, remapper.getToNamedMapper(), remapper, server));
+        Main.log("process.remap.success");
     }
 
     public static void addPlainClasses(ZipFile file, MappingFormat format) throws IOException {
@@ -101,7 +109,8 @@ public class FileProcessor {
         }
     }
 
-    public static Map<String, byte[]> remapAllClasses(ZipFile file, ASMRemapper remapper, MappingFormat format) throws IOException {
+    public static Map<String, byte[]> remapAllClasses(ZipFile file, ASMRemapper remapper, MappingFormat format, boolean server)
+            throws IOException {
         Map<String, byte[]> remappedData = new HashMap<>();
 
         Enumeration<? extends ZipEntry> entries = file.entries();
@@ -125,7 +134,8 @@ public class FileProcessor {
         }
 
         remappedData.put("META-INF/MANIFEST.MF",
-                "Manifest-Version: 1.0\r\nMain-Class: net.minecraft.client.main.Main".getBytes());
+                ("Manifest-Version: 1.0\r\nMain-Class: " +
+                        (server ? "net.minecraft.server.Main" : "net.minecraft.client.main.Main")).getBytes());
 
         return remappedData;
     }

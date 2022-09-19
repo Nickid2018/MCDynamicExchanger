@@ -32,10 +32,12 @@ public class MCProgramInjector {
 
     private static void createMapper(String data) throws IOException {
         String[] typeAndPath = data.split(";", 3);
+        if (typeAndPath.length != 3)
+            throw new IllegalArgumentException(I18N.getTranslation("error.argument"));
         format = switch (typeAndPath[0].toLowerCase(Locale.ROOT)) {
             case "mojang" -> new MojangMappingFormat(Files.newInputStream(Path.of(typeAndPath[1])));
             case "yarn" -> new YarnMappingFormat(Files.newInputStream(Path.of(typeAndPath[1])));
-            default -> throw new IllegalArgumentException(I18N.getTranslation("error.mapping.format"));
+            default -> throw new IllegalArgumentException(I18N.getTranslation("error.mapping.unsupported"));
         };
         try (ZipFile file = new ZipFile(typeAndPath[3])) {
             FileProcessor.addPlainClasses(file, format);

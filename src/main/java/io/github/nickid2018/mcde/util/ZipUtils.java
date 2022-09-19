@@ -21,7 +21,6 @@ public class ZipUtils {
 
     private static void addFolderToZip(String path, String srcFolder, ZipOutputStream zip) throws Exception {
         File folder = new File(srcFolder);
-
         for (String fileName : Objects.requireNonNull(folder.list())) {
             if (path.equals(""))
                 addFileToZip(folder.getName(), srcFolder + "/" + fileName, zip);

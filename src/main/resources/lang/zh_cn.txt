@@ -9,4 +9,17 @@ command.decompile.source = 输入文件
 command.decompile.output = 输出文件
 command.help = 获得此帮助信息
 
+process.remap.start = 正在反混淆...
+process.remap.mapping = 正在加载混淆映射表...
+process.remap.mapping.done = 混淆映射表加载完成
+process.remap.server = 正在解包服务端核心...
+process.remap.server.done = 服务端核心解包完成
+process.remap.inheritance = 正在加载继承关系...
+process.remap.inheritance.done = 继承关系加载完成
+process.remap.output = 正在写入反混淆的类...
+process.remap.success = 反混淆成功!
+
+error.argument = 错误的参数
 error.mapping.format = 错误的混淆映射表格式
+error.mapping.unsupported = 不支持的混淆映射表格式
+error.remap.serverhash = 服务端核心的哈希值不匹配，应为: %s，实际为: %s

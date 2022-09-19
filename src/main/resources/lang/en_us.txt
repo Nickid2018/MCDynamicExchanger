@@ -9,4 +9,17 @@ command.decompile.source = Input file
 command.decompile.output = Output file
 command.help = Get this help message
 
+process.remap.start = Start remapping
+process.remap.mapping = Loading mapping
+process.remap.mapping.done = Mapping loaded
+process.remap.server = Unzipping server core
+process.remap.server.done = Server core unzipped
+process.remap.inheritance = Loading inheritance
+process.remap.inheritance.done = Inheritance loaded
+process.remap.output = Creating output
+process.remap.success = Remapping done
+
+error.argument = Wrong arguments
 error.mapping.format = Invalid mapping format
+error.mapping.unsupported = Unsupported mapping type
+error.remap.serverhash = Server hash mismatch, expected %s, but got %s
