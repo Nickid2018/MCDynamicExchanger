@@ -1,10 +1,10 @@
 package io.github.nickid2018.mcde.remapper;
 
-import io.github.nickid2018.mcde.Main;
 import io.github.nickid2018.mcde.format.MappingClassData;
 import io.github.nickid2018.mcde.format.MappingFormat;
 import io.github.nickid2018.mcde.util.ClassUtils;
 import io.github.nickid2018.mcde.util.I18N;
+import io.github.nickid2018.mcde.util.LogUtils;
 import org.apache.commons.io.IOUtils;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
@@ -29,7 +29,7 @@ import java.util.zip.ZipOutputStream;
 public class FileProcessor {
 
     public static void processServer(ZipFile file, MappingFormat remapper, File output) throws Exception {
-        Main.log("process.remap.server");
+        LogUtils.log("process.remap.server");
         String versionData = IOUtils.toString(
                 file.getInputStream(file.getEntry("META-INF/versions.list")), StandardCharsets.UTF_8);
         String[] extractData = versionData.split("\t", 3);
@@ -37,7 +37,7 @@ public class FileProcessor {
         IOUtils.copy(file.getInputStream(file.getEntry("META-INF/versions/" + extractData[2])),
                 new FileOutputStream(tempZip));
         checkIntegrity(tempZip.toPath(), extractData[0]);
-        Main.log("process.remap.server.done");
+        LogUtils.log("process.remap.server.done");
         try (ZipFile server = new ZipFile(tempZip)) {
             process(server, remapper, output, true);
         }
@@ -64,13 +64,13 @@ public class FileProcessor {
     }
 
     public static void process(ZipFile file, MappingFormat remapper, File output, boolean server) throws IOException {
-        Main.log("process.remap.inheritance");
+        LogUtils.log("process.remap.inheritance");
         addPlainClasses(file, remapper);
         generateInheritTree(file, remapper);
-        Main.log("process.remap.inheritance.done");
-        Main.log("process.remap.output");
+        LogUtils.log("process.remap.inheritance.done");
+        LogUtils.log("process.remap.output");
         runPack(output, remapAllClasses(file, remapper.getToNamedMapper(), remapper, server));
-        Main.log("process.remap.success");
+        LogUtils.log("process.remap.success");
     }
 
     public static void addPlainClasses(ZipFile file, MappingFormat format) throws IOException {

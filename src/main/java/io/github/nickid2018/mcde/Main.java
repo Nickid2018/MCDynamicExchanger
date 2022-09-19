@@ -1,20 +1,26 @@
 package io.github.nickid2018.mcde;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import io.github.nickid2018.mcde.remapper.FileProcessor;
 import io.github.nickid2018.mcde.format.MappingFormat;
 import io.github.nickid2018.mcde.format.MojangMappingFormat;
 import io.github.nickid2018.mcde.format.YarnMappingFormat;
-import io.github.nickid2018.mcde.util.ConsumerE;
-import io.github.nickid2018.mcde.util.I18N;
-import io.github.nickid2018.mcde.util.Pair;
-import io.github.nickid2018.mcde.util.ZipUtils;
+import io.github.nickid2018.mcde.util.*;
 import org.apache.commons.cli.*;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.StreamSupport;
 import java.util.zip.ZipFile;
 
 public class Main {
@@ -25,27 +31,25 @@ public class Main {
         parsers.add(new Pair<>(initOptionHelp(), Main::doHelp));
         parsers.add(new Pair<>(initOptionRemap(), Main::doRemap));
         parsers.add(new Pair<>(initOptionDecompile(), Main::doDecompile));
+        parsers.add(new Pair<>(initOptionAuto(), Main::doAuto));
         for (Pair<Options, ConsumerE<CommandLine>> pairs : parsers)
             try {
                 CommandLine commandLine = new DefaultParser().parse(pairs.left(), args);
                 pairs.right().accept(commandLine);
                 return;
             } catch (ParseException ignored) {
+            } catch (IllegalArgumentException e) {
+                LogUtils.err(e.getMessage(), null);
+                return;
+            } catch (IOException e) {
+                LogUtils.err("error.io", e);
+                return;
             } catch (Exception e) {
-                e.printStackTrace();
+                LogUtils.err("error.unknown", e);
+                return;
             }
-        err("error.argument", null);
+        LogUtils.err("error.argument.help", null);
         showHelp();
-    }
-
-    public static void log(String message, Object... args) {
-        System.out.println(I18N.getTranslation(message, args));
-    }
-
-    public static void err(String message, Throwable throwable, Object... args) {
-        System.err.println(I18N.getTranslation(message, args));
-        if (throwable != null)
-            throwable.printStackTrace();
     }
 
     private static void showHelp() {
@@ -105,6 +109,24 @@ public class Main {
         return decompileOptions;
     }
 
+    private static Options initOptionAuto() {
+        Options autoOptions = new Options();
+
+        Option help = new Option("auto", false, I18N.getTranslation("command.auto"));
+        help.setRequired(true);
+        autoOptions.addOption(help);
+
+        Option version = new Option("v", "version", true, I18N.getTranslation("command.auto.version"));
+        version.setRequired(true);
+        autoOptions.addOption(version);
+
+        Option output = new Option("o", "output", true, I18N.getTranslation("command.auto.output"));
+        output.setRequired(false);
+        autoOptions.addOption(output);
+
+        return autoOptions;
+    }
+
     private static Options initOptionHelp() {
         Options helpOptions = new Options();
 
@@ -121,24 +143,22 @@ public class Main {
         File output = new File("remapped.jar");
         if (commandLine.hasOption("output"))
             output = new File(commandLine.getOptionValue("output"));
-        log("process.remap.start");
+        LogUtils.log("process.remap.start");
 
         try (ZipFile file = new ZipFile(input)) {
             String type = commandLine.hasOption("type") ? commandLine.getOptionValue("type") : "mojang";
-            log("process.remap.mapping");
+            LogUtils.log("process.remap.mapping");
             MappingFormat format = switch (type) {
                 case "mojang" -> new MojangMappingFormat(Files.newInputStream(mapping.toPath()));
                 case "yarn" -> new YarnMappingFormat(Files.newInputStream(mapping.toPath()));
                 default -> throw new IllegalArgumentException(I18N.getTranslation("error.mapping.unsupported"));
             };
-            log("process.remap.mapping.done");
+            LogUtils.log("process.remap.mapping.done");
             if (commandLine.hasOption("server"))
                 FileProcessor.processServer(file, format, output);
             else
                 FileProcessor.process(file, format, output, false);
         }
-
-        log("process.remap.success");
     }
 
     private static void doDecompile(CommandLine commandLine) throws Exception {
@@ -146,18 +166,72 @@ public class Main {
         File output = new File("decompiled.jar");
         if (commandLine.hasOption("output"))
             output = new File(commandLine.getOptionValue("output"));
-
-        org.benf.cfr.reader.Main.main(new String[] {
+        LogUtils.log("process.decompile.start");
+        org.benf.cfr.reader.Main.main(new String[]{
                 input.getAbsolutePath(),
                 "--outputpath", output.getAbsolutePath() + "-files",
                 "--comments", "false",
                 "--silent", "true",
                 "--clobber", "true"
         });
-
+        LogUtils.log("process.decompile.pack");
         ZipUtils.zipFolders(output.getAbsolutePath() + "-files", output.getAbsolutePath());
-
+        LogUtils.log("process.decompile.clean");
         FileUtils.deleteDirectory(new File(output.getAbsolutePath() + "-files"));
+        LogUtils.log("process.decompile.success");
+    }
+
+    private static void doAuto(CommandLine commandLine) throws Exception {
+        File output = new File("decompiled.jar");
+        if (commandLine.hasOption("output"))
+            output = new File(commandLine.getOptionValue("output"));
+        String version = commandLine.getOptionValue("version");
+
+        LogUtils.log("process.auto.fetch");
+        JsonObject data = JsonParser.parseString(IOUtils.toString(
+                new URL("https://piston-meta.mojang.com/mc/game/version_manifest.json"), StandardCharsets.UTF_8))
+                .getAsJsonObject();
+        String url = StreamSupport.stream(data.getAsJsonArray("versions").spliterator(), false)
+                .map(JsonElement::getAsJsonObject)
+                .filter(json -> json.get("id").getAsString().equals(version))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException(I18N.getTranslation("error.version.notfound")))
+                .get("url").getAsString();
+
+        LogUtils.log("process.auto.file");
+        JsonObject versionData = JsonParser.parseString(IOUtils.toString(
+                        new URL(url), StandardCharsets.UTF_8)).getAsJsonObject();
+        String clientUrl = versionData.getAsJsonObject("downloads")
+                .getAsJsonObject("client").get("url").getAsString();
+        String clientMappingUrl = versionData.getAsJsonObject("downloads")
+                .getAsJsonObject("client_mappings").get("url").getAsString();
+
+        File clientJar = new File("temp-client.jar");
+        File temp = new File("temp-de.jar");
+        FileUtils.copyURLToFile(new URL(clientUrl), clientJar);
+        InputStream clientMappingStream = new URL(clientMappingUrl).openStream();
+        try (ZipFile file = new ZipFile(clientJar)) {
+            LogUtils.log("process.remap.mapping");
+            MappingFormat format = new MojangMappingFormat(clientMappingStream);
+            LogUtils.log("process.remap.mapping.done");
+            FileProcessor.process(file, format, temp, false);
+        }
+
+        LogUtils.log("process.decompile.start");
+        org.benf.cfr.reader.Main.main(new String[]{
+                temp.getAbsolutePath(),
+                "--outputpath", output.getAbsolutePath() + "-files",
+                "--comments", "false",
+                "--silent", "true",
+                "--clobber", "true"
+        });
+        LogUtils.log("process.decompile.pack");
+        ZipUtils.zipFolders(output.getAbsolutePath() + "-files", output.getAbsolutePath());
+        LogUtils.log("process.decompile.clean");
+        FileUtils.deleteDirectory(new File(output.getAbsolutePath() + "-files"));
+        clientJar.delete();
+        temp.delete();
+        LogUtils.log("process.decompile.success");
     }
 
     private static void doHelp(CommandLine commandLine) {
