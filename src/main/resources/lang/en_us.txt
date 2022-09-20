@@ -28,6 +28,13 @@ process.decompile.success = Decompiling done
 process.auto.fetch = Fetching Minecraft version list
 process.auto.file = Fetching Minecraft file
 
+injector.frame.title = MC Dynamic Exchanger Injector Console
+injector.command.classstatus.loaded = Class %s(Obfuscate name %s) loaded
+injector.command.classstatus.notloaded = Class %s(Obfuscate name %s) hasn't loaded
+injector.command.class.notfound = Class %s(Obfuscate name %s) can't be found, it may not be loaded, recorded or redefined
+injector.command.class.found = Class %s(Obfuscate name %s) is found, now decompiling
+injector.command.class.success = Class %s(Obfuscate name %s) decompiled
+
 error.unknown = Unknown error occurred, please report this to the developer at https://github.com/Nickid2018/MCDynamicExchanger
 error.argument = Argument count is not correct or argument is not valid
 error.argument.help = Argument count is not correct or argument is not valid, correct usage is:

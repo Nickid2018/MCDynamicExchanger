@@ -8,6 +8,9 @@ version '1.1-SNAPSHOT'
 
 repositories {
     mavenCentral()
+    maven {
+        url "https://libraries.minecraft.net"
+    }
 }
 
 dependencies {
@@ -20,6 +23,8 @@ dependencies {
     implementation("org.ow2.asm:asm-util:9.3")
     implementation('com.google.code.gson:gson:2.9.0')
     implementation("org.benf:cfr:0.152")
+    implementation("com.mojang:brigadier:1.0.18")
+    implementation("com.fifesoft:rsyntaxtextarea:3.2.0")
 }
 
 jar {

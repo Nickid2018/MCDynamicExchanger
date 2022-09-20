@@ -16,18 +16,22 @@ public class I18N {
 
     static {
         String lang = Locale.getDefault().getLanguage() + "_" + Locale.getDefault().getCountry();
+        lang = lang.toLowerCase(Locale.ROOT);
+        System.out.println("Loading language: " + lang);
         translations.clear();
         try {
             translations.load(new InputStreamReader(
                     Objects.requireNonNull(I18N.class.getResourceAsStream("/lang/" + lang + ".txt")),
                     StandardCharsets.UTF_8));
         } catch (Exception e) {
+            System.err.println("Cannot load default language file! Now using English(en_us).");
+            e.printStackTrace();
             try {
                 translations.load(new InputStreamReader(
                         Objects.requireNonNull(I18N.class.getResourceAsStream("/lang/en_us.txt")),
                         StandardCharsets.UTF_8));
             } catch (Exception ex) {
-                throw new RuntimeException(ex);
+                ex.printStackTrace();
             }
         }
     }

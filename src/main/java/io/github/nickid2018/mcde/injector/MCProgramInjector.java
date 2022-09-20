@@ -4,30 +4,60 @@ import io.github.nickid2018.mcde.format.MappingFormat;
 import io.github.nickid2018.mcde.format.MojangMappingFormat;
 import io.github.nickid2018.mcde.format.YarnMappingFormat;
 import io.github.nickid2018.mcde.remapper.FileProcessor;
+import io.github.nickid2018.mcde.util.AsyncUtil;
+import io.github.nickid2018.mcde.util.ClassUtils;
 import io.github.nickid2018.mcde.util.I18N;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.instrument.ClassFileTransformer;
+import java.lang.instrument.IllegalClassFormatException;
 import java.lang.instrument.Instrumentation;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.security.ProtectionDomain;
 import java.util.Locale;
+import java.util.Objects;
+import java.util.stream.Stream;
 import java.util.zip.ZipFile;
 
 // Argument Format: <mapping type>;<mapping>;<mc jar file>
 public class MCProgramInjector {
 
+    public static final File TEMP_DIR = new File(System.getProperty("java.io.tmpdir"), "MCDE");
     public static Instrumentation instrumentation;
     public static MappingFormat format;
 
     public static void premain(String args, Instrumentation instrumentation) throws IOException {
-        MCProgramInjector.instrumentation = instrumentation;
-        createMapper(args);
+        main(args, instrumentation);
     }
 
     public static void agentmain(String args, Instrumentation instrumentation) throws IOException {
+        main(args, instrumentation);
+    }
+
+    private static void main(String args, Instrumentation instrumentation) throws IOException {
         MCProgramInjector.instrumentation = instrumentation;
         createMapper(args);
+        instrumentation.addTransformer(new ClassFileTransformer() {
+            @Override
+            public byte[] transform(ClassLoader loader,
+                                    String className,
+                                    Class<?> classBeingRedefined,
+                                    ProtectionDomain protectionDomain,
+                                    byte[] classfileBuffer) {
+                ClassDataRepository.getInstance().classData.put(ClassUtils.toBinaryName(className), classfileBuffer);
+                return null;
+            }
+        });
+        if (!TEMP_DIR.isDirectory())
+            TEMP_DIR.mkdirs();
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            if (TEMP_DIR.list() != null)
+                Stream.of(Objects.requireNonNull(TEMP_DIR.list())).forEach(s -> new File(TEMP_DIR, s).delete());
+        }));
+        new InjectorFrame().show();
+        AsyncUtil.start();
     }
 
     private static void createMapper(String data) throws IOException {
@@ -39,7 +69,7 @@ public class MCProgramInjector {
             case "yarn" -> new YarnMappingFormat(Files.newInputStream(Path.of(typeAndPath[1])));
             default -> throw new IllegalArgumentException(I18N.getTranslation("error.mapping.unsupported"));
         };
-        try (ZipFile file = new ZipFile(typeAndPath[3])) {
+        try (ZipFile file = new ZipFile(typeAndPath[2])) {
             FileProcessor.addPlainClasses(file, format);
             FileProcessor.generateInheritTree(file, format);
         }
