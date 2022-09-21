@@ -21,7 +21,7 @@ public class ClassSwapCommand {
 
     public static void register(CommandDispatcher<InjectorFrame> dispatcher) {
         dispatcher.register(InjectCommander.literal("classswap")
-                .then(InjectCommander.argument("class", StringArgumentType.string())
+                .then(InjectCommander.argument("class", StringArgumentType.word())
                         .executes(ClassSwapCommand::swapEdit)
                         .then(InjectCommander.argument("file", StringArgumentType.greedyString())
                                 .executes(ClassSwapCommand::swapFile))));

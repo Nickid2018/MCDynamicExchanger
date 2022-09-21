@@ -1,7 +1,5 @@
 package io.github.nickid2018.mcde.injector;
 
-import java.lang.instrument.ClassFileTransformer;
-import java.security.ProtectionDomain;
 import java.util.HashMap;
 import java.util.Map;
 

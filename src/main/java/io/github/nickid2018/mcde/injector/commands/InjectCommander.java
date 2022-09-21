@@ -29,7 +29,7 @@ public class InjectCommander {
         try {
             dispatcher.execute(command, frame);
         } catch (CommandSyntaxException e) {
-            frame.error(null, e);
+            frame.error(e.getMessage(), null);
         }
     }
 }

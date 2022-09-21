@@ -59,7 +59,7 @@ public class InjectorFrame {
     }
 
     public void show() {
-        frame.setSize(800, 600);
+        frame.setSize(800, 600);;
         frame.setLocationByPlatform(true);
         frame.setVisible(true);
     }
