@@ -34,6 +34,9 @@ injector.command.classstatus.notloaded = 类%s（混淆名为%s）未加载。
 injector.command.class.notfound = 类%s（混淆名为%s）无法找到，这可能是因为该类没有被加载、记录或被重定义。
 injector.command.class.found = 类%s（混淆名为%s）已找到，正在执行反编译...
 injector.command.class.success = 类%s（混淆名为%s）反编译成功
+injector.command.swap.unmodifiable = 类%s（混淆名为%s）不可修改，无法交换。
+injector.command.swap.notfound = 类%s（混淆名为%s）无法找到
+injector.command.swap.success = 类%s（混淆名为%s）热交换成功
 
 error.unknown = 发生未知错误，请报告给开发者（仓库地址https://github.com/Nickid2018/MCDynamicExchanger）
 error.argument = 参数数量或格式不正确

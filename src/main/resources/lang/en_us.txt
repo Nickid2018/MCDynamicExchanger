@@ -34,6 +34,9 @@ injector.command.classstatus.notloaded = Class %s(Obfuscate name %s) hasn't load
 injector.command.class.notfound = Class %s(Obfuscate name %s) can't be found, it may not be loaded, recorded or redefined
 injector.command.class.found = Class %s(Obfuscate name %s) is found, now decompiling
 injector.command.class.success = Class %s(Obfuscate name %s) decompiled
+injector.command.swap.unmodifiable = Class %s(Obfuscate name %s) isn't modifiable, can't be swapped
+injector.command.swap.notfound = Class %s(Obfuscate name %s) can't be found
+injector.command.swap.success = Class %s(Obfuscate name %s) hot swapped successfully
 
 error.unknown = Unknown error occurred, please report this to the developer at https://github.com/Nickid2018/MCDynamicExchanger
 error.argument = Argument count is not correct or argument is not valid

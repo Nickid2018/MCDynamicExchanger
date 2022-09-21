@@ -10,9 +10,7 @@ import io.github.nickid2018.mcde.util.I18N;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.instrument.ClassFileTransformer;
-import java.lang.instrument.IllegalClassFormatException;
-import java.lang.instrument.Instrumentation;
+import java.lang.instrument.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.ProtectionDomain;
@@ -50,6 +48,18 @@ public class MCProgramInjector {
                 return null;
             }
         });
+        instrumentation.addTransformer(new ClassFileTransformer() {
+            @Override
+            public byte[] transform(ClassLoader loader,
+                                    String className,
+                                    Class<?> classBeingRedefined,
+                                    ProtectionDomain protectionDomain,
+                                    byte[] classfileBuffer) {
+                if (ClassDataRepository.getInstance().toTransform.containsKey(className))
+                    return ClassDataRepository.getInstance().toTransform.remove(className);
+                return null;
+            }
+        });
         if (!TEMP_DIR.isDirectory())
             TEMP_DIR.mkdirs();
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
@@ -74,5 +84,9 @@ public class MCProgramInjector {
             FileProcessor.generateInheritTree(file, format);
         }
         format.createToSourceMapper();
+    }
+
+    public static void swapClass(ClassDefinition definition) throws UnmodifiableClassException, ClassNotFoundException {
+        instrumentation.redefineClasses(definition);
     }
 }

@@ -13,6 +13,7 @@ public class InjectCommander {
 
     public InjectCommander() {
         ClassStatusCommand.register(dispatcher);
+        ClassSwapCommand.register(dispatcher);
         DecompileClassCommand.register(dispatcher);
     }
 
