@@ -81,6 +81,7 @@ public class FieldDescBlock extends DescBlock {
                         }
                         default -> throw new ASMDLSyntaxException("field with a non-primitive type cannot be assigned a value");
                     }
+                    pointer++;
                 }
                 case "signature" -> {
                     if (pointer + 1 >= args.length)

@@ -18,6 +18,8 @@ public class DescFunctions {
     public static final LabelDescBlock LABEL = register(new LabelDescBlock());
     public static final InvokeDynamicDescBlock INVOKEDYNAMIC = register(new InvokeDynamicDescBlock());
     public static final ConstantDynamicDescBlock CONSTANTDYNAMIC = register(new ConstantDynamicDescBlock());
+    public static final AnnotationDescBlock ANNOTATION = register(new AnnotationDescBlock());
+    public static final AnnotationArrayDescBlock ANNOTATION_ARRAY = register(new AnnotationArrayDescBlock());
 
     public static final MethodZeroArgumentFunction RETURN = register(
             new MethodZeroArgumentFunction("return", Opcodes.RETURN));
@@ -344,6 +346,18 @@ public class DescFunctions {
     public static final LDCFunction LDC = register(new LDCFunction());
 
     public static final HandleFunction HANDLE = register(new HandleFunction());
+
+    public static final ParameterFunction PARAMETER = register(new ParameterFunction());
+
+    public static final TryCatchFunction TRYCATCH = register(new TryCatchFunction());
+
+    public static final LocalVariableFunction LOCALVARIABLE = register(new LocalVariableFunction());
+
+    public static final LineFunction LINENUMBER = register(new LineFunction());
+
+    public static final AnnotationValueFunction ANNOTATION_VALUE = register(new AnnotationValueFunction());
+
+    public static final AnnotationEnumFunction ANNOTATION_ENUM = register(new AnnotationEnumFunction());
 
     public static <T extends DescFunction> T register(T function) {
         FUNCTIONS.put(function.name(), function);
