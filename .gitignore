@@ -3,3 +3,4 @@
 /build/
 *.jar
 *.class
+/out/
