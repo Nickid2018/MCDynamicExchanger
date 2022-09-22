@@ -10,6 +10,9 @@ command.decompile.output = 输出文件
 command.auto = 自动反混淆反编译Minecraft的标志
 command.auto.version = Minecraft版本
 command.auto.output = 输出文件
+command.asmdl = 编译ASMDL的标志
+command.asmdl.source = 输入文件
+command.asmdl.output = 输出文件
 command.help = 获得此帮助信息
 
 process.remap.start = 正在反混淆...
@@ -27,6 +30,7 @@ process.decompile.clean = 正在清理...
 process.decompile.success = 反编译成功!
 process.auto.fetch = 正在获取Minecraft版本列表...
 process.auto.file = 正在获取Minecraft版本文件...
+process.asmdl.success = 编译成功
 
 injector.frame.title = MC Dynamic Exchanger注入控制台
 injector.command.classstatus.loaded = 类%s（混淆名为%s）已加载。

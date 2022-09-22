@@ -9,9 +9,9 @@ import org.objectweb.asm.Opcodes;
 
 import java.util.Map;
 
-public class ParameterFunction extends DescFunction {
+public class MethodParameterFunction extends DescFunction {
 
-    public ParameterFunction() {
+    public MethodParameterFunction() {
         super("parameter");
     }
 

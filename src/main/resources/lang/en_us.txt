@@ -10,6 +10,9 @@ command.decompile.output = Output file
 command.auto = Flag of auto deobfuscating and decompiling a Minecraft version
 command.auto.version = Minecraft version
 command.auto.output = Output file
+command.asmdl = Flag of compiling a ASMDL file to a class file
+command.asmdl.source = Input file
+command.asmdl.output = Output file
 command.help = Get this help message
 
 process.remap.start = Start remapping
@@ -27,6 +30,7 @@ process.decompile.clean = Cleaning classes
 process.decompile.success = Decompiling done
 process.auto.fetch = Fetching Minecraft version list
 process.auto.file = Fetching Minecraft file
+process.asmdl.success = Compiling done
 
 injector.frame.title = MC Dynamic Exchanger Injector Console
 injector.command.classstatus.loaded = Class %s(Obfuscate name %s) loaded

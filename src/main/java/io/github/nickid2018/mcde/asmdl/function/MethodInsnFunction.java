@@ -6,11 +6,11 @@ import io.github.nickid2018.mcde.asmdl.DescFunctionContext;
 import io.github.nickid2018.mcde.asmdl.DescFunctions;
 import org.objectweb.asm.MethodVisitor;
 
-public class MethodZeroArgumentFunction extends DescFunction {
+public class MethodInsnFunction extends DescFunction {
 
     private final int opcode;
 
-    public MethodZeroArgumentFunction(String name, int opcode) {
+    public MethodInsnFunction(String name, int opcode) {
         super(name);
         this.opcode = opcode;
     }

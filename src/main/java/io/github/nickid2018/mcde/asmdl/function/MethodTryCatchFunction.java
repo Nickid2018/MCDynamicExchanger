@@ -7,9 +7,9 @@ import io.github.nickid2018.mcde.asmdl.DescFunctions;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 
-public class TryCatchFunction extends DescFunction {
+public class MethodTryCatchFunction extends DescFunction {
 
-    public TryCatchFunction() {
+    public MethodTryCatchFunction() {
         super("try_catch");
     }
 

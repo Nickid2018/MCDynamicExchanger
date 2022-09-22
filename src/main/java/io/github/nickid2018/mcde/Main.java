@@ -3,6 +3,7 @@ package io.github.nickid2018.mcde;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import io.github.nickid2018.mcde.asmdl.ASMDLParser;
 import io.github.nickid2018.mcde.remapper.FileProcessor;
 import io.github.nickid2018.mcde.format.MappingFormat;
 import io.github.nickid2018.mcde.format.MojangMappingFormat;
@@ -12,9 +13,7 @@ import org.apache.commons.cli.*;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -32,6 +31,7 @@ public class Main {
         parsers.add(new Pair<>(initOptionRemap(), Main::doRemap));
         parsers.add(new Pair<>(initOptionDecompile(), Main::doDecompile));
         parsers.add(new Pair<>(initOptionAuto(), Main::doAuto));
+        parsers.add(new Pair<>(initOptionCompileASMDL(), Main::doCompileASMDL));
         for (Pair<Options, ConsumerE<CommandLine>> pairs : parsers)
             try {
                 CommandLine commandLine = new DefaultParser().parse(pairs.left(), args);
@@ -125,6 +125,24 @@ public class Main {
         autoOptions.addOption(output);
 
         return autoOptions;
+    }
+
+    private static Options initOptionCompileASMDL() {
+        Options compileOptions = new Options();
+
+        Option compile = new Option("asmdl", false, I18N.getTranslation("command.asmdl"));
+        compile.setRequired(true);
+        compileOptions.addOption(compile);
+
+        Option input = new Option("i", "input", true, I18N.getTranslation("command.asmdl.source"));
+        input.setRequired(true);
+        compileOptions.addOption(input);
+
+        Option output = new Option("o", "output", true, I18N.getTranslation("command.asmdl.output"));
+        output.setRequired(false);
+        compileOptions.addOption(output);
+
+        return compileOptions;
     }
 
     private static Options initOptionHelp() {
@@ -232,6 +250,23 @@ public class Main {
         clientJar.delete();
         temp.delete();
         LogUtils.log("process.decompile.success");
+    }
+
+    private static void doCompileASMDL(CommandLine commandLine) throws Exception {
+        File input = new File(commandLine.getOptionValue("input"));
+        File output = new File("compiled.class");
+        if (commandLine.hasOption("output"))
+            output = new File(commandLine.getOptionValue("output"));
+        String data;
+        try (InputStream fileInput =  new FileInputStream(input)) {
+            data = IOUtils.toString(fileInput, StandardCharsets.UTF_8);
+        }
+        ASMDLParser parser = new ASMDLParser(data);
+        byte[] bytes = parser.toClass();
+        try (FileOutputStream fileOutput = new FileOutputStream(output)) {
+            fileOutput.write(bytes);
+        }
+        LogUtils.log("process.asmdl.success");
     }
 
     private static void doHelp(CommandLine commandLine) {

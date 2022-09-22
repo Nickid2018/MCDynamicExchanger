@@ -23,8 +23,8 @@ public class MethodLookupSwitchFunction extends DescFunction {
 
         MethodVisitor mv = (MethodVisitor) context.visitor();
         String[] args = context.args();
-        if (args.length != 4)
-            throw new ASMDLSyntaxException("lookupswitch requires 4 arguments");
+        if (args.length != 3)
+            throw new ASMDLSyntaxException("lookupswitch requires 3 arguments");
 
         int[] labelsInts;
         try {
@@ -35,7 +35,7 @@ public class MethodLookupSwitchFunction extends DescFunction {
             throw new ASMDLSyntaxException("lookupswitch requires an integer sequence");
         }
 
-        Label defaultLabel = context.labelMap().computeIfAbsent(args[2], k -> new Label());
+        Label defaultLabel = context.labelMap().computeIfAbsent(args[0], k -> new Label());
         Label[] labels = Stream.of(args[3].split(","))
                 .map(s -> context.labelMap().computeIfAbsent(s, k -> new Label()))
                 .toArray(Label[]::new);

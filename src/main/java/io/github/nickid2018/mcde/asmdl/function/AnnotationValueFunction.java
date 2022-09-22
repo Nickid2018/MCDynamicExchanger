@@ -21,6 +21,6 @@ public class AnnotationValueFunction extends DescFunction {
         String[] args = context.args();
         if (args.length < 2)
             throw new ASMDLSyntaxException("value needs at least 2 arguments");
-        ((AnnotationVisitor) context.visitor()).visit(args[0], LDCFunction.formatLDC(Arrays.copyOfRange(args, 1, args.length)));
+        ((AnnotationVisitor) context.visitor()).visit(args[0], MethodLDCFunction.formatLDC(Arrays.copyOfRange(args, 1, args.length)));
     }
 }

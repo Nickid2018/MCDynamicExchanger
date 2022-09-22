@@ -7,16 +7,16 @@ import io.github.nickid2018.mcde.asmdl.DescFunctions;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 
-public class LineFunction extends DescFunction {
+public class MethodLineFunction extends DescFunction {
 
-    public LineFunction() {
+    public MethodLineFunction() {
         super("line");
     }
 
     @Override
     public void process(DescFunctionContext context) throws ASMDLSyntaxException {
-        if (context.environment() != DescFunctions.METHOD)
-            throw new ASMDLSyntaxException("line can only be used in method");
+        if (context.environment() != DescFunctions.METHOD && context.environment() != DescFunctions.LABEL)
+            throw new ASMDLSyntaxException("line can only be used in method or label");
 
         String[] args = context.args();
         if (args.length != 2)

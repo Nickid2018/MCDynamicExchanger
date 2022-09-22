@@ -22,220 +22,220 @@ public class DescFunctions {
     public static final AnnotationDescBlock ANNOTATION = register(new AnnotationDescBlock());
     public static final AnnotationArrayDescBlock ANNOTATION_ARRAY = register(new AnnotationArrayDescBlock());
 
-    public static final MethodZeroArgumentFunction RETURN = register(
-            new MethodZeroArgumentFunction("return", Opcodes.RETURN));
-    public static final MethodZeroArgumentFunction IRETURN = register(
-            new MethodZeroArgumentFunction("ireturn", Opcodes.IRETURN));
-    public static final MethodZeroArgumentFunction LRETURN = register(
-            new MethodZeroArgumentFunction("lreturn", Opcodes.LRETURN));
-    public static final MethodZeroArgumentFunction FRETURN = register(
-            new MethodZeroArgumentFunction("freturn", Opcodes.FRETURN));
-    public static final MethodZeroArgumentFunction DRETURN = register(
-            new MethodZeroArgumentFunction("dreturn", Opcodes.DRETURN));
-    public static final MethodZeroArgumentFunction ARETURN = register(
-            new MethodZeroArgumentFunction("areturn", Opcodes.ARETURN));
-    public static final MethodZeroArgumentFunction ATHROW = register(
-            new MethodZeroArgumentFunction("athrow", Opcodes.ATHROW));
-    public static final MethodZeroArgumentFunction MONITORENTER = register(
-            new MethodZeroArgumentFunction("monitorenter", Opcodes.MONITORENTER));
-    public static final MethodZeroArgumentFunction MONITOREXIT = register(
-            new MethodZeroArgumentFunction("monitorexit", Opcodes.MONITOREXIT));
-    public static final MethodZeroArgumentFunction NOP = register(
-            new MethodZeroArgumentFunction("nop", Opcodes.NOP));
-    public static final MethodZeroArgumentFunction ACONST_NULL = register(
-            new MethodZeroArgumentFunction("aconst_null", Opcodes.ACONST_NULL));
-    public static final MethodZeroArgumentFunction ICONST_M1 = register(
-            new MethodZeroArgumentFunction("iconst_m1", Opcodes.ICONST_M1));
-    public static final MethodZeroArgumentFunction ICONST_0 = register(
-            new MethodZeroArgumentFunction("iconst_0", Opcodes.ICONST_0));
-    public static final MethodZeroArgumentFunction ICONST_1 = register(
-            new MethodZeroArgumentFunction("iconst_1", Opcodes.ICONST_1));
-    public static final MethodZeroArgumentFunction ICONST_2 = register(
-            new MethodZeroArgumentFunction("iconst_2", Opcodes.ICONST_2));
-    public static final MethodZeroArgumentFunction ICONST_3 = register(
-            new MethodZeroArgumentFunction("iconst_3", Opcodes.ICONST_3));
-    public static final MethodZeroArgumentFunction ICONST_4 = register(
-            new MethodZeroArgumentFunction("iconst_4", Opcodes.ICONST_4));
-    public static final MethodZeroArgumentFunction ICONST_5 = register(
-            new MethodZeroArgumentFunction("iconst_5", Opcodes.ICONST_5));
-    public static final MethodZeroArgumentFunction LCONST_0 = register(
-            new MethodZeroArgumentFunction("lconst_0", Opcodes.LCONST_0));
-    public static final MethodZeroArgumentFunction LCONST_1 = register(
-            new MethodZeroArgumentFunction("lconst_1", Opcodes.LCONST_1));
-    public static final MethodZeroArgumentFunction FCONST_0 = register(
-            new MethodZeroArgumentFunction("fconst_0", Opcodes.FCONST_0));
-    public static final MethodZeroArgumentFunction FCONST_1 = register(
-            new MethodZeroArgumentFunction("fconst_1", Opcodes.FCONST_1));
-    public static final MethodZeroArgumentFunction FCONST_2 = register(
-            new MethodZeroArgumentFunction("fconst_2", Opcodes.FCONST_2));
-    public static final MethodZeroArgumentFunction DCONST_0 = register(
-            new MethodZeroArgumentFunction("dconst_0", Opcodes.DCONST_0));
-    public static final MethodZeroArgumentFunction DCONST_1 = register(
-            new MethodZeroArgumentFunction("dconst_1", Opcodes.DCONST_1));
-    public static final MethodZeroArgumentFunction IALOAD = register(
-            new MethodZeroArgumentFunction("iaload", Opcodes.IALOAD));
-    public static final MethodZeroArgumentFunction LALOAD = register(
-            new MethodZeroArgumentFunction("laload", Opcodes.LALOAD));
-    public static final MethodZeroArgumentFunction FALOAD = register(
-            new MethodZeroArgumentFunction("faload", Opcodes.FALOAD));
-    public static final MethodZeroArgumentFunction DALOAD = register(
-            new MethodZeroArgumentFunction("daload", Opcodes.DALOAD));
-    public static final MethodZeroArgumentFunction AALOAD = register(
-            new MethodZeroArgumentFunction("aaload", Opcodes.AALOAD));
-    public static final MethodZeroArgumentFunction BALOAD = register(
-            new MethodZeroArgumentFunction("baload", Opcodes.BALOAD));
-    public static final MethodZeroArgumentFunction CALOAD = register(
-            new MethodZeroArgumentFunction("caload", Opcodes.CALOAD));
-    public static final MethodZeroArgumentFunction SALOAD = register(
-            new MethodZeroArgumentFunction("saload", Opcodes.SALOAD));
-    public static final MethodZeroArgumentFunction IASTORE = register(
-            new MethodZeroArgumentFunction("iastore", Opcodes.IASTORE));
-    public static final MethodZeroArgumentFunction LASTORE = register(
-            new MethodZeroArgumentFunction("lastore", Opcodes.LASTORE));
-    public static final MethodZeroArgumentFunction FASTORE = register(
-            new MethodZeroArgumentFunction("fastore", Opcodes.FASTORE));
-    public static final MethodZeroArgumentFunction DASTORE = register(
-            new MethodZeroArgumentFunction("dastore", Opcodes.DASTORE));
-    public static final MethodZeroArgumentFunction AASTORE = register(
-            new MethodZeroArgumentFunction("aastore", Opcodes.AASTORE));
-    public static final MethodZeroArgumentFunction BASTORE = register(
-            new MethodZeroArgumentFunction("bastore", Opcodes.BASTORE));
-    public static final MethodZeroArgumentFunction CASTORE = register(
-            new MethodZeroArgumentFunction("castore", Opcodes.CASTORE));
-    public static final MethodZeroArgumentFunction SASTORE = register(
-            new MethodZeroArgumentFunction("sastore", Opcodes.SASTORE));
-    public static final MethodZeroArgumentFunction POP = register(
-            new MethodZeroArgumentFunction("pop", Opcodes.POP));
-    public static final MethodZeroArgumentFunction POP2 = register(
-            new MethodZeroArgumentFunction("pop2", Opcodes.POP2));
-    public static final MethodZeroArgumentFunction DUP = register(
-            new MethodZeroArgumentFunction("dup", Opcodes.DUP));
-    public static final MethodZeroArgumentFunction DUP_X1 = register(
-            new MethodZeroArgumentFunction("dup_x1", Opcodes.DUP_X1));
-    public static final MethodZeroArgumentFunction DUP_X2 = register(
-            new MethodZeroArgumentFunction("dup_x2", Opcodes.DUP_X2));
-    public static final MethodZeroArgumentFunction DUP2 = register(
-            new MethodZeroArgumentFunction("dup2", Opcodes.DUP2));
-    public static final MethodZeroArgumentFunction DUP2_X1 = register(
-            new MethodZeroArgumentFunction("dup2_x1", Opcodes.DUP2_X1));
-    public static final MethodZeroArgumentFunction DUP2_X2 = register(
-            new MethodZeroArgumentFunction("dup2_x2", Opcodes.DUP2_X2));
-    public static final MethodZeroArgumentFunction SWAP = register(
-            new MethodZeroArgumentFunction("swap", Opcodes.SWAP));
-    public static final MethodZeroArgumentFunction IADD = register(
-            new MethodZeroArgumentFunction("iadd", Opcodes.IADD));
-    public static final MethodZeroArgumentFunction LADD = register(
-            new MethodZeroArgumentFunction("ladd", Opcodes.LADD));
-    public static final MethodZeroArgumentFunction FADD = register(
-            new MethodZeroArgumentFunction("fadd", Opcodes.FADD));
-    public static final MethodZeroArgumentFunction DADD = register(
-            new MethodZeroArgumentFunction("dadd", Opcodes.DADD));
-    public static final MethodZeroArgumentFunction ISUB = register(
-            new MethodZeroArgumentFunction("isub", Opcodes.ISUB));
-    public static final MethodZeroArgumentFunction LSUB = register(
-            new MethodZeroArgumentFunction("lsub", Opcodes.LSUB));
-    public static final MethodZeroArgumentFunction FSUB = register(
-            new MethodZeroArgumentFunction("fsub", Opcodes.FSUB));
-    public static final MethodZeroArgumentFunction DSUB = register(
-            new MethodZeroArgumentFunction("dsub", Opcodes.DSUB));
-    public static final MethodZeroArgumentFunction IMUL = register(
-            new MethodZeroArgumentFunction("imul", Opcodes.IMUL));
-    public static final MethodZeroArgumentFunction LMUL = register(
-            new MethodZeroArgumentFunction("lmul", Opcodes.LMUL));
-    public static final MethodZeroArgumentFunction FMUL = register(
-            new MethodZeroArgumentFunction("fmul", Opcodes.FMUL));
-    public static final MethodZeroArgumentFunction DMUL = register(
-            new MethodZeroArgumentFunction("dmul", Opcodes.DMUL));
-    public static final MethodZeroArgumentFunction IDIV = register(
-            new MethodZeroArgumentFunction("idiv", Opcodes.IDIV));
-    public static final MethodZeroArgumentFunction LDIV = register(
-            new MethodZeroArgumentFunction("ldiv", Opcodes.LDIV));
-    public static final MethodZeroArgumentFunction FDIV = register(
-            new MethodZeroArgumentFunction("fdiv", Opcodes.FDIV));
-    public static final MethodZeroArgumentFunction DDIV = register(
-            new MethodZeroArgumentFunction("ddiv", Opcodes.DDIV));
-    public static final MethodZeroArgumentFunction IREM = register(
-            new MethodZeroArgumentFunction("irem", Opcodes.IREM));
-    public static final MethodZeroArgumentFunction LREM = register(
-            new MethodZeroArgumentFunction("lrem", Opcodes.LREM));
-    public static final MethodZeroArgumentFunction FREM = register(
-            new MethodZeroArgumentFunction("frem", Opcodes.FREM));
-    public static final MethodZeroArgumentFunction DREM = register(
-            new MethodZeroArgumentFunction("drem", Opcodes.DREM));
-    public static final MethodZeroArgumentFunction INEG = register(
-            new MethodZeroArgumentFunction("ineg", Opcodes.INEG));
-    public static final MethodZeroArgumentFunction LNEG = register(
-            new MethodZeroArgumentFunction("lneg", Opcodes.LNEG));
-    public static final MethodZeroArgumentFunction FNEG = register(
-            new MethodZeroArgumentFunction("fneg", Opcodes.FNEG));
-    public static final MethodZeroArgumentFunction DNEG = register(
-            new MethodZeroArgumentFunction("dneg", Opcodes.DNEG));
-    public static final MethodZeroArgumentFunction ISHL = register(
-            new MethodZeroArgumentFunction("ishl", Opcodes.ISHL));
-    public static final MethodZeroArgumentFunction LSHL = register(
-            new MethodZeroArgumentFunction("lshl", Opcodes.LSHL));
-    public static final MethodZeroArgumentFunction ISHR = register(
-            new MethodZeroArgumentFunction("ishr", Opcodes.ISHR));
-    public static final MethodZeroArgumentFunction LSHR = register(
-            new MethodZeroArgumentFunction("lshr", Opcodes.LSHR));
-    public static final MethodZeroArgumentFunction IUSHR = register(
-            new MethodZeroArgumentFunction("iushr", Opcodes.IUSHR));
-    public static final MethodZeroArgumentFunction LUSHR = register(
-            new MethodZeroArgumentFunction("lushr", Opcodes.LUSHR));
-    public static final MethodZeroArgumentFunction IAND = register(
-            new MethodZeroArgumentFunction("iand", Opcodes.IAND));
-    public static final MethodZeroArgumentFunction LAND = register(
-            new MethodZeroArgumentFunction("land", Opcodes.LAND));
-    public static final MethodZeroArgumentFunction IOR = register(
-            new MethodZeroArgumentFunction("ior", Opcodes.IOR));
-    public static final MethodZeroArgumentFunction LOR = register(
-            new MethodZeroArgumentFunction("lor", Opcodes.LOR));
-    public static final MethodZeroArgumentFunction IXOR = register(
-            new MethodZeroArgumentFunction("ixor", Opcodes.IXOR));
-    public static final MethodZeroArgumentFunction LXOR = register(
-            new MethodZeroArgumentFunction("lxor", Opcodes.LXOR));
-    public static final MethodZeroArgumentFunction I2L = register(
-            new MethodZeroArgumentFunction("i2l", Opcodes.I2L));
-    public static final MethodZeroArgumentFunction I2F = register(
-            new MethodZeroArgumentFunction("i2f", Opcodes.I2F));
-    public static final MethodZeroArgumentFunction I2D = register(
-            new MethodZeroArgumentFunction("i2d", Opcodes.I2D));
-    public static final MethodZeroArgumentFunction L2I = register(
-            new MethodZeroArgumentFunction("l2i", Opcodes.L2I));
-    public static final MethodZeroArgumentFunction L2F = register(
-            new MethodZeroArgumentFunction("l2f", Opcodes.L2F));
-    public static final MethodZeroArgumentFunction L2D = register(
-            new MethodZeroArgumentFunction("l2d", Opcodes.L2D));
-    public static final MethodZeroArgumentFunction F2I = register(
-            new MethodZeroArgumentFunction("f2i", Opcodes.F2I));
-    public static final MethodZeroArgumentFunction F2L = register(
-            new MethodZeroArgumentFunction("f2l", Opcodes.F2L));
-    public static final MethodZeroArgumentFunction F2D = register(
-            new MethodZeroArgumentFunction("f2d", Opcodes.F2D));
-    public static final MethodZeroArgumentFunction D2I = register(
-            new MethodZeroArgumentFunction("d2i", Opcodes.D2I));
-    public static final MethodZeroArgumentFunction D2L = register(
-            new MethodZeroArgumentFunction("d2l", Opcodes.D2L));
-    public static final MethodZeroArgumentFunction D2F = register(
-            new MethodZeroArgumentFunction("d2f", Opcodes.D2F));
-    public static final MethodZeroArgumentFunction I2B = register(
-            new MethodZeroArgumentFunction("i2b", Opcodes.I2B));
-    public static final MethodZeroArgumentFunction I2C = register(
-            new MethodZeroArgumentFunction("i2c", Opcodes.I2C));
-    public static final MethodZeroArgumentFunction I2S = register(
-            new MethodZeroArgumentFunction("i2s", Opcodes.I2S));
-    public static final MethodZeroArgumentFunction LCMP = register(
-            new MethodZeroArgumentFunction("lcmp", Opcodes.LCMP));
-    public static final MethodZeroArgumentFunction FCMPL = register(
-            new MethodZeroArgumentFunction("fcmpl", Opcodes.FCMPL));
-    public static final MethodZeroArgumentFunction FCMPG = register(
-            new MethodZeroArgumentFunction("fcmpg", Opcodes.FCMPG));
-    public static final MethodZeroArgumentFunction DCMPL = register(
-            new MethodZeroArgumentFunction("dcmpl", Opcodes.DCMPL));
-    public static final MethodZeroArgumentFunction DCMPG = register(
-            new MethodZeroArgumentFunction("dcmpg", Opcodes.DCMPG));
-    public static final MethodZeroArgumentFunction ARRAYLENGTH = register(
-            new MethodZeroArgumentFunction("arraylength", Opcodes.ARRAYLENGTH));
+    public static final MethodInsnFunction RETURN = register(
+            new MethodInsnFunction("return", Opcodes.RETURN));
+    public static final MethodInsnFunction IRETURN = register(
+            new MethodInsnFunction("ireturn", Opcodes.IRETURN));
+    public static final MethodInsnFunction LRETURN = register(
+            new MethodInsnFunction("lreturn", Opcodes.LRETURN));
+    public static final MethodInsnFunction FRETURN = register(
+            new MethodInsnFunction("freturn", Opcodes.FRETURN));
+    public static final MethodInsnFunction DRETURN = register(
+            new MethodInsnFunction("dreturn", Opcodes.DRETURN));
+    public static final MethodInsnFunction ARETURN = register(
+            new MethodInsnFunction("areturn", Opcodes.ARETURN));
+    public static final MethodInsnFunction ATHROW = register(
+            new MethodInsnFunction("athrow", Opcodes.ATHROW));
+    public static final MethodInsnFunction MONITORENTER = register(
+            new MethodInsnFunction("monitorenter", Opcodes.MONITORENTER));
+    public static final MethodInsnFunction MONITOREXIT = register(
+            new MethodInsnFunction("monitorexit", Opcodes.MONITOREXIT));
+    public static final MethodInsnFunction NOP = register(
+            new MethodInsnFunction("nop", Opcodes.NOP));
+    public static final MethodInsnFunction ACONST_NULL = register(
+            new MethodInsnFunction("aconst_null", Opcodes.ACONST_NULL));
+    public static final MethodInsnFunction ICONST_M1 = register(
+            new MethodInsnFunction("iconst_m1", Opcodes.ICONST_M1));
+    public static final MethodInsnFunction ICONST_0 = register(
+            new MethodInsnFunction("iconst_0", Opcodes.ICONST_0));
+    public static final MethodInsnFunction ICONST_1 = register(
+            new MethodInsnFunction("iconst_1", Opcodes.ICONST_1));
+    public static final MethodInsnFunction ICONST_2 = register(
+            new MethodInsnFunction("iconst_2", Opcodes.ICONST_2));
+    public static final MethodInsnFunction ICONST_3 = register(
+            new MethodInsnFunction("iconst_3", Opcodes.ICONST_3));
+    public static final MethodInsnFunction ICONST_4 = register(
+            new MethodInsnFunction("iconst_4", Opcodes.ICONST_4));
+    public static final MethodInsnFunction ICONST_5 = register(
+            new MethodInsnFunction("iconst_5", Opcodes.ICONST_5));
+    public static final MethodInsnFunction LCONST_0 = register(
+            new MethodInsnFunction("lconst_0", Opcodes.LCONST_0));
+    public static final MethodInsnFunction LCONST_1 = register(
+            new MethodInsnFunction("lconst_1", Opcodes.LCONST_1));
+    public static final MethodInsnFunction FCONST_0 = register(
+            new MethodInsnFunction("fconst_0", Opcodes.FCONST_0));
+    public static final MethodInsnFunction FCONST_1 = register(
+            new MethodInsnFunction("fconst_1", Opcodes.FCONST_1));
+    public static final MethodInsnFunction FCONST_2 = register(
+            new MethodInsnFunction("fconst_2", Opcodes.FCONST_2));
+    public static final MethodInsnFunction DCONST_0 = register(
+            new MethodInsnFunction("dconst_0", Opcodes.DCONST_0));
+    public static final MethodInsnFunction DCONST_1 = register(
+            new MethodInsnFunction("dconst_1", Opcodes.DCONST_1));
+    public static final MethodInsnFunction IALOAD = register(
+            new MethodInsnFunction("iaload", Opcodes.IALOAD));
+    public static final MethodInsnFunction LALOAD = register(
+            new MethodInsnFunction("laload", Opcodes.LALOAD));
+    public static final MethodInsnFunction FALOAD = register(
+            new MethodInsnFunction("faload", Opcodes.FALOAD));
+    public static final MethodInsnFunction DALOAD = register(
+            new MethodInsnFunction("daload", Opcodes.DALOAD));
+    public static final MethodInsnFunction AALOAD = register(
+            new MethodInsnFunction("aaload", Opcodes.AALOAD));
+    public static final MethodInsnFunction BALOAD = register(
+            new MethodInsnFunction("baload", Opcodes.BALOAD));
+    public static final MethodInsnFunction CALOAD = register(
+            new MethodInsnFunction("caload", Opcodes.CALOAD));
+    public static final MethodInsnFunction SALOAD = register(
+            new MethodInsnFunction("saload", Opcodes.SALOAD));
+    public static final MethodInsnFunction IASTORE = register(
+            new MethodInsnFunction("iastore", Opcodes.IASTORE));
+    public static final MethodInsnFunction LASTORE = register(
+            new MethodInsnFunction("lastore", Opcodes.LASTORE));
+    public static final MethodInsnFunction FASTORE = register(
+            new MethodInsnFunction("fastore", Opcodes.FASTORE));
+    public static final MethodInsnFunction DASTORE = register(
+            new MethodInsnFunction("dastore", Opcodes.DASTORE));
+    public static final MethodInsnFunction AASTORE = register(
+            new MethodInsnFunction("aastore", Opcodes.AASTORE));
+    public static final MethodInsnFunction BASTORE = register(
+            new MethodInsnFunction("bastore", Opcodes.BASTORE));
+    public static final MethodInsnFunction CASTORE = register(
+            new MethodInsnFunction("castore", Opcodes.CASTORE));
+    public static final MethodInsnFunction SASTORE = register(
+            new MethodInsnFunction("sastore", Opcodes.SASTORE));
+    public static final MethodInsnFunction POP = register(
+            new MethodInsnFunction("pop", Opcodes.POP));
+    public static final MethodInsnFunction POP2 = register(
+            new MethodInsnFunction("pop2", Opcodes.POP2));
+    public static final MethodInsnFunction DUP = register(
+            new MethodInsnFunction("dup", Opcodes.DUP));
+    public static final MethodInsnFunction DUP_X1 = register(
+            new MethodInsnFunction("dup_x1", Opcodes.DUP_X1));
+    public static final MethodInsnFunction DUP_X2 = register(
+            new MethodInsnFunction("dup_x2", Opcodes.DUP_X2));
+    public static final MethodInsnFunction DUP2 = register(
+            new MethodInsnFunction("dup2", Opcodes.DUP2));
+    public static final MethodInsnFunction DUP2_X1 = register(
+            new MethodInsnFunction("dup2_x1", Opcodes.DUP2_X1));
+    public static final MethodInsnFunction DUP2_X2 = register(
+            new MethodInsnFunction("dup2_x2", Opcodes.DUP2_X2));
+    public static final MethodInsnFunction SWAP = register(
+            new MethodInsnFunction("swap", Opcodes.SWAP));
+    public static final MethodInsnFunction IADD = register(
+            new MethodInsnFunction("iadd", Opcodes.IADD));
+    public static final MethodInsnFunction LADD = register(
+            new MethodInsnFunction("ladd", Opcodes.LADD));
+    public static final MethodInsnFunction FADD = register(
+            new MethodInsnFunction("fadd", Opcodes.FADD));
+    public static final MethodInsnFunction DADD = register(
+            new MethodInsnFunction("dadd", Opcodes.DADD));
+    public static final MethodInsnFunction ISUB = register(
+            new MethodInsnFunction("isub", Opcodes.ISUB));
+    public static final MethodInsnFunction LSUB = register(
+            new MethodInsnFunction("lsub", Opcodes.LSUB));
+    public static final MethodInsnFunction FSUB = register(
+            new MethodInsnFunction("fsub", Opcodes.FSUB));
+    public static final MethodInsnFunction DSUB = register(
+            new MethodInsnFunction("dsub", Opcodes.DSUB));
+    public static final MethodInsnFunction IMUL = register(
+            new MethodInsnFunction("imul", Opcodes.IMUL));
+    public static final MethodInsnFunction LMUL = register(
+            new MethodInsnFunction("lmul", Opcodes.LMUL));
+    public static final MethodInsnFunction FMUL = register(
+            new MethodInsnFunction("fmul", Opcodes.FMUL));
+    public static final MethodInsnFunction DMUL = register(
+            new MethodInsnFunction("dmul", Opcodes.DMUL));
+    public static final MethodInsnFunction IDIV = register(
+            new MethodInsnFunction("idiv", Opcodes.IDIV));
+    public static final MethodInsnFunction LDIV = register(
+            new MethodInsnFunction("ldiv", Opcodes.LDIV));
+    public static final MethodInsnFunction FDIV = register(
+            new MethodInsnFunction("fdiv", Opcodes.FDIV));
+    public static final MethodInsnFunction DDIV = register(
+            new MethodInsnFunction("ddiv", Opcodes.DDIV));
+    public static final MethodInsnFunction IREM = register(
+            new MethodInsnFunction("irem", Opcodes.IREM));
+    public static final MethodInsnFunction LREM = register(
+            new MethodInsnFunction("lrem", Opcodes.LREM));
+    public static final MethodInsnFunction FREM = register(
+            new MethodInsnFunction("frem", Opcodes.FREM));
+    public static final MethodInsnFunction DREM = register(
+            new MethodInsnFunction("drem", Opcodes.DREM));
+    public static final MethodInsnFunction INEG = register(
+            new MethodInsnFunction("ineg", Opcodes.INEG));
+    public static final MethodInsnFunction LNEG = register(
+            new MethodInsnFunction("lneg", Opcodes.LNEG));
+    public static final MethodInsnFunction FNEG = register(
+            new MethodInsnFunction("fneg", Opcodes.FNEG));
+    public static final MethodInsnFunction DNEG = register(
+            new MethodInsnFunction("dneg", Opcodes.DNEG));
+    public static final MethodInsnFunction ISHL = register(
+            new MethodInsnFunction("ishl", Opcodes.ISHL));
+    public static final MethodInsnFunction LSHL = register(
+            new MethodInsnFunction("lshl", Opcodes.LSHL));
+    public static final MethodInsnFunction ISHR = register(
+            new MethodInsnFunction("ishr", Opcodes.ISHR));
+    public static final MethodInsnFunction LSHR = register(
+            new MethodInsnFunction("lshr", Opcodes.LSHR));
+    public static final MethodInsnFunction IUSHR = register(
+            new MethodInsnFunction("iushr", Opcodes.IUSHR));
+    public static final MethodInsnFunction LUSHR = register(
+            new MethodInsnFunction("lushr", Opcodes.LUSHR));
+    public static final MethodInsnFunction IAND = register(
+            new MethodInsnFunction("iand", Opcodes.IAND));
+    public static final MethodInsnFunction LAND = register(
+            new MethodInsnFunction("land", Opcodes.LAND));
+    public static final MethodInsnFunction IOR = register(
+            new MethodInsnFunction("ior", Opcodes.IOR));
+    public static final MethodInsnFunction LOR = register(
+            new MethodInsnFunction("lor", Opcodes.LOR));
+    public static final MethodInsnFunction IXOR = register(
+            new MethodInsnFunction("ixor", Opcodes.IXOR));
+    public static final MethodInsnFunction LXOR = register(
+            new MethodInsnFunction("lxor", Opcodes.LXOR));
+    public static final MethodInsnFunction I2L = register(
+            new MethodInsnFunction("i2l", Opcodes.I2L));
+    public static final MethodInsnFunction I2F = register(
+            new MethodInsnFunction("i2f", Opcodes.I2F));
+    public static final MethodInsnFunction I2D = register(
+            new MethodInsnFunction("i2d", Opcodes.I2D));
+    public static final MethodInsnFunction L2I = register(
+            new MethodInsnFunction("l2i", Opcodes.L2I));
+    public static final MethodInsnFunction L2F = register(
+            new MethodInsnFunction("l2f", Opcodes.L2F));
+    public static final MethodInsnFunction L2D = register(
+            new MethodInsnFunction("l2d", Opcodes.L2D));
+    public static final MethodInsnFunction F2I = register(
+            new MethodInsnFunction("f2i", Opcodes.F2I));
+    public static final MethodInsnFunction F2L = register(
+            new MethodInsnFunction("f2l", Opcodes.F2L));
+    public static final MethodInsnFunction F2D = register(
+            new MethodInsnFunction("f2d", Opcodes.F2D));
+    public static final MethodInsnFunction D2I = register(
+            new MethodInsnFunction("d2i", Opcodes.D2I));
+    public static final MethodInsnFunction D2L = register(
+            new MethodInsnFunction("d2l", Opcodes.D2L));
+    public static final MethodInsnFunction D2F = register(
+            new MethodInsnFunction("d2f", Opcodes.D2F));
+    public static final MethodInsnFunction I2B = register(
+            new MethodInsnFunction("i2b", Opcodes.I2B));
+    public static final MethodInsnFunction I2C = register(
+            new MethodInsnFunction("i2c", Opcodes.I2C));
+    public static final MethodInsnFunction I2S = register(
+            new MethodInsnFunction("i2s", Opcodes.I2S));
+    public static final MethodInsnFunction LCMP = register(
+            new MethodInsnFunction("lcmp", Opcodes.LCMP));
+    public static final MethodInsnFunction FCMPL = register(
+            new MethodInsnFunction("fcmpl", Opcodes.FCMPL));
+    public static final MethodInsnFunction FCMPG = register(
+            new MethodInsnFunction("fcmpg", Opcodes.FCMPG));
+    public static final MethodInsnFunction DCMPL = register(
+            new MethodInsnFunction("dcmpl", Opcodes.DCMPL));
+    public static final MethodInsnFunction DCMPG = register(
+            new MethodInsnFunction("dcmpg", Opcodes.DCMPG));
+    public static final MethodInsnFunction ARRAYLENGTH = register(
+            new MethodInsnFunction("arraylength", Opcodes.ARRAYLENGTH));
 
 
     public static final MethodVarIntFunction ALOAD = register(
@@ -344,17 +344,17 @@ public class DescFunctions {
 
     public static final ConstantFunction CONSTANT = register(new ConstantFunction());
 
-    public static final LDCFunction LDC = register(new LDCFunction());
+    public static final MethodLDCFunction LDC = register(new MethodLDCFunction());
 
     public static final HandleFunction HANDLE = register(new HandleFunction());
 
-    public static final ParameterFunction PARAMETER = register(new ParameterFunction());
+    public static final MethodParameterFunction PARAMETER = register(new MethodParameterFunction());
 
-    public static final TryCatchFunction TRYCATCH = register(new TryCatchFunction());
+    public static final MethodTryCatchFunction TRYCATCH = register(new MethodTryCatchFunction());
 
-    public static final LocalVariableFunction LOCALVARIABLE = register(new LocalVariableFunction());
+    public static final MethodLocalVariableFunction LOCALVARIABLE = register(new MethodLocalVariableFunction());
 
-    public static final LineFunction LINENUMBER = register(new LineFunction());
+    public static final MethodLineFunction LINENUMBER = register(new MethodLineFunction());
 
     public static final AnnotationValueFunction ANNOTATION_VALUE = register(new AnnotationValueFunction());
 
