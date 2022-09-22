@@ -9,7 +9,7 @@ import org.objectweb.asm.MethodVisitor;
 
 import java.util.stream.Stream;
 
-public class MethodLookupSwitchFunction extends DescFunction<MethodVisitor> {
+public class MethodLookupSwitchFunction extends DescFunction {
 
     public MethodLookupSwitchFunction() {
         super("lookupswitch");
@@ -17,7 +17,7 @@ public class MethodLookupSwitchFunction extends DescFunction<MethodVisitor> {
 
 
     @Override
-    public <F> MethodVisitor process(DescFunctionContext<F> context) throws ASMDLSyntaxException {
+    public void process(DescFunctionContext context) throws ASMDLSyntaxException {
         if (context.environment() != DescFunctions.METHOD && context.environment() != DescFunctions.LABEL)
             throw new ASMDLSyntaxException("lookupswitch function must be in a method block or a label block");
 
@@ -44,6 +44,5 @@ public class MethodLookupSwitchFunction extends DescFunction<MethodVisitor> {
             throw new ASMDLSyntaxException("count of labels and keys must be equal");
 
         mv.visitLookupSwitchInsn(defaultLabel, labelsInts, labels);
-        return mv;
     }
 }

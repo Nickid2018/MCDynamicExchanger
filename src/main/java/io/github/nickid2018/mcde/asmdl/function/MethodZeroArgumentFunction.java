@@ -6,7 +6,7 @@ import io.github.nickid2018.mcde.asmdl.DescFunctionContext;
 import io.github.nickid2018.mcde.asmdl.DescFunctions;
 import org.objectweb.asm.MethodVisitor;
 
-public class MethodZeroArgumentFunction extends DescFunction<MethodVisitor> {
+public class MethodZeroArgumentFunction extends DescFunction {
 
     private final int opcode;
 
@@ -16,12 +16,11 @@ public class MethodZeroArgumentFunction extends DescFunction<MethodVisitor> {
     }
 
     @Override
-    public <F> MethodVisitor process(DescFunctionContext<F> context) throws ASMDLSyntaxException {
+    public void process(DescFunctionContext context) throws ASMDLSyntaxException {
         if (context.environment() != DescFunctions.METHOD && context.environment() != DescFunctions.LABEL)
             throw new ASMDLSyntaxException(name + " function must be in a method block or a label block");
 
         MethodVisitor mv = (MethodVisitor) context.visitor();
         mv.visitInsn(opcode);
-        return mv;
     }
 }

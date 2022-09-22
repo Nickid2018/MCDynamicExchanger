@@ -12,7 +12,7 @@ import java.util.Map;
 
 import static org.objectweb.asm.Opcodes.*;
 
-public class MethodDescBlock extends DescBlock<MethodVisitor> {
+public class MethodDescBlock extends DescBlock {
 
     public static final Map<String, Integer> ACCESS_FLAGS;
 
@@ -38,7 +38,7 @@ public class MethodDescBlock extends DescBlock<MethodVisitor> {
 
     @Override
     // method [access] <name> <desc> [signature <signature>] [throws <exceptions>]
-    public <F> MethodVisitor process(DescFunctionContext<F> context) throws ASMDLSyntaxException {
+    public MethodVisitor processStart(DescFunctionContext context) throws ASMDLSyntaxException {
         if (context.environment() != DescFunctions.CLASS)
             throw new ASMDLSyntaxException("method block must be in class block");
         int pointer = 0;
@@ -85,10 +85,11 @@ public class MethodDescBlock extends DescBlock<MethodVisitor> {
     }
 
     @Override
-    public <F> void processEnd(DescFunctionContext<F> context) throws ASMDLSyntaxException {
+    public Object processEnd(DescFunctionContext context) throws ASMDLSyntaxException {
         if (context.environment() != DescFunctions.CLASS)
             throw new ASMDLSyntaxException("method block must be in class block");
         ((MethodVisitor) context.visitor()).visitMaxs(0, 0);
         ((MethodVisitor) context.visitor()).visitEnd();
+        return null;
     }
 }

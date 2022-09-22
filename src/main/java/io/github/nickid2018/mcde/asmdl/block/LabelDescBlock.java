@@ -7,18 +7,19 @@ import io.github.nickid2018.mcde.asmdl.DescFunctions;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 
-public class LabelDescBlock extends DescBlock<MethodVisitor> {
+public class LabelDescBlock extends DescBlock {
 
     public LabelDescBlock() {
         super("label");
     }
 
     @Override
-    public <F> void processEnd(DescFunctionContext<F> context) {
+    public Object processEnd(DescFunctionContext context) {
+        return null;
     }
 
     @Override
-    public <F> MethodVisitor process(DescFunctionContext<F> context) throws ASMDLSyntaxException {
+    public MethodVisitor processStart(DescFunctionContext context) throws ASMDLSyntaxException {
         if (context.environment() != DescFunctions.METHOD && context.environment() != DescFunctions.LABEL)
             throw new ASMDLSyntaxException("label block must be in a method block or a label block");
         if (context.args().length != 1)

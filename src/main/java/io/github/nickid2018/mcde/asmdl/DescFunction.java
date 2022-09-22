@@ -1,6 +1,6 @@
 package io.github.nickid2018.mcde.asmdl;
 
-public abstract class DescFunction<T> {
+public abstract class DescFunction {
 
     protected final String name;
 
@@ -8,7 +8,7 @@ public abstract class DescFunction<T> {
         this.name = name;
     }
 
-    public abstract <F> T process(DescFunctionContext<F> context) throws ASMDLSyntaxException;
+    public abstract void process(DescFunctionContext context) throws ASMDLSyntaxException;
 
     public String name() {
         return name;

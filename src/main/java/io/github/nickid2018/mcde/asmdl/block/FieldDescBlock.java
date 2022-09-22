@@ -11,7 +11,7 @@ import java.util.*;
 
 import static org.objectweb.asm.Opcodes.*;
 
-public class FieldDescBlock extends DescBlock<FieldVisitor> {
+public class FieldDescBlock extends DescBlock {
 
     public FieldDescBlock() {
         super("field");
@@ -34,7 +34,7 @@ public class FieldDescBlock extends DescBlock<FieldVisitor> {
 
     @Override
     // field [access] <name> <desc> [signature <signature>] [value <value>]
-    public <F> FieldVisitor process(DescFunctionContext<F> context) throws ASMDLSyntaxException {
+    public FieldVisitor processStart(DescFunctionContext context) throws ASMDLSyntaxException {
         if (context.environment() != DescFunctions.CLASS)
             throw new ASMDLSyntaxException("field block must be in class block");
         int pointer = 0;
@@ -96,9 +96,10 @@ public class FieldDescBlock extends DescBlock<FieldVisitor> {
     }
 
     @Override
-    public <F> void processEnd(DescFunctionContext<F> context) throws ASMDLSyntaxException {
+    public Object processEnd(DescFunctionContext context) throws ASMDLSyntaxException {
         if (context.environment() != DescFunctions.CLASS)
             throw new ASMDLSyntaxException("field block must be in class block");
         ((FieldVisitor) context.visitor()).visitEnd();
+        return null;
     }
 }

@@ -5,10 +5,7 @@ import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Label;
 
 import java.io.FileOutputStream;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.Stack;
+import java.util.*;
 
 public class ASMDLParser {
 
@@ -18,13 +15,13 @@ public class ASMDLParser {
         lines = data.split("\n");
     }
 
-    @SuppressWarnings({"rawtypes", "unchecked"})
     public byte[] toClass() throws ASMDLSyntaxException {
         ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_FRAMES);
 
-        Stack<DescBlock<?>> environmentStack = new Stack<>();
+        Stack<DescBlock> environmentStack = new Stack<>();
         Stack<Object> visitorStack = new Stack<>();
         Stack<Map<String, Label>> labelMap = new Stack<>();
+        Stack<List<Object>> additionalStack = new Stack<>();
         visitorStack.push(writer);
 
         for (String line : lines) {
@@ -32,7 +29,7 @@ public class ASMDLParser {
             if (lineTrim.isEmpty() || lineTrim.startsWith("#"))
                 continue;
 
-            String[] args = lineTrim.split("#")[0].trim().split(" ");
+            String[] args = lineTrim.split(" ");
             if (args.length == 0)
                 continue;
 
@@ -44,16 +41,22 @@ public class ASMDLParser {
             if (name.equals("}") && argsPass.length == 0) {
                 if (environmentStack.isEmpty())
                     throw new ASMDLSyntaxException("unexpected }");
-                DescBlock<?> lastEnv = environmentStack.pop();
+                DescBlock lastEnv = environmentStack.pop();
                 labelMap.pop();
-                lastEnv.processEnd(new DescFunctionContext(environmentStack.isEmpty() ? null : environmentStack.peek(),
-                        new String[0], visitorStack.pop(), labelMap.isEmpty() ? null : labelMap.peek()));
+                List<Object> additionalNow = additionalStack.pop();
+                Object returns = lastEnv.processEnd(new DescFunctionContext(environmentStack.isEmpty() ? null : environmentStack.peek(),
+                        new String[0], visitorStack.pop(), labelMap.isEmpty() ? null : labelMap.peek(),
+                        additionalNow, null));
+                lastEnv.process(new DescFunctionContext(environmentStack.isEmpty() ? null : environmentStack.peek(),
+                        new String[0], visitorStack.peek(), labelMap.isEmpty() ? null : labelMap.peek(),
+                        additionalStack.isEmpty() ? null : additionalStack.peek(), returns));
                 continue;
             }
 
-            DescFunction<?> function = DescFunctions.FUNCTIONS.get(name);
+            DescFunction function = DescFunctions.FUNCTIONS.get(name);
             DescBlock env = environmentStack.isEmpty() ? null : environmentStack.peek();
             Map<String, Label> labels = labelMap.isEmpty() ? null : labelMap.peek();
+            List<Object> additional = additionalStack.isEmpty() ? null : additionalStack.peek();
             if (function == null)
                 throw new ASMDLSyntaxException("Unknown function " + name);
             if (function instanceof DescBlock block) {
@@ -68,15 +71,21 @@ public class ASMDLParser {
                 Map<String, Label> labelMapNow = function == DescFunctions.METHOD ? new HashMap<>() : labels;
                 labelMap.push(labelMapNow);
 
-                Object obj = block.process(new DescFunctionContext(env, argsPass, visitorStack.peek(),
-                        labelMapNow));
+                List<Object> additionalNow = new ArrayList<>();
+                additionalStack.push(additionalNow);
+
+                Object obj = block.processStart(new DescFunctionContext(env, argsPass, visitorStack.peek(),
+                        labelMapNow, additionalNow, null));
                 if (needClose) {
                     environmentStack.push(block);
                     visitorStack.push(obj);
                 } else
-                    block.processEnd(new DescFunctionContext(env, argsPass, obj, labels));
+                    block.process(new DescFunctionContext(environmentStack.isEmpty() ? null : environmentStack.peek(),
+                            new String[0], visitorStack.peek(), labelMap.isEmpty() ? null : labelMap.peek(),
+                            additional,
+                            block.processEnd(new DescFunctionContext(env, argsPass, obj, labels, additionalNow, null))));
             } else
-                function.process(new DescFunctionContext(env, argsPass, visitorStack.peek(), labels));
+                function.process(new DescFunctionContext(env, argsPass, visitorStack.peek(), labels, additional, null));
         }
 
         if (!environmentStack.isEmpty())
@@ -87,59 +96,24 @@ public class ASMDLParser {
     public static void main(String[] args) {
         String data = """
                 class 17 public final Test implements java/lang/Runnable {
-                    field public final name Ljava/lang/String;
-                    
-                    method public <init> (Ljava/lang/String;)V {
+                    method public <init> ()V {
                         aload 0
                         invokespecial java/lang/Object.<init>()V
-                        aload 0
-                        aload 1
-                        putfield Test.name Ljava/lang/String;
                         return
                     }
                     
                     method public run ()V {
-                        aload 0
-                        getfield Test.name Ljava/lang/String;
-                        invokestatic Test.test(Ljava/lang/String;)Ljava/lang/String;
-                        astore 1
-                        iconst_0
-                        istore 2
-                        label loop {
-                            iload 2
-                            bipush 100
-                            if_icmpge end
-                            getstatic java/lang/System.out Ljava/io/PrintStream;
-                            aload 1
-                            invokevirtual java/io/PrintStream.println(Ljava/lang/String;)V
-                            iinc 2 1
-                            goto loop
+                        getstatic java/lang/System.out Ljava/io/PrintStream;
+                        ldc string Hello World!
+                        invokedynamic concat (Ljava/lang/String;)Ljava/lang/String; {
+                            bootstrap invokestatic java/lang/invoke/StringConcatFactory.makeConcatWithConstants(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/invoke/CallSite;
+                            ldc_dynamic test Ljava/lang/String; {
+                                bootstrap invokestatic java/lang/invoke/ConstantBootstraps.getStaticFinal(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Class;)Ljava/lang/Object;
+                                constant type Lio/github/nickid2018/mcde/asmdl/ASMDLParser;
+                            }
                         }
-                        label end {
-                            return
-                        }
-                    }
-                    
-                    method static test (Ljava/lang/String;)Ljava/lang/String; {
-                        aload 0
-                        iconst_4
-                        invokevirtual java/lang/String.repeat(I)Ljava/lang/String;
-                        astore 1
-                        invokestatic java/lang/System.currentTimeMillis()J
-                        l2i
-                        iconst_2
-                        irem
-                        iconst_1
-                        if_icmpne end
-                        label do_trim {
-                            aload 1
-                            invokevirtual java/lang/String.toUpperCase()Ljava/lang/String;
-                            astore 1
-                        }
-                        label end {
-                            aload 1
-                            areturn
-                        }
+                        invokevirtual java/io/PrintStream.println(Ljava/lang/String;)V
+                        return
                     }
                 }
                 """;
@@ -155,7 +129,7 @@ public class ASMDLParser {
             };
             IOUtils.write(bytes, new FileOutputStream("D:\\Test.class"));
             Class<?> cls = loader.loadClass("Test");
-            Runnable r = (Runnable) cls.getConstructor(String.class).newInstance("   Hello World!   ");
+            Runnable r = (Runnable) cls.getConstructor().newInstance();
             r.run();
         } catch (Exception e) {
             e.printStackTrace();

@@ -7,7 +7,7 @@ import io.github.nickid2018.mcde.asmdl.DescFunctions;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 
-public class MethodJumpFunction extends DescFunction<MethodVisitor> {
+public class MethodJumpFunction extends DescFunction {
 
     private final int opcode;
 
@@ -17,7 +17,7 @@ public class MethodJumpFunction extends DescFunction<MethodVisitor> {
     }
 
     @Override
-    public <F> MethodVisitor process(DescFunctionContext<F> context) throws ASMDLSyntaxException {
+    public void process(DescFunctionContext context) throws ASMDLSyntaxException {
         if (context.environment() != DescFunctions.METHOD && context.environment() != DescFunctions.LABEL)
             throw new ASMDLSyntaxException(name + " function must be in a method block or a label block");
 
@@ -27,6 +27,5 @@ public class MethodJumpFunction extends DescFunction<MethodVisitor> {
         String label = context.args()[0];
         Label l = context.labelMap().computeIfAbsent(label, k -> new Label());
         visitor.visitJumpInsn(opcode, l);
-        return visitor;
     }
 }

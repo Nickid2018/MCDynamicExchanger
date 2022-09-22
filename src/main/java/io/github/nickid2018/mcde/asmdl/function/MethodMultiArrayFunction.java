@@ -6,14 +6,14 @@ import io.github.nickid2018.mcde.asmdl.DescFunctionContext;
 import io.github.nickid2018.mcde.asmdl.DescFunctions;
 import org.objectweb.asm.MethodVisitor;
 
-public class MethodMultiArrayFunction extends DescFunction<MethodVisitor> {
+public class MethodMultiArrayFunction extends DescFunction {
 
     public MethodMultiArrayFunction() {
         super("multianewarray");
     }
 
     @Override
-    public <F> MethodVisitor process(DescFunctionContext<F> context) throws ASMDLSyntaxException {
+    public void process(DescFunctionContext context) throws ASMDLSyntaxException {
         if (context.environment() != DescFunctions.METHOD && context.environment() != DescFunctions.LABEL)
             throw new ASMDLSyntaxException("multianewarray function must be in a method block or a label block");
 
@@ -31,6 +31,5 @@ public class MethodMultiArrayFunction extends DescFunction<MethodVisitor> {
 
         MethodVisitor mv = (MethodVisitor) context.visitor();
         mv.visitMultiANewArrayInsn(desc, dims);
-        return mv;
     }
 }

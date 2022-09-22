@@ -1,10 +1,17 @@
 package io.github.nickid2018.mcde.asmdl;
 
-public abstract class DescBlock<T> extends DescFunction<T> {
+public abstract class DescBlock extends DescFunction {
 
     public DescBlock(String name) {
         super(name);
     }
 
-    public abstract <F> void processEnd(DescFunctionContext<F> context) throws ASMDLSyntaxException;
+    @Override
+    public void process(DescFunctionContext context) throws ASMDLSyntaxException {
+    }
+
+
+    public abstract Object processStart(DescFunctionContext context) throws ASMDLSyntaxException;
+
+    public abstract Object processEnd(DescFunctionContext context) throws ASMDLSyntaxException;
 }

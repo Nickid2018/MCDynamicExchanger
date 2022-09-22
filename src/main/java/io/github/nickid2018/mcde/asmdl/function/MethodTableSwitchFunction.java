@@ -9,14 +9,14 @@ import org.objectweb.asm.MethodVisitor;
 
 import java.util.stream.Stream;
 
-public class MethodTableSwitchFunction extends DescFunction<MethodVisitor> {
+public class MethodTableSwitchFunction extends DescFunction {
 
     public MethodTableSwitchFunction() {
         super("tableswitch");
     }
 
     @Override
-    public <F> MethodVisitor process(DescFunctionContext<F> context) throws ASMDLSyntaxException {
+    public void process(DescFunctionContext context) throws ASMDLSyntaxException {
         if (context.environment() != DescFunctions.METHOD && context.environment() != DescFunctions.LABEL)
             throw new ASMDLSyntaxException("tableswitch function must be in a method block or a label block");
 
@@ -43,6 +43,5 @@ public class MethodTableSwitchFunction extends DescFunction<MethodVisitor> {
             throw new ASMDLSyntaxException("tableswitch requires " + (max - min + 1) + " labels");
 
         mv.visitTableSwitchInsn(min, max, defaultLabel, labels);
-        return mv;
     }
 }

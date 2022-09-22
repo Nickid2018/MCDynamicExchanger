@@ -1,9 +1,6 @@
 package io.github.nickid2018.mcde.asmdl;
 
-import io.github.nickid2018.mcde.asmdl.block.ClassDescBlock;
-import io.github.nickid2018.mcde.asmdl.block.FieldDescBlock;
-import io.github.nickid2018.mcde.asmdl.block.LabelDescBlock;
-import io.github.nickid2018.mcde.asmdl.block.MethodDescBlock;
+import io.github.nickid2018.mcde.asmdl.block.*;
 import io.github.nickid2018.mcde.asmdl.function.*;
 import org.objectweb.asm.Opcodes;
 
@@ -13,12 +10,14 @@ import java.util.Map;
 @SuppressWarnings("unused")
 public class DescFunctions {
 
-    public static final Map<String, DescFunction<?>> FUNCTIONS = new HashMap<>();
+    public static final Map<String, DescFunction> FUNCTIONS = new HashMap<>();
 
     public static final ClassDescBlock CLASS = register(new ClassDescBlock());
     public static final FieldDescBlock FIELD = register(new FieldDescBlock());
     public static final MethodDescBlock METHOD = register(new MethodDescBlock());
     public static final LabelDescBlock LABEL = register(new LabelDescBlock());
+    public static final InvokeDynamicDescBlock INVOKEDYNAMIC = register(new InvokeDynamicDescBlock());
+    public static final ConstantDynamicDescBlock CONSTANTDYNAMIC = register(new ConstantDynamicDescBlock());
 
     public static final MethodZeroArgumentFunction RETURN = register(
             new MethodZeroArgumentFunction("return", Opcodes.RETURN));
@@ -338,7 +337,15 @@ public class DescFunctions {
 
     public static final MethodTableSwitchFunction TABLESWITCH = register(new MethodTableSwitchFunction());
 
-    public static <T extends DescFunction<?>> T register(T function) {
+    public static final BootstrapFunction BOOTSTRAP = register(new BootstrapFunction());
+
+    public static final ConstantFunction CONSTANT = register(new ConstantFunction());
+
+    public static final LDCFunction LDC = register(new LDCFunction());
+
+    public static final HandleFunction HANDLE = register(new HandleFunction());
+
+    public static <T extends DescFunction> T register(T function) {
         FUNCTIONS.put(function.name(), function);
         return function;
     }

@@ -9,7 +9,7 @@ import org.objectweb.asm.Opcodes;
 
 import java.util.Map;
 
-public class MethodNewArrayFunction extends DescFunction<MethodVisitor> {
+public class MethodNewArrayFunction extends DescFunction {
 
     public MethodNewArrayFunction() {
         super("newarray");
@@ -27,7 +27,7 @@ public class MethodNewArrayFunction extends DescFunction<MethodVisitor> {
     );
 
     @Override
-    public <F> MethodVisitor process(DescFunctionContext<F> context) throws ASMDLSyntaxException {
+    public void process(DescFunctionContext context) throws ASMDLSyntaxException {
         if (context.environment() != DescFunctions.METHOD && context.environment() != DescFunctions.LABEL)
             throw new ASMDLSyntaxException("newarray function must be in a method block or a label block");
 
@@ -38,6 +38,5 @@ public class MethodNewArrayFunction extends DescFunction<MethodVisitor> {
         if (!TYPES.containsKey(args[0]))
             throw new ASMDLSyntaxException("invalid type");
         mv.visitIntInsn(Opcodes.NEWARRAY, TYPES.get(args[0]));
-        return mv;
     }
 }

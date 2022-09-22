@@ -12,7 +12,7 @@ import java.util.Map;
 
 import static org.objectweb.asm.Opcodes.*;
 
-public class ClassDescBlock extends DescBlock<ClassWriter> {
+public class ClassDescBlock extends DescBlock {
 
     public ClassDescBlock() {
         super("class");
@@ -37,7 +37,7 @@ public class ClassDescBlock extends DescBlock<ClassWriter> {
 
     @Override
     // class <version> [access] <name> [extends <super>] [implements <interfaces...>] [signature <signature>]
-    public <F> ClassWriter process(DescFunctionContext<F> context) throws ASMDLSyntaxException {
+    public ClassWriter processStart(DescFunctionContext context) throws ASMDLSyntaxException {
         if (context.environment() != null)
             throw new ASMDLSyntaxException("class environment shouldn't be defined in any environment");
 
@@ -99,7 +99,8 @@ public class ClassDescBlock extends DescBlock<ClassWriter> {
     }
 
     @Override
-    public <F> void processEnd(DescFunctionContext<F> context) {
+    public Object processEnd(DescFunctionContext context) {
         ((ClassWriter) context.visitor()).visitEnd();
+        return null;
     }
 }
