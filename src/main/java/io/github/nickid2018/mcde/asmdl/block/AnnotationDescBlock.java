@@ -6,9 +6,6 @@ import io.github.nickid2018.mcde.asmdl.DescFunctionContext;
 import io.github.nickid2018.mcde.asmdl.DescFunctions;
 import org.objectweb.asm.*;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -32,29 +29,23 @@ public class AnnotationDescBlock extends DescBlock {
             "resource_variable", TypeReference.RESOURCE_VARIABLE
     );
 
-    public static final Map<String, Integer> INSN_TYPE_REFERENCE_KINDS;
+    public static final Map<String, Integer> INSN_TYPE_REFERENCE_KINDS = Map.of(
+            "new", TypeReference.NEW,
+            "cast", TypeReference.CAST,
+            "constructor_reference", TypeReference.CONSTRUCTOR_REFERENCE,
+            "method_reference", TypeReference.METHOD_REFERENCE,
+            "instanceof", TypeReference.INSTANCEOF,
+            "constructor_invocation_type_argument", TypeReference.CONSTRUCTOR_INVOCATION_TYPE_ARGUMENT,
+            "method_invocation_type_argument", TypeReference.METHOD_INVOCATION_TYPE_ARGUMENT,
+            "constructor_reference_type_argument", TypeReference.CONSTRUCTOR_REFERENCE_TYPE_ARGUMENT,
+            "method_reference_type_argument", TypeReference.METHOD_REFERENCE_TYPE_ARGUMENT
+    );
 
     public static final Map<String, Integer> CLASS_TYPE_REFERENCE_KINDS = Map.of(
             "class_parameter", TypeReference.CLASS_TYPE_PARAMETER,
             "class_parameter_bound", TypeReference.CLASS_TYPE_PARAMETER_BOUND,
             "class_extends", TypeReference.CLASS_EXTENDS
     );
-
-    static {
-        Map<String, Integer> map = new HashMap<>();
-
-        map.put("new", TypeReference.NEW);
-        map.put("cast", TypeReference.CAST);
-        map.put("constructor_reference", TypeReference.CONSTRUCTOR_REFERENCE);
-        map.put("method_reference", TypeReference.METHOD_REFERENCE);
-        map.put("instanceof", TypeReference.INSTANCEOF);
-        map.put("constructor_invocation_type_argument", TypeReference.CONSTRUCTOR_INVOCATION_TYPE_ARGUMENT);
-        map.put("method_invocation_type_argument", TypeReference.METHOD_INVOCATION_TYPE_ARGUMENT);
-        map.put("constructor_reference_type_argument", TypeReference.CONSTRUCTOR_REFERENCE_TYPE_ARGUMENT);
-        map.put("method_reference_type_argument", TypeReference.METHOD_REFERENCE_TYPE_ARGUMENT);
-
-        INSN_TYPE_REFERENCE_KINDS = Collections.unmodifiableMap(map);
-    }
 
     @Override
     public AnnotationVisitor processStart(DescFunctionContext context) throws ASMDLSyntaxException {
@@ -181,7 +172,31 @@ public class AnnotationDescBlock extends DescBlock {
                 default -> throw new ASMDLSyntaxException("unknown annotation type: " + args[0]);
             };
         }
-        throw new ASMDLSyntaxException("annotation block can only be used in annotation, class, method(label) or field");
+        if (context.environment() == DescFunctions.RECORD_COMPONENT) {
+            return switch (args[0]) {
+                case "record_component" -> {
+                    if (args.length != 3)
+                        throw new ASMDLSyntaxException("annotation record_component needs 2 arguments");
+                    RecordComponentVisitor visitor = (RecordComponentVisitor) context.visitor();
+                    yield visitor.visitAnnotation(args[1], Boolean.parseBoolean(args[2]));
+                }
+                case "record_component_type" -> {
+                    if (args.length != 5)
+                        throw new ASMDLSyntaxException("annotation record_component_type needs 4 argument");
+                    RecordComponentVisitor visitor = (RecordComponentVisitor) context.visitor();
+                    if (!CLASS_TYPE_REFERENCE_KINDS.containsKey(args[1]))
+                        throw new ASMDLSyntaxException("unknown record component type reference kind: " + args[1]);
+                    int kind = CLASS_TYPE_REFERENCE_KINDS.get(args[1]);
+                    TypePath path = TypePath.fromString(args[2]);
+                    String desc = args[3];
+                    boolean visible = Boolean.parseBoolean(args[4]);
+                    yield visitor.visitTypeAnnotation(kind, path, desc, visible);
+                }
+                default -> throw new ASMDLSyntaxException("unknown annotation type: " + args[0]);
+            };
+        }
+        throw new ASMDLSyntaxException("annotation block can only be used in annotation, class," +
+                " method(label) or field(record component) environment");
     }
 
     @Override

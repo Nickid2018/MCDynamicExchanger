@@ -14,6 +14,7 @@ public class DescFunctions {
 
     public static final ClassDescBlock CLASS = register(new ClassDescBlock());
     public static final FieldDescBlock FIELD = register(new FieldDescBlock());
+    public static final RecordComponentDescBlock RECORD_COMPONENT = register(new RecordComponentDescBlock());
     public static final MethodDescBlock METHOD = register(new MethodDescBlock());
     public static final LabelDescBlock LABEL = register(new LabelDescBlock());
     public static final InvokeDynamicDescBlock INVOKEDYNAMIC = register(new InvokeDynamicDescBlock());
@@ -358,6 +359,18 @@ public class DescFunctions {
     public static final AnnotationValueFunction ANNOTATION_VALUE = register(new AnnotationValueFunction());
 
     public static final AnnotationEnumFunction ANNOTATION_ENUM = register(new AnnotationEnumFunction());
+
+    public static final AnnotationParameterCountFunction ANNOTATION_PARAMETER_COUNT = register(new AnnotationParameterCountFunction());
+
+    public static final ClassNestHostFunction CLASS_NEST_HOST = register(new ClassNestHostFunction());
+
+    public static final ClassNestMemberFunction CLASS_NEST_MEMBER = register(new ClassNestMemberFunction());
+
+    public static final ClassInnerClassFunction CLASS_INNER_CLASS = register(new ClassInnerClassFunction());
+
+    public static final ClassOuterClassFunction CLASS_OUTER_CLASS = register(new ClassOuterClassFunction());
+
+    public static final ClassPermittedSubClassFunction CLASS_PERMITTED_SUBCLASS = register(new ClassPermittedSubClassFunction());
 
     public static <T extends DescFunction> T register(T function) {
         FUNCTIONS.put(function.name(), function);

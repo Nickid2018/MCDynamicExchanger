@@ -1,10 +1,8 @@
 package io.github.nickid2018.mcde.asmdl;
 
-import org.apache.commons.io.IOUtils;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Label;
 
-import java.io.FileOutputStream;
 import java.util.*;
 
 public class ASMDLParser {
@@ -91,59 +89,5 @@ public class ASMDLParser {
         if (!environmentStack.isEmpty())
             throw new ASMDLSyntaxException("unexpected EOF");
         return writer.toByteArray();
-    }
-
-    public @interface TestAnnotation {
-        String value();
-    }
-
-    public static void main(String[] args) {
-        String data = """
-                class 17 public final Test implements java/lang/Runnable {
-                    
-                    field public static final str Ljava/lang/String; value test\u0001 {
-                        annotation field Lio/github/nickid2018/mcde/asmdl/ASMDLParser$TestAnnotation; true {
-                            value value string Hello
-                        }
-                    }
-                    
-                    method public <init> ()V {
-                        aload 0
-                        invokespecial java/lang/Object.<init>()V
-                        return
-                    }
-                    
-                    method public run ()V {
-                        getstatic java/lang/System.out Ljava/io/PrintStream;
-                        ldc string Hello World!
-                        invokedynamic concat (Ljava/lang/String;)Ljava/lang/String; {
-                            bootstrap invokestatic java/lang/invoke/StringConcatFactory.makeConcatWithConstants(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/invoke/MethodType;Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/invoke/CallSite;
-                            ldc_dynamic str Ljava/lang/String; {
-                                bootstrap invokestatic java/lang/invoke/ConstantBootstraps.getStaticFinal(Ljava/lang/invoke/MethodHandles$Lookup;Ljava/lang/String;Ljava/lang/Class;Ljava/lang/Class;)Ljava/lang/Object;
-                                constant type LTest;
-                            }
-                        }
-                        invokevirtual java/io/PrintStream.println(Ljava/lang/String;)V
-                        return
-                    }
-                }
-                """;
-
-        ASMDLParser parser = new ASMDLParser(data);
-        try {
-            byte[] bytes = parser.toClass();
-            ClassLoader loader = new ClassLoader() {
-                @Override
-                protected Class<?> findClass(String name) {
-                    return defineClass(name, bytes, 0, bytes.length);
-                }
-            };
-            IOUtils.write(bytes, new FileOutputStream("D:\\Test.class"));
-            Class<?> cls = loader.loadClass("Test");
-            Runnable r = (Runnable) cls.getConstructor().newInstance();
-            r.run();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 }
