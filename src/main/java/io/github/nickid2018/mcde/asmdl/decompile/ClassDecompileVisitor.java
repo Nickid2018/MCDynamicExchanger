@@ -78,7 +78,7 @@ public class ClassDecompileVisitor extends ClassVisitor {
         if (signature != null)
             base += " signature %s".formatted(signature);
         if (value != null)
-            base += " value %s".formatted(TextElement.getPlainValue(value));
+            base += " value %s".formatted(value);
         TextBlockElement root = new TextBlockElement(base);
         context.pushBlock(root);
         return new FieldDecompileVisitor(context);

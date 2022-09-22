@@ -4,6 +4,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import io.github.nickid2018.mcde.asmdl.ASMDLParser;
+import io.github.nickid2018.mcde.asmdl.decompile.ClassDecompileVisitor;
 import io.github.nickid2018.mcde.remapper.FileProcessor;
 import io.github.nickid2018.mcde.format.MappingFormat;
 import io.github.nickid2018.mcde.format.MojangMappingFormat;
@@ -12,6 +13,7 @@ import io.github.nickid2018.mcde.util.*;
 import org.apache.commons.cli.*;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.objectweb.asm.ClassReader;
 
 import java.io.*;
 import java.net.URL;
@@ -31,7 +33,7 @@ public class Main {
         parsers.add(new Pair<>(initOptionRemap(), Main::doRemap));
         parsers.add(new Pair<>(initOptionDecompile(), Main::doDecompile));
         parsers.add(new Pair<>(initOptionAuto(), Main::doAuto));
-        parsers.add(new Pair<>(initOptionCompileASMDL(), Main::doCompileASMDL));
+        parsers.add(new Pair<>(initOptionASMDL(), Main::doASMDL));
         for (Pair<Options, ConsumerE<CommandLine>> pairs : parsers)
             try {
                 CommandLine commandLine = new DefaultParser().parse(pairs.left(), args);
@@ -127,12 +129,20 @@ public class Main {
         return autoOptions;
     }
 
-    private static Options initOptionCompileASMDL() {
+    private static Options initOptionASMDL() {
         Options compileOptions = new Options();
 
-        Option compile = new Option("asmdl", false, I18N.getTranslation("command.asmdl"));
-        compile.setRequired(true);
+        Option flag = new Option("asmdl", false, I18N.getTranslation("command.asmdl"));
+        flag.setRequired(true);
+        compileOptions.addOption(flag);
+
+        Option compile = new Option("c", "compile", false, I18N.getTranslation("command.asmdl.compile"));
+        compile.setRequired(false);
         compileOptions.addOption(compile);
+
+        Option decompile = new Option("d", "decompile", false, I18N.getTranslation("command.asmdl.decompile"));
+        decompile.setRequired(false);
+        compileOptions.addOption(decompile);
 
         Option input = new Option("i", "input", true, I18N.getTranslation("command.asmdl.source"));
         input.setRequired(true);
@@ -252,19 +262,44 @@ public class Main {
         LogUtils.log("process.decompile.success");
     }
 
-    private static void doCompileASMDL(CommandLine commandLine) throws Exception {
+    private static void doASMDL(CommandLine commandLine) throws Exception {
         File input = new File(commandLine.getOptionValue("input"));
-        File output = new File("compiled.class");
-        if (commandLine.hasOption("output"))
-            output = new File(commandLine.getOptionValue("output"));
-        String data;
-        try (InputStream fileInput =  new FileInputStream(input)) {
-            data = IOUtils.toString(fileInput, StandardCharsets.UTF_8);
-        }
-        ASMDLParser parser = new ASMDLParser(data);
-        byte[] bytes = parser.toClass();
-        try (FileOutputStream fileOutput = new FileOutputStream(output)) {
-            fileOutput.write(bytes);
+
+        boolean compile = commandLine.hasOption("compile");
+        boolean decompile = commandLine.hasOption("decompile");
+
+        if (compile == decompile)
+            throw new IllegalArgumentException(I18N.getTranslation("error.asmdl.invalid"));
+
+        if (compile) {
+            File output = new File("compiled.class");
+            if (commandLine.hasOption("output"))
+                output = new File(commandLine.getOptionValue("output"));
+
+            String data;
+            try (InputStream fileInput = new FileInputStream(input)) {
+                data = IOUtils.toString(fileInput, StandardCharsets.UTF_8);
+            }
+            ASMDLParser parser = new ASMDLParser(data);
+            byte[] bytes = parser.toClass();
+            try (FileOutputStream fileOutput = new FileOutputStream(output)) {
+                fileOutput.write(bytes);
+            }
+        } else {
+            File output = new File("decompiled.txt");
+            if (commandLine.hasOption("output"))
+                output = new File(commandLine.getOptionValue("output"));
+
+            byte[] bytes;
+            try (InputStream fileInput = new FileInputStream(input)) {
+                bytes = IOUtils.toByteArray(fileInput);
+            }
+            ClassReader reader = new ClassReader(bytes);
+            ClassDecompileVisitor visitor = new ClassDecompileVisitor();
+            reader.accept(visitor, 0);
+            try (FileWriter fileOutput = new FileWriter(output)) {
+                fileOutput.write(visitor.decompiledString());
+            }
         }
         LogUtils.log("process.asmdl.success");
     }
