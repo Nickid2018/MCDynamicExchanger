@@ -1,6 +1,8 @@
 package io.github.nickid2018.mcde.injector;
 
+import org.fife.ui.rsyntaxtextarea.AbstractTokenMakerFactory;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+import org.fife.ui.rsyntaxtextarea.TokenMakerFactory;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
 import javax.swing.*;
@@ -40,5 +42,10 @@ public class CodingFrame {
         frame.setSize(800, 600);
         frame.setLocationByPlatform(true);
         frame.setVisible(true);
+    }
+
+    static {
+        AbstractTokenMakerFactory atmf = (AbstractTokenMakerFactory) TokenMakerFactory.getDefaultInstance();
+        atmf.putMapping("text/asmdl", "io.github.nickid2018.mcde.asmdl.highlight.ASMDLTokenMaker");
     }
 }
