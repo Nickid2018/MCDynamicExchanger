@@ -1,11 +1,7 @@
 package io.github.nickid2018.mcde.asmdl.decompile;
 
-import io.github.nickid2018.mcde.asmdl.ASMDLParser;
-import org.apache.commons.io.IOUtils;
 import org.objectweb.asm.*;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.StringWriter;
 import java.util.Map;
 

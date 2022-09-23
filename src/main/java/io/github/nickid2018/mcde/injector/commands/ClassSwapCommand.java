@@ -3,6 +3,8 @@ package io.github.nickid2018.mcde.injector.commands;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
+import io.github.nickid2018.mcde.asmdl.ASMDLParser;
+import io.github.nickid2018.mcde.injector.ClassWriterHacked;
 import io.github.nickid2018.mcde.asmdl.decompile.ClassDecompileVisitor;
 import io.github.nickid2018.mcde.injector.ClassDataRepository;
 import io.github.nickid2018.mcde.injector.CodingFrame;
@@ -46,7 +48,21 @@ public class ClassSwapCommand {
         ClassReader reader = new ClassReader(remapWriter.toByteArray());
         ClassDecompileVisitor visitor = new ClassDecompileVisitor();
         reader.accept(visitor, 0);
-        CodingFrame frame = new CodingFrame(className + " - " + remappedName, "text/asmdl", true);
+        String finalClassName = className;
+        CodingFrame frame = new CodingFrame(className + " - " + remappedName, "text/asmdl", true, f -> {
+            ASMDLParser parser = new ASMDLParser(f.getCode(),
+                    () -> new ClassWriterHacked(ClassWriter.COMPUTE_FRAMES, MCProgramInjector.format.getToSourceMapper()));
+            try {
+                byte[] data = parser.toClass();
+                ClassReader classReader = new ClassReader(data);
+                ClassWriter writer = new ClassWriter(0);
+                classReader.accept(new ClassRemapperFix(writer, MCProgramInjector.format.getToSourceMapper()), 0);
+                data = writer.toByteArray();
+                doSwap(remappedName, finalClassName, data, context.getSource());
+            } catch (Exception e) {
+                context.getSource().error(null, e);
+            }
+        });
         frame.setCode(visitor.decompiledString());
         frame.show();
 

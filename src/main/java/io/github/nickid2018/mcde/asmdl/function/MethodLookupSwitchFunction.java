@@ -36,7 +36,7 @@ public class MethodLookupSwitchFunction extends DescFunction {
         }
 
         Label defaultLabel = context.labelMap().computeIfAbsent(args[0], k -> new Label());
-        Label[] labels = Stream.of(args[3].split(","))
+        Label[] labels = Stream.of(args[2].split(","))
                 .map(s -> context.labelMap().computeIfAbsent(s, k -> new Label()))
                 .toArray(Label[]::new);
 
