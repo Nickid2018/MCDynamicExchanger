@@ -311,7 +311,7 @@ public class MethodDecompileVisitor extends MethodVisitor {
 
     @Override
     public void visitTryCatchBlock(Label start, Label end, Label handler, String type) {
-        context.addElement(new TextElement("try %s %s %s %s".formatted(
+        context.addElement(new TextElement("try_catch %s %s %s %s".formatted(
                 getOrNameLabel(start), getOrNameLabel(end), getOrNameLabel(handler), type)));
     }
 

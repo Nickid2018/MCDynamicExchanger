@@ -3,7 +3,9 @@ package io.github.nickid2018.mcde.injector.commands;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
+import io.github.nickid2018.mcde.asmdl.decompile.ClassDecompileVisitor;
 import io.github.nickid2018.mcde.injector.ClassDataRepository;
+import io.github.nickid2018.mcde.injector.CodingFrame;
 import io.github.nickid2018.mcde.injector.InjectorFrame;
 import io.github.nickid2018.mcde.injector.MCProgramInjector;
 import io.github.nickid2018.mcde.remapper.ClassRemapperFix;
@@ -29,6 +31,24 @@ public class ClassSwapCommand {
 
     public static int swapEdit(CommandContext<InjectorFrame> context) {
         String className = StringArgumentType.getString(context, "class");
+        String remappedName = ClassUtils.toBinaryName(MCProgramInjector.format.getToSourceMapper().map(className));
+        className = ClassUtils.toBinaryName(MCProgramInjector.format.getToNamedMapper().map(remappedName));
+        byte[] bytes = ClassDataRepository.getInstance().classData.get(remappedName);
+        if (bytes == null) {
+            context.getSource().error(I18N.getTranslation("injector.command.swap.notfound", className, remappedName), null);
+            return 0;
+        }
+        ClassReader remapReader = new ClassReader(bytes);
+        ClassWriter remapWriter = new ClassWriter(0);
+        ClassRemapperFix remapper = new ClassRemapperFix(remapWriter, MCProgramInjector.format.getToNamedMapper());
+        remapReader.accept(remapper, 0);
+
+        ClassReader reader = new ClassReader(remapWriter.toByteArray());
+        ClassDecompileVisitor visitor = new ClassDecompileVisitor();
+        reader.accept(visitor, 0);
+        CodingFrame frame = new CodingFrame(className + " - " + remappedName, "text/asmdl", true);
+        frame.setCode(visitor.decompiledString());
+        frame.show();
 
         return 0;
     }

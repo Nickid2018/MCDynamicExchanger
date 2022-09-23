@@ -31,18 +31,22 @@ public class ClassInnerClassFunction extends DescFunction {
         int access = 0;
         for (;;pointer++) {
             if (pointer >= args.length)
-                throw new ASMDLSyntaxException("field name is required");
+                throw new ASMDLSyntaxException("inner class name is required");
             if (ClassDescBlock.ACCESS_FLAGS.containsKey(args[pointer]))
                 access += ClassDescBlock.ACCESS_FLAGS.get(args[pointer]);
             else break;
         }
 
         String name = args[pointer++];
-        if (pointer >= args.length)
-            throw new ASMDLSyntaxException("inner class outer name is required");
+        if (pointer >= args.length) {
+            cw.visitInnerClass(name, null, null, access);
+            return;
+        }
         String outerName = args[pointer++];
-        if (pointer >= args.length)
-            throw new ASMDLSyntaxException("inner class inner name is required");
+        if (pointer >= args.length) {
+            cw.visitInnerClass(name, outerName, null, access);
+            return;
+        }
         String innerName = args[pointer];
 
         cw.visitInnerClass(name, outerName, innerName, access);

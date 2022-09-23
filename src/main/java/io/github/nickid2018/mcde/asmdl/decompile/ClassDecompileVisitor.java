@@ -68,8 +68,15 @@ public class ClassDecompileVisitor extends ClassVisitor {
 
     @Override
     public void visitInnerClass(String name, String outerName, String innerName, int access) {
-        context.addElement(new TextElement("innerclass %s %s %s %s".formatted(
-                AccessFlags.CLASS.getFlags(access), name, outerName, innerName)));
+        if (outerName == null && innerName == null)
+            context.addElement(new TextElement("innerclass %s %s".formatted(
+                    AccessFlags.CLASS.getFlags(access), name)));
+        else if (innerName == null)
+            context.addElement(new TextElement("innerclass %s %s %s".formatted(
+                    AccessFlags.CLASS.getFlags(access), name, outerName)));
+        else
+            context.addElement(new TextElement("innerclass %s %s %s %s".formatted(
+                    AccessFlags.CLASS.getFlags(access), name, outerName, innerName)));
     }
 
     @Override
