@@ -257,7 +257,7 @@ public class MethodDecompileVisitor extends MethodVisitor {
 
     @Override
     public void visitMethodInsn(int opcode, String owner, String name, String descriptor, boolean isInterface) {
-        context.addElement(new TextElement("%s %s.%s%s".formatted(INSN_LIST.get(opcode), owner, name, descriptor)));
+        context.addElement(new TextElement("%s %s.%s%s %s".formatted(INSN_LIST.get(opcode), owner, name, descriptor, isInterface)));
     }
 
     @Override

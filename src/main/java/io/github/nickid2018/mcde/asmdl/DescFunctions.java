@@ -262,13 +262,13 @@ public class DescFunctions {
             new MethodVarIntFunction("ret", Opcodes.RET));
 
     public static final MethodInvokeFunction INVOKEVIRTUAL = register(
-            new MethodInvokeFunction("invokevirtual", Opcodes.INVOKEVIRTUAL, false));
+            new MethodInvokeFunction("invokevirtual", Opcodes.INVOKEVIRTUAL));
     public static final MethodInvokeFunction INVOKESPECIAL = register(
-            new MethodInvokeFunction("invokespecial", Opcodes.INVOKESPECIAL, false));
+            new MethodInvokeFunction("invokespecial", Opcodes.INVOKESPECIAL));
     public static final MethodInvokeFunction INVOKESTATIC = register(
-            new MethodInvokeFunction("invokestatic", Opcodes.INVOKESTATIC, false));
+            new MethodInvokeFunction("invokestatic", Opcodes.INVOKESTATIC));
     public static final MethodInvokeFunction INVOKEINTERFACE = register(
-            new MethodInvokeFunction("invokeinterface", Opcodes.INVOKEINTERFACE, true));
+            new MethodInvokeFunction("invokeinterface", Opcodes.INVOKEINTERFACE));
 
     public static final MethodFieldFunction GETFIELD = register(
             new MethodFieldFunction("getfield", Opcodes.GETFIELD));

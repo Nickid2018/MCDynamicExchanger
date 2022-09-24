@@ -78,7 +78,7 @@ public class MethodLDCFunction extends DescFunction {
             case "boolean" -> Boolean.parseBoolean(args[1]);
             case "string" -> decode(String.join(" ", Arrays.copyOfRange(args, 1, args.length)));
             case "type" -> Type.getType(args[1]);
-            case "handle" -> HandleFunction.formatAsHandle(args[1], args[2]);
+            case "handle" -> HandleFunction.formatAsHandle(args[1], args[2], Boolean.parseBoolean(args[3]));
             default -> throw new ASMDLSyntaxException("invalid constant type");
         };
     }

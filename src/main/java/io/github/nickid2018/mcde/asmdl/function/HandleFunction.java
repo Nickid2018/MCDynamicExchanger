@@ -31,7 +31,7 @@ public class HandleFunction extends DescFunction {
         HANDLE_TYPES.put("invokeinterface", Opcodes.H_INVOKEINTERFACE);
     }
 
-    public static Handle formatAsHandle(String type, String nameAndDesc) throws ASMDLSyntaxException {
+    public static Handle formatAsHandle(String type, String nameAndDesc, boolean isInterface) throws ASMDLSyntaxException {
         if (!HANDLE_TYPES.containsKey(type))
             throw new ASMDLSyntaxException("Invalid handle type: " + type);
         int opcode = HANDLE_TYPES.get(type);
@@ -48,7 +48,7 @@ public class HandleFunction extends DescFunction {
         String methodName = methodAndDesc[0];
         String desc = "(" + methodAndDesc[1];
 
-        return new Handle(opcode, className, methodName, desc, opcode == Opcodes.H_INVOKEINTERFACE);
+        return new Handle(opcode, className, methodName, desc, isInterface);
     }
 
     @Override
@@ -56,10 +56,10 @@ public class HandleFunction extends DescFunction {
         if (context.environment() != DescFunctions.INVOKEDYNAMIC && context.environment() != DescFunctions.CONSTANTDYNAMIC)
             throw new ASMDLSyntaxException("handle can only be used in invokedynamic or ldc_dynamic");
         String[] args = context.args();
-        if (args.length != 2)
-            throw new ASMDLSyntaxException("handle requires 2 arguments");
+        if (args.length != 3)
+            throw new ASMDLSyntaxException("handle requires three arguments");
 
-        Handle handle = formatAsHandle(args[0], args[1]);
+        Handle handle = formatAsHandle(args[0], args[1], Boolean.parseBoolean(args[2]));
 
         if (context.additional().size() == 2)
             context.additional().add(null);

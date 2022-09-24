@@ -9,12 +9,10 @@ import org.objectweb.asm.MethodVisitor;
 public class MethodInvokeFunction extends DescFunction {
 
     private final int opcode;
-    private final boolean isInterface;
 
-    public MethodInvokeFunction(String name, int opcode, boolean isInterface) {
+    public MethodInvokeFunction(String name, int opcode) {
         super(name);
         this.opcode = opcode;
-        this.isInterface = isInterface;
     }
 
     @Override
@@ -23,8 +21,8 @@ public class MethodInvokeFunction extends DescFunction {
             throw new ASMDLSyntaxException(name + " function must be in a method block or a label block");
 
         String[] args = context.args();
-        if (args.length != 1)
-            throw new ASMDLSyntaxException(name + " function requires one argument");
+        if (args.length != 2)
+            throw new ASMDLSyntaxException(name + " function requires two arguments");
 
         String[] splitClassName = args[0].split("\\.", 2);
         if (splitClassName.length != 2)
@@ -39,6 +37,6 @@ public class MethodInvokeFunction extends DescFunction {
         String desc = "(" + methodAndDesc[1];
 
         MethodVisitor mv = (MethodVisitor) context.visitor();
-        mv.visitMethodInsn(opcode, className, methodName, desc, isInterface);
+        mv.visitMethodInsn(opcode, className, methodName, desc, Boolean.parseBoolean(args[1]));
     }
 }

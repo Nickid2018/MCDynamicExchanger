@@ -115,7 +115,8 @@ public class TextElement {
     }
 
     public static String getHandleValue(Handle handle) {
-        return "%s %s.%s%s".formatted(HANDLE_TYPES.get(handle.getTag()), handle.getOwner(), handle.getName(), handle.getDesc());
+        return "%s %s.%s%s %s".formatted(HANDLE_TYPES.get(handle.getTag()),
+                handle.getOwner(), handle.getName(), handle.getDesc(), handle.isInterface());
     }
 
     public static TextBlockElement getConstantDynamicValue(String name, ConstantDynamic value) {

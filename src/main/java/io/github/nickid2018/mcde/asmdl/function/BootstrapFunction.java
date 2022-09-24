@@ -18,10 +18,10 @@ public class BootstrapFunction extends DescFunction {
         if (context.environment() != DescFunctions.INVOKEDYNAMIC && context.environment() != DescFunctions.CONSTANTDYNAMIC)
             throw new ASMDLSyntaxException("bootstrap can only be used in invokedynamic or ldc_dynamic");
         String[] args = context.args();
-        if (args.length != 2)
-            throw new ASMDLSyntaxException("bootstrap requires 2 arguments");
+        if (args.length != 3)
+            throw new ASMDLSyntaxException("bootstrap requires three arguments");
 
-        Handle handle = HandleFunction.formatAsHandle(args[0], args[1]);
+        Handle handle = HandleFunction.formatAsHandle(args[0], args[1], Boolean.parseBoolean(args[2]));
         if (context.additional().size() == 2)
             context.additional().add(handle);
         else
