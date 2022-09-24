@@ -94,6 +94,8 @@ public class ASMDLParser {
                     function.process(new DescFunctionContext(env, argsPass, visitorStack.peek(), labels, additional, null));
             } catch (ASMDLSyntaxException e) {
                 throw new ASMDLSyntaxException(e.getMessage() + " at line " + (i + 1));
+            } catch (Exception e) {
+                throw new ASMDLSyntaxException(e.getMessage() + " at line " + (i + 1), e);
             }
         }
 

@@ -13,8 +13,8 @@ public class InjectCommander {
 
     public InjectCommander() {
         ClassStatusCommand.register(dispatcher);
-        ClassSwapCommand.register(dispatcher);
         DecompileClassCommand.register(dispatcher);
+        SwapCommand.register(dispatcher);
     }
 
     public static LiteralArgumentBuilder<InjectorFrame> literal(String var0) {

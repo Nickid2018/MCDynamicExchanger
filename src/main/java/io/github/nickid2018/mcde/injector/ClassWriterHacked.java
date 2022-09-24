@@ -15,8 +15,32 @@ public class ClassWriterHacked extends ClassWriter {
 
     @Override
     protected String getCommonSuperClass(String type1, String type2) {
-        return super.getCommonSuperClass(
-                remapper.map(ClassUtils.toBinaryName(type1)),
-                remapper.map(ClassUtils.toBinaryName(type2)));
+        ClassLoader classLoader = getClassLoader();
+        Class<?> class1;
+        try {
+            class1 = Class.forName(ClassUtils.toBinaryName(remapper.map(ClassUtils.toBinaryName(type1))), false, classLoader);
+        } catch (ClassNotFoundException e) {
+            throw new TypeNotPresentException(type1, e);
+        }
+        Class<?> class2;
+        try {
+            class2 = Class.forName(ClassUtils.toBinaryName(remapper.map(ClassUtils.toBinaryName(type2))), false, classLoader);
+        } catch (ClassNotFoundException e) {
+            throw new TypeNotPresentException(type2, e);
+        }
+        if (class1.isAssignableFrom(class2)) {
+            return type1;
+        }
+        if (class2.isAssignableFrom(class1)) {
+            return type2;
+        }
+        if (class1.isInterface() || class2.isInterface()) {
+            return "java/lang/Object";
+        } else {
+            do {
+                class1 = class1.getSuperclass();
+            } while (!class1.isAssignableFrom(class2));
+            return class1.getName().replace('.', '/');
+        }
     }
 }

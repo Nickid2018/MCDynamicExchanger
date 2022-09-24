@@ -23,11 +23,11 @@ public class MethodVarIntFunction extends DescFunction {
         MethodVisitor mv = (MethodVisitor) context.visitor();
         String[] args = context.args();
         if (args.length < 1)
-            throw new ASMDLSyntaxException(name + "function requires an integer argument");
+            throw new ASMDLSyntaxException(name + " function requires an integer argument");
         try {
             mv.visitVarInsn(opcode, Integer.parseInt(args[0]));
         } catch (NumberFormatException e) {
-            throw new ASMDLSyntaxException(name + "function requires an integer argument");
+            throw new ASMDLSyntaxException(name + " function requires an integer argument");
         }
     }
 }

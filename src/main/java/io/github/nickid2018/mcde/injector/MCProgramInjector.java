@@ -7,6 +7,8 @@ import io.github.nickid2018.mcde.remapper.FileProcessor;
 import io.github.nickid2018.mcde.util.AsyncUtil;
 import io.github.nickid2018.mcde.util.ClassUtils;
 import io.github.nickid2018.mcde.util.I18N;
+import org.fife.ui.rsyntaxtextarea.AbstractTokenMakerFactory;
+import org.fife.ui.rsyntaxtextarea.TokenMakerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -60,13 +62,19 @@ public class MCProgramInjector {
                 return null;
             }
         });
+
         if (!TEMP_DIR.isDirectory())
             TEMP_DIR.mkdirs();
+
+        AbstractTokenMakerFactory atmf = (AbstractTokenMakerFactory) TokenMakerFactory.getDefaultInstance();
+        atmf.putMapping("text/asmdl", "io.github.nickid2018.mcde.asmdl.highlight.ASMDLTokenMaker");
+
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             if (TEMP_DIR.list() != null)
                 Stream.of(Objects.requireNonNull(TEMP_DIR.list())).forEach(s -> new File(TEMP_DIR, s).delete());
         }));
-        new InjectorFrame().show();
+
+        InjectorFrame.INSTANCE.show();
         AsyncUtil.start();
     }
 

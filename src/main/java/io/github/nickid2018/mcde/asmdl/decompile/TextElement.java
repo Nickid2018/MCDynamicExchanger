@@ -58,7 +58,7 @@ public class TextElement {
                 case ' ' -> {
                     if (x == 0)
                         outBuffer.append('\\');
-                    outBuffer.append(' ');
+                    outBuffer.append("\\u0020");
                 }
                 case '\t' -> {
                     outBuffer.append('\\');

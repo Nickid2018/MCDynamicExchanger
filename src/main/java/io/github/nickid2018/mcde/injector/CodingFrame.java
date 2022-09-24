@@ -22,6 +22,10 @@ public class CodingFrame {
     }
 
     public CodingFrame(String title, String syntaxHighlighting, boolean editable, Consumer<CodingFrame> runnable) {
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception ignored) {
+        }
         frame = new JFrame(title);
         JPanel contentPane = new JPanel();
 
@@ -55,10 +59,5 @@ public class CodingFrame {
         frame.setSize(800, 600);
         frame.setLocationByPlatform(true);
         frame.setVisible(true);
-    }
-
-    static {
-        AbstractTokenMakerFactory atmf = (AbstractTokenMakerFactory) TokenMakerFactory.getDefaultInstance();
-        atmf.putMapping("text/asmdl", "io.github.nickid2018.mcde.asmdl.highlight.ASMDLTokenMaker");
     }
 }

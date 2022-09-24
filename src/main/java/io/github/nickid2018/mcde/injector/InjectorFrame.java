@@ -10,6 +10,9 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 
 public class InjectorFrame {
+
+    public static final InjectorFrame INSTANCE = new InjectorFrame();
+
     private JTextPane outputPane;
     private JTextField inputField;
     private final JFrame frame;
