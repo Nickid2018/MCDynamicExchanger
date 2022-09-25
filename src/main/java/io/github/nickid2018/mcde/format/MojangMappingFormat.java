@@ -44,7 +44,7 @@ public class MojangMappingFormat extends MappingFormat {
     private void readComponents(BufferedReader reader) throws IOException {
         String toClass;
         String nowStr;
-        MappingClassData nowClass = new MappingClassData("" ,"");
+        MappingClassData nowClass = new MappingClassData("", "");
         while ((nowStr = reader.readLine()) != null) {
             if (nowStr.startsWith("#"))
                 continue;

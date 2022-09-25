@@ -5,10 +5,10 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import io.github.nickid2018.mcde.asmdl.ASMDLParser;
 import io.github.nickid2018.mcde.asmdl.decompile.ClassDecompileVisitor;
-import io.github.nickid2018.mcde.remapper.FileProcessor;
 import io.github.nickid2018.mcde.format.MappingFormat;
 import io.github.nickid2018.mcde.format.MojangMappingFormat;
 import io.github.nickid2018.mcde.format.YarnMappingFormat;
+import io.github.nickid2018.mcde.remapper.FileProcessor;
 import io.github.nickid2018.mcde.util.*;
 import org.apache.commons.cli.*;
 import org.apache.commons.io.FileUtils;
@@ -217,7 +217,7 @@ public class Main {
 
         LogUtils.log("process.auto.fetch");
         JsonObject data = JsonParser.parseString(IOUtils.toString(
-                new URL("https://piston-meta.mojang.com/mc/game/version_manifest.json"), StandardCharsets.UTF_8))
+                        new URL("https://piston-meta.mojang.com/mc/game/version_manifest.json"), StandardCharsets.UTF_8))
                 .getAsJsonObject();
         String url = StreamSupport.stream(data.getAsJsonArray("versions").spliterator(), false)
                 .map(JsonElement::getAsJsonObject)
@@ -228,7 +228,7 @@ public class Main {
 
         LogUtils.log("process.auto.file");
         JsonObject versionData = JsonParser.parseString(IOUtils.toString(
-                        new URL(url), StandardCharsets.UTF_8)).getAsJsonObject();
+                new URL(url), StandardCharsets.UTF_8)).getAsJsonObject();
         String clientUrl = versionData.getAsJsonObject("downloads")
                 .getAsJsonObject("client").get("url").getAsString();
         String clientMappingUrl = versionData.getAsJsonObject("downloads")

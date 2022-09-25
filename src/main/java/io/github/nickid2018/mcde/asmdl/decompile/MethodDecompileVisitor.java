@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 public class MethodDecompileVisitor extends MethodVisitor {
 
-    private static final String[] ARRAY_TYPES = new String[] {
+    private static final String[] ARRAY_TYPES = new String[]{
             "boolean", "char", "float", "double", "byte", "short", "int", "long"
     };
 

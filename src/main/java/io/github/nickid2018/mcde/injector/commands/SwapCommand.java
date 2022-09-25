@@ -1,7 +1,10 @@
 package io.github.nickid2018.mcde.injector.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
-import io.github.nickid2018.mcde.injector.*;
+import io.github.nickid2018.mcde.injector.ClassDataRepository;
+import io.github.nickid2018.mcde.injector.InjectorFrame;
+import io.github.nickid2018.mcde.injector.MCProgramInjector;
+import io.github.nickid2018.mcde.injector.WorkbenchFrame;
 import io.github.nickid2018.mcde.util.I18N;
 
 import java.lang.instrument.ClassDefinition;

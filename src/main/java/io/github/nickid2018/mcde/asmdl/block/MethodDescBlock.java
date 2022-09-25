@@ -48,7 +48,7 @@ public class MethodDescBlock extends DescBlock {
             throw new ASMDLSyntaxException("method name is required");
 
         int access = 0;
-        for (;;pointer++) {
+        for (; ; pointer++) {
             if (pointer >= args.length)
                 throw new ASMDLSyntaxException("method name is required");
             if (ACCESS_FLAGS.containsKey(args[pointer]))

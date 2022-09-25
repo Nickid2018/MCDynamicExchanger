@@ -12,7 +12,10 @@ import org.fife.ui.rsyntaxtextarea.TokenMakerFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.instrument.*;
+import java.lang.instrument.ClassDefinition;
+import java.lang.instrument.ClassFileTransformer;
+import java.lang.instrument.Instrumentation;
+import java.lang.instrument.UnmodifiableClassException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.ProtectionDomain;

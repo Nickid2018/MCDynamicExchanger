@@ -1,6 +1,9 @@
 package io.github.nickid2018.mcde.asmdl.decompile;
 
-import org.objectweb.asm.*;
+import org.objectweb.asm.AnnotationVisitor;
+import org.objectweb.asm.FieldVisitor;
+import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.TypePath;
 
 public class FieldDecompileVisitor extends FieldVisitor {
 

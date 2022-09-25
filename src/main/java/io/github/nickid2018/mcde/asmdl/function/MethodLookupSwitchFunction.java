@@ -15,7 +15,6 @@ public class MethodLookupSwitchFunction extends DescFunction {
         super("lookupswitch");
     }
 
-
     @Override
     public void process(DescFunctionContext context) throws ASMDLSyntaxException {
         if (context.environment() != DescFunctions.METHOD && context.environment() != DescFunctions.LABEL)

@@ -4,7 +4,10 @@ import io.github.nickid2018.mcde.injector.commands.InjectCommander;
 import io.github.nickid2018.mcde.util.I18N;
 
 import javax.swing.*;
-import javax.swing.text.*;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.MutableAttributeSet;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
 import java.awt.*;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -62,7 +65,8 @@ public class InjectorFrame {
     }
 
     public void show() {
-        frame.setSize(800, 600);;
+        frame.setSize(800, 600);
+        ;
         frame.setLocationByPlatform(true);
         frame.setVisible(true);
     }

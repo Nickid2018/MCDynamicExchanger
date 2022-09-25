@@ -31,7 +31,7 @@ public class MethodParameterFunction extends DescFunction {
 
         int pointer = 0;
         int access = 0;
-        for (;;pointer++) {
+        for (; ; pointer++) {
             if (pointer >= args.length)
                 throw new ASMDLSyntaxException("parameter name is required");
             if (ACCESS_FLAGS.containsKey(args[pointer]))

@@ -7,7 +7,9 @@ import io.github.nickid2018.mcde.asmdl.DescFunctions;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.FieldVisitor;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.objectweb.asm.Opcodes.*;
 
@@ -44,7 +46,7 @@ public class FieldDescBlock extends DescBlock {
             throw new ASMDLSyntaxException("field name is required");
 
         int access = 0;
-        for (;;pointer++) {
+        for (; ; pointer++) {
             if (pointer >= args.length)
                 throw new ASMDLSyntaxException("field name is required");
             if (ACCESS_FLAGS.containsKey(args[pointer]))
@@ -79,7 +81,8 @@ public class FieldDescBlock extends DescBlock {
                             value = String.join(" ", Arrays.copyOfRange(args, ++pointer, args.length));
                             pointer = args.length;
                         }
-                        default -> throw new ASMDLSyntaxException("field with a non-primitive type cannot be assigned a value");
+                        default ->
+                                throw new ASMDLSyntaxException("field with a non-primitive type cannot be assigned a value");
                     }
                     pointer++;
                 }

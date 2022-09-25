@@ -1,9 +1,6 @@
 package io.github.nickid2018.mcde.injector;
 
-import io.github.nickid2018.mcde.util.ConsumerE;
-import org.fife.ui.rsyntaxtextarea.AbstractTokenMakerFactory;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
-import org.fife.ui.rsyntaxtextarea.TokenMakerFactory;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
 import javax.swing.*;
@@ -18,7 +15,8 @@ public class CodingFrame {
     private final RSyntaxTextArea textArea;
 
     public CodingFrame(String title, String syntaxHighlighting, boolean editable) {
-        this(title, syntaxHighlighting, editable, f -> {});
+        this(title, syntaxHighlighting, editable, f -> {
+        });
     }
 
     public CodingFrame(String title, String syntaxHighlighting, boolean editable, Consumer<CodingFrame> runnable) {

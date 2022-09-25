@@ -7,11 +7,6 @@ import io.github.nickid2018.mcde.asmdl.DescFunctions;
 import io.github.nickid2018.mcde.asmdl.block.ClassDescBlock;
 import org.objectweb.asm.ClassWriter;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import static org.objectweb.asm.Opcodes.*;
-
 public class ClassInnerClassFunction extends DescFunction {
 
     public ClassInnerClassFunction() {
@@ -29,7 +24,7 @@ public class ClassInnerClassFunction extends DescFunction {
             throw new ASMDLSyntaxException("inner class name is required");
 
         int access = 0;
-        for (;;pointer++) {
+        for (; ; pointer++) {
             if (pointer >= args.length)
                 throw new ASMDLSyntaxException("inner class name is required");
             if (ClassDescBlock.ACCESS_FLAGS.containsKey(args[pointer]))

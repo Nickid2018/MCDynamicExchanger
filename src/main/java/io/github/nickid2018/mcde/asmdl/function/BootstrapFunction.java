@@ -5,7 +5,6 @@ import io.github.nickid2018.mcde.asmdl.DescFunction;
 import io.github.nickid2018.mcde.asmdl.DescFunctionContext;
 import io.github.nickid2018.mcde.asmdl.DescFunctions;
 import org.objectweb.asm.Handle;
-import org.objectweb.asm.MethodVisitor;
 
 public class BootstrapFunction extends DescFunction {
 
