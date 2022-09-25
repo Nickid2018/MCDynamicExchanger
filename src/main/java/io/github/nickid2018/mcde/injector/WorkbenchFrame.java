@@ -14,6 +14,8 @@ import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -33,15 +35,11 @@ public class WorkbenchFrame {
     private final Map<String, RSyntaxTextArea> textAreas = new HashMap<>();
     private final Map<String, String> codes = new HashMap<>();
 
-    private final Consumer<Map<String, byte[]>> onApply;
-
     public WorkbenchFrame(String title, Consumer<Map<String, byte[]>> onApply) {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception ignored) {
         }
-
-        this.onApply = onApply;
 
         frame = new JFrame(title);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -96,7 +94,7 @@ public class WorkbenchFrame {
         });
         listMenu.add(process);
 
-        list.addMouseListener(new PopupListener(listMenu));
+        list.setComponentPopupMenu(listMenu);
 
         frame.setSize(800, 600);
         frame.setLocationRelativeTo(null);
@@ -149,41 +147,5 @@ public class WorkbenchFrame {
     public void syncCodes() {
         for (String name : fileList)
             codes.put(name, textAreas.get(name).getText());
-    }
-
-    private static class PopupListener extends MouseAdapter {
-
-        private final JPopupMenu popup;
-
-        public PopupListener(JPopupMenu popup) {
-            this.popup = popup;
-        }
-
-        public void mousePressed(MouseEvent e) {
-            maybeShowPopup(e);
-        }
-
-        public void mouseReleased(MouseEvent e) {
-            maybeShowPopup(e);
-        }
-
-        private void maybeShowPopup(MouseEvent e) {
-            if (e.isPopupTrigger()) {
-                popup.show(e.getComponent(),
-                        e.getX(), e.getY());
-            }
-        }
-    }
-
-    public static void main(String[] args) throws UnsupportedLookAndFeelException, ClassNotFoundException, InstantiationException, IllegalAccessException {
-        AbstractTokenMakerFactory atmf = (AbstractTokenMakerFactory) TokenMakerFactory.getDefaultInstance();
-        atmf.putMapping("text/asmdl", "io.github.nickid2018.mcde.asmdl.highlight.ASMDLTokenMaker");
-        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        WorkbenchFrame frame = new WorkbenchFrame("Workbench", map -> {
-        });
-        frame.show();
-        frame.addCode("test", "test");
-        frame.addCode("test2", "test");
-        frame.addCode("test3", "test");
     }
 }
