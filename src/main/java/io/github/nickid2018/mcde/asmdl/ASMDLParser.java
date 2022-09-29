@@ -35,7 +35,7 @@ public class ASMDLParser {
                 if (line.isEmpty() || line.startsWith("#"))
                     continue;
 
-                String[] args = line.split(" ");
+                String[] args = line.split("#")[0].split(" ");
                 if (args.length == 0)
                     continue;
 

@@ -7,6 +7,7 @@ import org.fife.ui.rtextarea.RTextScrollPane;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.function.Consumer;
 
 public class CodingFrame {
@@ -14,6 +15,7 @@ public class CodingFrame {
     private final JFrame frame;
 
     private final RSyntaxTextArea textArea;
+    private FindDialog findDialog;
 
     public CodingFrame(String title, String syntaxHighlighting, boolean editable) {
         this(title, syntaxHighlighting, editable, f -> {
@@ -47,21 +49,28 @@ public class CodingFrame {
 
         JMenuItem find = new JMenuItem(I18N.getTranslation("injector.find_dialog.name"));
         find.setAccelerator(KeyStroke.getKeyStroke("control F"));
-        find.addActionListener(e -> new FindDialog(textArea).setVisible(true));
+        find.addActionListener(e -> showFindDialog());
         textArea.getPopupMenu().add(find);
+        textArea.registerKeyboardAction(e -> showFindDialog(),
+                KeyStroke.getKeyStroke("control F"), JComponent.WHEN_FOCUSED);
     }
 
     public void setCode(String code) {
         textArea.setText(code);
     }
 
-    public String getCode() {
-        return textArea.getText();
-    }
-
     public void show() {
         frame.setSize(800, 600);
         frame.setLocationByPlatform(true);
         frame.setVisible(true);
+    }
+
+    private void showFindDialog() {
+        if (findDialog != null) {
+            findDialog.setVisible(false);
+            findDialog.dispose();
+        }
+        findDialog = new FindDialog(textArea);
+        findDialog.setVisible(true);
     }
 }

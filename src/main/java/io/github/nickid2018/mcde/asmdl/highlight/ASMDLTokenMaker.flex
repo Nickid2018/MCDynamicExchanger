@@ -75,7 +75,7 @@ import org.fife.ui.rsyntaxtextarea.*;
     *         it out.
     */
    public String[] getLineCommentStartAndEnd() {
-      return new String[] { "//", null };
+      return new String[] { "#", null };
    }
 
    /**
@@ -165,6 +165,8 @@ Separator2            = ([,])
 
 Identifier            = ({IdentifierStart}{IdentifierPart}*)
 
+LineCommentBegin         = "#"
+
 %%
 
 <YYINITIAL> {
@@ -172,11 +174,11 @@ Identifier            = ({IdentifierStart}{IdentifierPart}*)
    /* Keywords */
    "class" | "method" | "field" | "label" | "true" | "false" | "value" | "signature" | "extends" |
    "public" | "protected" | "private" | "static" | "final" | "synthetic" | "abstract" | "implements" |
-   "interface" | "super" | "enum" | "bridge" | "synchoronized" | "volatile" | "transient" |
+   "interface" | "super" | "enum" | "bridge" | "synchoronized" | "volatile" | "transient" | "throws" |
    "native" | "varargs" | "strict" | "outerclass" | "annotation" | "nesthost" | "nestmember" | "innerclass" { addToken(Token.RESERVED_WORD); }
 
    /* Data types */
-   "byte" | "char" | "double" | "float" | "int" | "short" | "boolean" | "handle" | "type" | "string" { addToken(Token.DATA_TYPE); }
+   "byte" | "char" | "double" | "long" | "float" | "int" | "short" | "boolean" | "handle" | "type" | "string" { addToken(Token.DATA_TYPE); }
 
    /* Functions */
    "lookupswitch" | "isub" | "if_icmpeq" | "aaload" | "laload" | "iconst_m1" | "if_icmpne" |
@@ -210,6 +212,8 @@ Identifier            = ({IdentifierStart}{IdentifierPart}*)
    /* Numbers */
    {IntegerLiteral}         { addToken(Token.LITERAL_NUMBER_DECIMAL_INT); }
    {FloatingPointLiteral}   { addToken(Token.LITERAL_NUMBER_FLOAT); }
+
+   {LineCommentBegin}.*      { addToken(Token.COMMENT_EOL); addNullToken(); return firstToken; }
 
    /* Ended with a line not in a string or comment. */
    \n |

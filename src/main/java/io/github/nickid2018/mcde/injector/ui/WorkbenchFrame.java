@@ -32,6 +32,8 @@ public class WorkbenchFrame {
     private final Map<String, RSyntaxTextArea> textAreas = new HashMap<>();
     private final Map<String, String> codes = new HashMap<>();
 
+    private FindDialog findDialog;
+
     public WorkbenchFrame(String title, Consumer<Map<String, byte[]>> onApply) {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -136,8 +138,10 @@ public class WorkbenchFrame {
         textArea.setText(code);
         JMenuItem find = new JMenuItem(I18N.getTranslation("injector.find_dialog.name"));
         find.setAccelerator(KeyStroke.getKeyStroke("control F"));
-        find.addActionListener(e -> new FindDialog(textArea).setVisible(true));
+        find.addActionListener(e -> showFindDialog(textArea));
         textArea.getPopupMenu().add(find);
+        textArea.registerKeyboardAction(e -> showFindDialog(textArea),
+                KeyStroke.getKeyStroke("control F"), JComponent.WHEN_FOCUSED);
         textAreas.put(name, textArea);
         fileList.add(name);
         list.setListData(fileList.toArray(String[]::new));
@@ -148,5 +152,19 @@ public class WorkbenchFrame {
     public void syncCodes() {
         for (String name : fileList)
             codes.put(name, textAreas.get(name).getText());
+    }
+
+    private void showFindDialog(RSyntaxTextArea textArea) {
+        if (findDialog != null) {
+            if (findDialog.getTextArea().equals(textArea) && findDialog.isVisible()) {
+                findDialog.requestFocus();
+                return;
+            } else {
+                findDialog.setVisible(false);
+                findDialog.dispose();
+            }
+        }
+        findDialog = new FindDialog(textArea);
+        findDialog.setVisible(true);
     }
 }

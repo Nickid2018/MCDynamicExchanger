@@ -60,6 +60,9 @@ public class TextElement {
                         outBuffer.append('\\');
                     outBuffer.append("\\u0020");
                 }
+                case '#' -> {
+                    outBuffer.append("\\u0023");
+                }
                 case '\t' -> {
                     outBuffer.append('\\');
                     outBuffer.append('t');
@@ -76,7 +79,7 @@ public class TextElement {
                     outBuffer.append('\\');
                     outBuffer.append('f');
                 }
-                case '=', ':', '#', '!' -> {
+                case '=', ':', '!' -> {
                     outBuffer.append('\\');
                     outBuffer.append(aChar);
                 }

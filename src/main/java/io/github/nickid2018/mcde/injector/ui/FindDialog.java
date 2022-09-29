@@ -2,6 +2,7 @@ package io.github.nickid2018.mcde.injector.ui;
 
 import io.github.nickid2018.mcde.util.I18N;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+import org.fife.ui.rtextarea.RTextArea;
 import org.fife.ui.rtextarea.SearchContext;
 import org.fife.ui.rtextarea.SearchEngine;
 
@@ -25,8 +26,9 @@ public class FindDialog extends JDialog {
 
     public FindDialog(RSyntaxTextArea textArea) {
         setContentPane(contentPane);
-        setLocationRelativeTo(textArea);
         setAlwaysOnTop(true);
+        setLocationRelativeTo(null);
+        setTitle(I18N.getTranslation("injector.find_dialog.name"));
         this.textArea = textArea;
         createUIComponents();
         pack();
@@ -44,8 +46,8 @@ public class FindDialog extends JDialog {
 
         btnFindNext.addActionListener(e -> find(true));
         btnFindPrev.addActionListener(e -> find(false));
-        btnReplace.addActionListener(e -> replace());
-        btnReplaceAll.addActionListener(e -> replaceAll());
+        btnReplace.addActionListener(e -> replace(false));
+        btnReplaceAll.addActionListener(e -> replace(true));
     }
 
     private void find(boolean next) {
@@ -66,7 +68,7 @@ public class FindDialog extends JDialog {
                     "injector.find_dialog.message.not_found"));
     }
 
-    private void replace() {
+    private void replace(boolean all) {
         String text = findField.getText();
         if (text.length() == 0)
             return;
@@ -81,31 +83,14 @@ public class FindDialog extends JDialog {
         context.setWholeWord(false);
         context.setReplaceWith(replace);
 
-        boolean found = SearchEngine.replace(textArea, context).wasFound();
+        boolean found = (all ? SearchEngine.replaceAll(textArea, context) : SearchEngine.replace(textArea, context)).wasFound();
         if (!found)
             JOptionPane.showMessageDialog(this, I18N.getTranslation(
                     "injector.find_dialog.message.not_found"));
     }
 
-    private void replaceAll() {
-        String text = findField.getText();
-        if (text.length() == 0)
-            return;
-
-        String replace = replaceField.getText();
-
-        SearchContext context = new SearchContext();
-        context.setSearchFor(text);
-        context.setMatchCase(checkCase.isSelected());
-        context.setRegularExpression(checkRegex.isSelected());
-        context.setSearchForward(true);
-        context.setWholeWord(false);
-        context.setReplaceWith(replace);
-
-        boolean found = SearchEngine.replaceAll(textArea, context).wasFound();
-        if (!found)
-            JOptionPane.showMessageDialog(this, I18N.getTranslation(
-                    "injector.find_dialog.message.not_found"));
+    public RTextArea getTextArea() {
+        return textArea;
     }
 
     {
