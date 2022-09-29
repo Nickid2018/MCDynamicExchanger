@@ -25,6 +25,7 @@ dependencies {
     implementation("org.benf:cfr:0.152")
     implementation("com.mojang:brigadier:1.0.18")
     implementation("com.fifesoft:rsyntaxtextarea:3.2.0")
+    implementation("com.github.adedayo.intellij.sdk:forms_rt:142.1")
 }
 
 jar {

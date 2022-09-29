@@ -1,5 +1,6 @@
-package io.github.nickid2018.mcde.injector;
+package io.github.nickid2018.mcde.injector.ui;
 
+import io.github.nickid2018.mcde.util.I18N;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
@@ -43,6 +44,11 @@ public class CodingFrame {
                 runnable.accept(CodingFrame.this);
             }
         });
+
+        JMenuItem find = new JMenuItem(I18N.getTranslation("injector.find_dialog.name"));
+        find.setAccelerator(KeyStroke.getKeyStroke("control F"));
+        find.addActionListener(e -> new FindDialog(textArea).setVisible(true));
+        textArea.getPopupMenu().add(find);
     }
 
     public void setCode(String code) {

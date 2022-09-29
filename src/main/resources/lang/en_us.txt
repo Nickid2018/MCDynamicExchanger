@@ -50,6 +50,16 @@ injector.workbench.process = Process
 injector.workbench.class = Please input the class name
 injector.workbench.class.notfound = Class %s(Obfuscate name %s) can't be found
 injector.workbench.syntaxerror = ASMDL Syntax error: %s
+injector.find_dialog.name = Find and replace
+injector.find_dialog.label.find = Find
+injector.find_dialog.label.replace = Replace
+injector.find_dialog.button.replace_all = Replace All
+injector.find_dialog.button.replace = Replace
+injector.find_dialog.button.find_next = Find Next
+injector.find_dialog.button.find_prev = Find Previous
+injector.find_dialog.checkbox.case = Case sensitive
+injector.find_dialog.checkbox.regex = Regular expression
+injector.find_dialog.message.not_found = Text not found
 
 error.unknown = Unknown error occurred, please report this to the developer at https://github.com/Nickid2018/MCDynamicExchanger
 error.argument = Argument count is not correct or argument is not valid

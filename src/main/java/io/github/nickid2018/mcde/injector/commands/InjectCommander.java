@@ -5,7 +5,7 @@ import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import io.github.nickid2018.mcde.injector.InjectorFrame;
+import io.github.nickid2018.mcde.injector.ui.InjectorFrame;
 
 public class InjectCommander {
 

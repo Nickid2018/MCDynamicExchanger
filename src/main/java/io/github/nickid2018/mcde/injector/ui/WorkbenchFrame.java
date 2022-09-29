@@ -1,8 +1,11 @@
-package io.github.nickid2018.mcde.injector;
+package io.github.nickid2018.mcde.injector.ui;
 
 import io.github.nickid2018.mcde.asmdl.ASMDLParser;
 import io.github.nickid2018.mcde.asmdl.ASMDLSyntaxException;
 import io.github.nickid2018.mcde.asmdl.decompile.ClassDecompileVisitor;
+import io.github.nickid2018.mcde.injector.ClassDataRepository;
+import io.github.nickid2018.mcde.injector.ClassWriterHacked;
+import io.github.nickid2018.mcde.injector.MCProgramInjector;
 import io.github.nickid2018.mcde.remapper.ClassRemapperFix;
 import io.github.nickid2018.mcde.util.ClassUtils;
 import io.github.nickid2018.mcde.util.I18N;
@@ -131,6 +134,10 @@ public class WorkbenchFrame {
         textArea.setSyntaxEditingStyle("text/asmdl");
         textArea.setCodeFoldingEnabled(true);
         textArea.setText(code);
+        JMenuItem find = new JMenuItem(I18N.getTranslation("injector.find_dialog.name"));
+        find.setAccelerator(KeyStroke.getKeyStroke("control F"));
+        find.addActionListener(e -> new FindDialog(textArea).setVisible(true));
+        textArea.getPopupMenu().add(find);
         textAreas.put(name, textArea);
         fileList.add(name);
         list.setListData(fileList.toArray(String[]::new));

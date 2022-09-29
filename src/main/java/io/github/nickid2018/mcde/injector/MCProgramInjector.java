@@ -3,12 +3,15 @@ package io.github.nickid2018.mcde.injector;
 import io.github.nickid2018.mcde.format.MappingFormat;
 import io.github.nickid2018.mcde.format.MojangMappingFormat;
 import io.github.nickid2018.mcde.format.YarnMappingFormat;
+import io.github.nickid2018.mcde.injector.ui.InjectorFrame;
 import io.github.nickid2018.mcde.remapper.FileProcessor;
 import io.github.nickid2018.mcde.util.AsyncUtil;
 import io.github.nickid2018.mcde.util.ClassUtils;
 import io.github.nickid2018.mcde.util.I18N;
 import org.fife.ui.rsyntaxtextarea.AbstractTokenMakerFactory;
 import org.fife.ui.rsyntaxtextarea.TokenMakerFactory;
+import org.fife.ui.rsyntaxtextarea.folding.CurlyFoldParser;
+import org.fife.ui.rsyntaxtextarea.folding.FoldParserManager;
 
 import java.io.File;
 import java.io.IOException;
@@ -71,6 +74,7 @@ public class MCProgramInjector {
 
         AbstractTokenMakerFactory atmf = (AbstractTokenMakerFactory) TokenMakerFactory.getDefaultInstance();
         atmf.putMapping("text/asmdl", "io.github.nickid2018.mcde.asmdl.highlight.ASMDLTokenMaker");
+        FoldParserManager.get().addFoldParserMapping("text/asmdl", new CurlyFoldParser(false, false));
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             if (TEMP_DIR.list() != null)

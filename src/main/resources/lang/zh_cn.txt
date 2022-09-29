@@ -50,6 +50,16 @@ injector.workbench.process = 执行操作
 injector.workbench.class = 输入类名
 injector.workbench.class.notfound = 类%s（混淆名为%s）无法找到
 injector.workbench.syntaxerror = ASMDL语法错误: %s
+injector.find_dialog.name = 查找与替换
+injector.find_dialog.label.find = 查找
+injector.find_dialog.label.replace = 替换
+injector.find_dialog.button.replace_all = 替换全部
+injector.find_dialog.button.replace = 替换
+injector.find_dialog.button.find_next = 查找下一个
+injector.find_dialog.button.find_prev = 查找上一个
+injector.find_dialog.checkbox.case = 区分大小写
+injector.find_dialog.checkbox.regex = 正则表达式
+injector.find_dialog.message.not_found = 未找到指定文本
 
 error.unknown = 发生未知错误，请报告给开发者（仓库地址https://github.com/Nickid2018/MCDynamicExchanger）
 error.argument = 参数数量或格式不正确

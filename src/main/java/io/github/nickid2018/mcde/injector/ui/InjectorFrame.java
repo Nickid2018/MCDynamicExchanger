@@ -1,4 +1,4 @@
-package io.github.nickid2018.mcde.injector;
+package io.github.nickid2018.mcde.injector.ui;
 
 import io.github.nickid2018.mcde.injector.commands.InjectCommander;
 import io.github.nickid2018.mcde.util.I18N;
