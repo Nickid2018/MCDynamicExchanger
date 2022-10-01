@@ -1,6 +1,7 @@
 package io.github.nickid2018.mcde.injector.ui;
 
 import io.github.nickid2018.mcde.util.I18N;
+import org.fife.ui.autocomplete.CompletionProvider;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rtextarea.RTextScrollPane;
 

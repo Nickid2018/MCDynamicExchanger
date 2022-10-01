@@ -100,8 +100,4 @@ public class MCProgramInjector {
         }
         format.createToSourceMapper();
     }
-
-    public static void swapClass(ClassDefinition definition) throws UnmodifiableClassException, ClassNotFoundException {
-        instrumentation.redefineClasses(definition);
-    }
 }

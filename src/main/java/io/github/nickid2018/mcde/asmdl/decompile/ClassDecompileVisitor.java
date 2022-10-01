@@ -77,7 +77,9 @@ public class ClassDecompileVisitor extends ClassVisitor {
 
     @Override
     public FieldVisitor visitField(int access, String name, String descriptor, String signature, Object value) {
-        String base = "field %s %s %s".formatted(AccessFlags.FIELD.getFlags(access), name, descriptor);
+        String accessFlags = AccessFlags.FIELD.getFlags(access);
+        String base = accessFlags.isEmpty() ? "field %s %s".formatted(name, descriptor)
+                : "field %s %s %s".formatted(accessFlags, name, descriptor);
         if (signature != null)
             base += " signature %s".formatted(signature);
         if (value != null)
@@ -89,7 +91,9 @@ public class ClassDecompileVisitor extends ClassVisitor {
 
     @Override
     public MethodVisitor visitMethod(int access, String name, String descriptor, String signature, String[] exceptions) {
-        String base = "method %s %s %s".formatted(AccessFlags.METHOD.getFlags(access), name, descriptor);
+        String accessFlags = AccessFlags.FIELD.getFlags(access);
+        String base = accessFlags.isEmpty() ? "method %s %s".formatted(name, descriptor)
+                : "method %s %s %s".formatted(accessFlags, name, descriptor);
         if (signature != null)
             base += " signature %s".formatted(signature);
         if (exceptions != null && exceptions.length > 0)
