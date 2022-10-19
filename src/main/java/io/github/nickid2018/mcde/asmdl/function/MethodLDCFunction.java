@@ -89,9 +89,6 @@ public class MethodLDCFunction extends DescFunction {
             throw new ASMDLSyntaxException("ldc function must be in a method block or a label block");
 
         String[] args = context.args();
-        if (args.length < 2)
-            throw new ASMDLSyntaxException("ldc function requires 2 arguments");
-
         MethodVisitor mv = (MethodVisitor) context.visitor();
         mv.visitLdcInsn(formatLDC(args));
     }
