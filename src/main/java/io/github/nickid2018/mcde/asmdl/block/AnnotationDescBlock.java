@@ -47,6 +47,8 @@ public class AnnotationDescBlock extends DescBlock {
             "class_extends", TypeReference.CLASS_EXTENDS
     );
 
+
+
     @Override
     public AnnotationVisitor processStart(DescFunctionContext context) throws ASMDLSyntaxException {
         String[] args = context.args();
@@ -70,7 +72,7 @@ public class AnnotationDescBlock extends DescBlock {
                     TypePath path = TypePath.fromString(args[1]);
                     String desc = args[2];
                     boolean visible = Boolean.parseBoolean(args[3]);
-                    yield visitor.visitTypeAnnotation(TypeReference.FIELD, path, desc, visible);
+                    yield visitor.visitTypeAnnotation(TypeReference.newTypeReference(TypeReference.FIELD).getValue(), path, desc, visible);
                 }
                 default -> throw new ASMDLSyntaxException("unknown annotation type: " + args[0]);
             };
@@ -86,13 +88,24 @@ public class AnnotationDescBlock extends DescBlock {
                     if (args.length != 5)
                         throw new ASMDLSyntaxException("annotation method_type needs 4 argument");
                     MethodVisitor visitor = (MethodVisitor) context.visitor();
-                    if (!METHOD_TYPE_REFERENCE_KINDS.containsKey(args[1]))
+                    String[] typeRef = args[1].split(",");
+
+                    if (!METHOD_TYPE_REFERENCE_KINDS.containsKey(typeRef[0]))
                         throw new ASMDLSyntaxException("unknown method type reference kind: " + args[1]);
-                    int kind = METHOD_TYPE_REFERENCE_KINDS.get(args[1]);
+                    int kind = METHOD_TYPE_REFERENCE_KINDS.get(typeRef[0]);
+
+                    int refInt = (switch (kind) {
+                        case TypeReference.METHOD_RETURN, TypeReference.THROWS, TypeReference.METHOD_RECEIVER -> TypeReference.newTypeReference(kind);
+                        case TypeReference.METHOD_FORMAL_PARAMETER -> TypeReference.newFormalParameterReference(Integer.parseInt(typeRef[1]));
+                        case TypeReference.METHOD_TYPE_PARAMETER -> TypeReference.newTypeParameterReference(kind, Integer.parseInt(typeRef[1]));
+                        case TypeReference.METHOD_TYPE_PARAMETER_BOUND -> TypeReference.newTypeParameterBoundReference(kind, Integer.parseInt(typeRef[1]), Integer.parseInt(typeRef[2]));
+                        default -> throw new ASMDLSyntaxException("unknown method type reference: " + args[1]);
+                    }).getValue();
+
                     TypePath path = TypePath.fromString(args[2]);
                     String desc = args[3];
                     boolean visible = Boolean.parseBoolean(args[4]);
-                    yield visitor.visitTypeAnnotation(kind, path, desc, visible);
+                    yield visitor.visitTypeAnnotation(refInt, path, desc, visible);
                 }
                 case "default" -> {
                     if (args.length != 1)
@@ -107,11 +120,11 @@ public class AnnotationDescBlock extends DescBlock {
                     yield visitor.visitParameterAnnotation(Integer.parseInt(args[1]), args[2], Boolean.parseBoolean(args[3]));
                 }
                 case "try_catch" -> {
-                    if (args.length != 4)
-                        throw new ASMDLSyntaxException("annotation try_catch needs 3 arguments");
+                    if (args.length != 5)
+                        throw new ASMDLSyntaxException("annotation try_catch needs 5 arguments");
                     MethodVisitor visitor = (MethodVisitor) context.visitor();
-                    yield visitor.visitTryCatchAnnotation(TypeReference.EXCEPTION_PARAMETER,
-                            TypePath.fromString(args[1]), args[2], Boolean.parseBoolean(args[3]));
+                    yield visitor.visitTryCatchAnnotation(TypeReference.newExceptionReference(Integer.parseInt(args[1])).getValue(),
+                            TypePath.fromString(args[2]), args[3], Boolean.parseBoolean(args[4]));
                 }
                 case "local" -> {
                     if (args.length != 8)
@@ -134,17 +147,31 @@ public class AnnotationDescBlock extends DescBlock {
                     } catch (Exception e) {
                         throw new ASMDLSyntaxException("local requires an integer sequence");
                     }
-                    yield visitor.visitLocalVariableAnnotation(kind,
+                    yield visitor.visitLocalVariableAnnotation(TypeReference.newTypeReference(kind).getValue(),
                             TypePath.fromString(args[2]), starts, ends, labelsInts, args[6], Boolean.parseBoolean(args[7]));
                 }
                 case "insn" -> {
                     if (args.length != 5)
                         throw new ASMDLSyntaxException("annotation insn needs 4 arguments");
                     MethodVisitor visitor = (MethodVisitor) context.visitor();
-                    if (!INSN_TYPE_REFERENCE_KINDS.containsKey(args[1]))
-                        throw new ASMDLSyntaxException("unknown insn type reference kind: " + args[1]);
-                    int kind = INSN_TYPE_REFERENCE_KINDS.get(args[1]);
-                    yield visitor.visitInsnAnnotation(kind, TypePath.fromString(args[2]), args[3], Boolean.parseBoolean(args[4]));
+
+                    String[] typeRef = args[1].split(",");
+
+                    if (!INSN_TYPE_REFERENCE_KINDS.containsKey(typeRef[0]))
+                        throw new ASMDLSyntaxException("unknown method type reference kind: " + args[1]);
+                    int kind = INSN_TYPE_REFERENCE_KINDS.get(typeRef[0]);
+
+                    int refInt = (switch (kind) {
+                        case TypeReference.NEW, TypeReference.INSTANCEOF,
+                                TypeReference.CONSTRUCTOR_REFERENCE, TypeReference.METHOD_REFERENCE ->
+                                TypeReference.newTypeReference(kind);
+                        case TypeReference.CAST, TypeReference.CONSTRUCTOR_INVOCATION_TYPE_ARGUMENT,
+                                TypeReference.METHOD_INVOCATION_TYPE_ARGUMENT, TypeReference.CONSTRUCTOR_REFERENCE_TYPE_ARGUMENT,
+                                TypeReference.METHOD_REFERENCE_TYPE_ARGUMENT -> TypeReference.newTypeArgumentReference(kind, Integer.parseInt(typeRef[1]));
+                        default -> throw new ASMDLSyntaxException("unknown method type reference: " + args[1]);
+                    }).getValue();
+
+                    yield visitor.visitInsnAnnotation(refInt, TypePath.fromString(args[2]), args[3], Boolean.parseBoolean(args[4]));
                 }
                 default -> throw new ASMDLSyntaxException("unknown annotation type: " + args[0]);
             };
@@ -161,13 +188,24 @@ public class AnnotationDescBlock extends DescBlock {
                     if (args.length != 5)
                         throw new ASMDLSyntaxException("annotation class_type needs 4 argument");
                     ClassVisitor visitor = (ClassVisitor) context.visitor();
-                    if (!CLASS_TYPE_REFERENCE_KINDS.containsKey(args[1]))
-                        throw new ASMDLSyntaxException("unknown class type reference kind: " + args[1]);
-                    int kind = CLASS_TYPE_REFERENCE_KINDS.get(args[1]);
+
+                    String[] typeRef = args[1].split(",");
+
+                    if (!CLASS_TYPE_REFERENCE_KINDS.containsKey(typeRef[0]))
+                        throw new ASMDLSyntaxException("unknown method type reference kind: " + args[1]);
+                    int kind = CLASS_TYPE_REFERENCE_KINDS.get(typeRef[0]);
+
+                    int refInt = (switch (kind) {
+                        case TypeReference.CLASS_TYPE_PARAMETER -> TypeReference.newTypeParameterReference(kind, Integer.parseInt(typeRef[1]));
+                        case TypeReference.CLASS_TYPE_PARAMETER_BOUND -> TypeReference.newTypeParameterBoundReference(kind, Integer.parseInt(typeRef[1]), Integer.parseInt(typeRef[2]));
+                        case TypeReference.CLASS_EXTENDS -> TypeReference.newSuperTypeReference(kind);
+                        default -> throw new ASMDLSyntaxException("unknown method type reference: " + args[1]);
+                    }).getValue();
+
                     TypePath path = TypePath.fromString(args[2]);
                     String desc = args[3];
                     boolean visible = Boolean.parseBoolean(args[4]);
-                    yield visitor.visitTypeAnnotation(kind, path, desc, visible);
+                    yield visitor.visitTypeAnnotation(refInt, path, desc, visible);
                 }
                 default -> throw new ASMDLSyntaxException("unknown annotation type: " + args[0]);
             };
@@ -184,13 +222,24 @@ public class AnnotationDescBlock extends DescBlock {
                     if (args.length != 5)
                         throw new ASMDLSyntaxException("annotation record_component_type needs 4 argument");
                     RecordComponentVisitor visitor = (RecordComponentVisitor) context.visitor();
-                    if (!CLASS_TYPE_REFERENCE_KINDS.containsKey(args[1]))
-                        throw new ASMDLSyntaxException("unknown record component type reference kind: " + args[1]);
-                    int kind = CLASS_TYPE_REFERENCE_KINDS.get(args[1]);
+
+                    String[] typeRef = args[1].split(",");
+
+                    if (!CLASS_TYPE_REFERENCE_KINDS.containsKey(typeRef[0]))
+                        throw new ASMDLSyntaxException("unknown method type reference kind: " + args[1]);
+                    int kind = CLASS_TYPE_REFERENCE_KINDS.get(typeRef[0]);
+
+                    int refInt = (switch (kind) {
+                        case TypeReference.CLASS_TYPE_PARAMETER -> TypeReference.newTypeParameterReference(kind, Integer.parseInt(typeRef[1]));
+                        case TypeReference.CLASS_TYPE_PARAMETER_BOUND -> TypeReference.newTypeParameterBoundReference(kind, Integer.parseInt(typeRef[1]), Integer.parseInt(typeRef[2]));
+                        case TypeReference.CLASS_EXTENDS -> TypeReference.newSuperTypeReference(kind);
+                        default -> throw new ASMDLSyntaxException("unknown method type reference: " + args[1]);
+                    }).getValue();
+
                     TypePath path = TypePath.fromString(args[2]);
                     String desc = args[3];
                     boolean visible = Boolean.parseBoolean(args[4]);
-                    yield visitor.visitTypeAnnotation(kind, path, desc, visible);
+                    yield visitor.visitTypeAnnotation(refInt, path, desc, visible);
                 }
                 default -> throw new ASMDLSyntaxException("unknown annotation type: " + args[0]);
             };

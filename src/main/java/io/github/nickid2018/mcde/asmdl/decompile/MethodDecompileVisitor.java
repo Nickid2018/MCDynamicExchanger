@@ -13,32 +13,6 @@ public class MethodDecompileVisitor extends MethodVisitor {
             "boolean", "char", "float", "double", "byte", "short", "int", "long"
     };
 
-    public static final Map<Integer, String> METHOD_TYPE_REFERENCE_KINDS = Map.of(
-            TypeReference.METHOD_TYPE_PARAMETER, "method_type_parameter",
-            TypeReference.METHOD_TYPE_PARAMETER_BOUND, "method_type_parameter_bound",
-            TypeReference.METHOD_RETURN, "method_return",
-            TypeReference.METHOD_RECEIVER, "method_receiver",
-            TypeReference.METHOD_FORMAL_PARAMETER, "method_formal_parameter",
-            TypeReference.THROWS, "throws"
-    );
-
-    public static final Map<Integer, String> LOCAL_VARIABLE_TYPE_REFERENCE_KINDS = Map.of(
-            TypeReference.LOCAL_VARIABLE, "local_variable",
-            TypeReference.RESOURCE_VARIABLE, "resource_variable"
-    );
-
-    public static final Map<Integer, String> INSN_TYPE_REFERENCE_KINDS = Map.of(
-            TypeReference.INSTANCEOF, "instanceof",
-            TypeReference.NEW, "new",
-            TypeReference.CONSTRUCTOR_REFERENCE, "constructor_reference",
-            TypeReference.METHOD_REFERENCE, "method_reference",
-            TypeReference.CAST, "cast",
-            TypeReference.CONSTRUCTOR_INVOCATION_TYPE_ARGUMENT, "constructor_invocation_type_argument",
-            TypeReference.METHOD_INVOCATION_TYPE_ARGUMENT, "method_invocation_type_argument",
-            TypeReference.CONSTRUCTOR_REFERENCE_TYPE_ARGUMENT, "constructor_reference_type_argument",
-            TypeReference.METHOD_REFERENCE_TYPE_ARGUMENT, "method_reference_type_argument"
-    );
-
     public static final Map<Integer, String> INSN_LIST = new HashMap<>();
 
     static {
@@ -349,7 +323,7 @@ public class MethodDecompileVisitor extends MethodVisitor {
     @Override
     public AnnotationVisitor visitTypeAnnotation(int typeRef, TypePath typePath, String descriptor, boolean visible) {
         TextBlockElement block = new TextBlockElement("annotation method_type %s %s %s %s".formatted(
-                METHOD_TYPE_REFERENCE_KINDS.get(typeRef), typePath, descriptor, visible));
+                TextElement.getTypeReference(typeRef), typePath, descriptor, visible));
         context.pushBlock(block);
         return new AnnotationDecompileVisitor(context);
     }
@@ -368,7 +342,7 @@ public class MethodDecompileVisitor extends MethodVisitor {
         String endStr = Arrays.stream(end).map(this::getOrNameLabel).collect(Collectors.joining(","));
         String indexStr = Arrays.stream(index).mapToObj(String::valueOf).collect(Collectors.joining(","));
         TextBlockElement block = new TextBlockElement("annotation local %s %s %s %s %s %s %s".formatted(
-                LOCAL_VARIABLE_TYPE_REFERENCE_KINDS.get(typeRef), typePath, startStr, endStr, indexStr, descriptor, visible));
+                TextElement.getTypeReference(typeRef), typePath, startStr, endStr, indexStr, descriptor, visible));
         context.pushBlock(block);
         return new AnnotationDecompileVisitor(context);
     }
@@ -392,7 +366,7 @@ public class MethodDecompileVisitor extends MethodVisitor {
     @Override
     public AnnotationVisitor visitInsnAnnotation(int typeRef, TypePath typePath, String descriptor, boolean visible) {
         TextBlockElement block = new TextBlockElement("annotation insn %s %s %s %s".formatted(
-                INSN_TYPE_REFERENCE_KINDS.get(typeRef), typePath, descriptor, visible));
+                TextElement.getTypeReference(typeRef), typePath, descriptor, visible));
         context.pushBlock(block);
         return new AnnotationDecompileVisitor(context);
     }

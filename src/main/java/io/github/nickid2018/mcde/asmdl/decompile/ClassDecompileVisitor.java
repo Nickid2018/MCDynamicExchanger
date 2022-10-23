@@ -7,12 +7,6 @@ import java.util.Map;
 
 public class ClassDecompileVisitor extends ClassVisitor {
 
-    public static final Map<Integer, String> CLASS_TYPE_REFERENCE_KINDS = Map.of(
-            TypeReference.CLASS_TYPE_PARAMETER, "class_type_parameter",
-            TypeReference.CLASS_TYPE_PARAMETER_BOUND, "class_type_parameter_bound",
-            TypeReference.CLASS_EXTENDS, "class_extends"
-    );
-
     private DecompileContext context;
 
     public ClassDecompileVisitor() {
@@ -52,7 +46,7 @@ public class ClassDecompileVisitor extends ClassVisitor {
     @Override
     public AnnotationVisitor visitTypeAnnotation(int typeRef, TypePath typePath, String descriptor, boolean visible) {
         TextBlockElement root = new TextBlockElement("annotation class_type %s %s %s %s".formatted(
-                CLASS_TYPE_REFERENCE_KINDS.get(typeRef), typePath, descriptor, visible));
+                TextElement.getTypeReference(typeRef), typePath, descriptor, visible));
         context.pushBlock(root);
         return new AnnotationDecompileVisitor(context);
     }
@@ -91,7 +85,7 @@ public class ClassDecompileVisitor extends ClassVisitor {
 
     @Override
     public MethodVisitor visitMethod(int access, String name, String descriptor, String signature, String[] exceptions) {
-        String accessFlags = AccessFlags.FIELD.getFlags(access);
+        String accessFlags = AccessFlags.METHOD.getFlags(access);
         String base = accessFlags.isEmpty() ? "method %s %s".formatted(name, descriptor)
                 : "method %s %s %s".formatted(accessFlags, name, descriptor);
         if (signature != null)

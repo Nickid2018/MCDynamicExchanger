@@ -24,7 +24,7 @@ public class RecordComponentDecompileVisitor extends RecordComponentVisitor {
     @Override
     public AnnotationVisitor visitTypeAnnotation(int typeRef, TypePath typePath, String descriptor, boolean visible) {
         TextBlockElement root = new TextBlockElement("annotation record_component_type %s %s %s %s"
-                .formatted(ClassDecompileVisitor.CLASS_TYPE_REFERENCE_KINDS.get(typeRef), typePath, descriptor, visible));
+                .formatted(TextElement.getTypeReference(typeRef), typePath, descriptor, visible));
         context.pushBlock(root);
         return new AnnotationDecompileVisitor(context);
     }
