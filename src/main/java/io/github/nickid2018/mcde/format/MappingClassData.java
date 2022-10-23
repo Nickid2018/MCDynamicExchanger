@@ -20,6 +20,14 @@ public class MappingClassData {
         methodMappings = new HashMap<>();
     }
 
+    public final String findFieldNoDesc(String name) {
+        for (String key : fieldMappings.keySet()) {
+            if (key.startsWith(name + "+"))
+                return fieldMappings.get(key);
+        }
+        return null;
+    }
+
     public final String findField(String nameWithDesc) {
         if (fieldMappings.containsKey(nameWithDesc))
             return fieldMappings.get(nameWithDesc);

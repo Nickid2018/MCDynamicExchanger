@@ -26,16 +26,13 @@ public class SwapCommand {
             InjectorFrame.INSTANCE.info(I18N.getTranslation("injector.workbench.swap.success"));
         } catch (UnmodifiableClassException e) {
             InjectorFrame.INSTANCE.error(I18N.getTranslation("injector.workbench.swap.unmodifiable"), e);
-        } catch (Exception e) {
+        } catch (Throwable e) {
             InjectorFrame.INSTANCE.error(I18N.getTranslation("injector.workbench.swap.error"), e);
         }
     });
 
     public static void register(CommandDispatcher<InjectorFrame> dispatcher) {
         dispatcher.register(InjectCommander.literal("swap")
-                .executes(context -> {
-                    frame.show();
-                    return 0;
-                }));
+                .executes(InjectCommander.return0(injector -> frame.show())));
     }
 }

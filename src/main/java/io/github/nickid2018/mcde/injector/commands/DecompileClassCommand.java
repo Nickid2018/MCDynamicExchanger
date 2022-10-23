@@ -24,7 +24,7 @@ public class DecompileClassCommand {
     public static void register(CommandDispatcher<InjectorFrame> dispatcher) {
         dispatcher.register(InjectCommander.literal("class")
                 .then(InjectCommander.argument("class", StringArgumentType.greedyString())
-                        .executes(context -> {
+                        .executes(InjectCommander.return0(context -> {
                             String className = StringArgumentType.getString(context, "class");
                             String remappedName = ClassUtils.toBinaryName(MCProgramInjector.format.getToSourceMapper().map(className));
                             className = ClassUtils.toBinaryName(MCProgramInjector.format.getToNamedMapper().map(remappedName));
@@ -33,12 +33,10 @@ public class DecompileClassCommand {
                                 AsyncUtil.execute(() -> doDecompileAndShow(finalClassName, remappedName, context.getSource()));
                                 context.getSource().info(I18N.getTranslation(
                                         "injector.command.class.found", className, remappedName));
-                                return 1;
-                            }
-                            context.getSource().error(I18N.getTranslation(
-                                    "injector.command.class.notfound", className, remappedName), null);
-                            return 0;
-                        })));
+                            } else
+                                context.getSource().error(I18N.getTranslation(
+                                        "injector.command.class.notfound", className, remappedName), null);
+                        }))));
     }
 
     private static void doDecompileAndShow(String className, String remappedName, InjectorFrame frame) {

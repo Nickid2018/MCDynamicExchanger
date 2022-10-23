@@ -13,7 +13,7 @@ public class ClassStatusCommand {
     public static void register(CommandDispatcher<InjectorFrame> dispatcher) {
         dispatcher.register(InjectCommander.literal("classstatus")
                 .then(InjectCommander.argument("class", StringArgumentType.greedyString())
-                        .executes(context -> {
+                        .executes(InjectCommander.return0(context -> {
                             String className = StringArgumentType.getString(context, "class");
                             String remappedName = ClassUtils.toBinaryName(MCProgramInjector.format.getToSourceMapper().map(className));
                             if (ClassDataRepository.getInstance().isLoaded(remappedName))
@@ -22,7 +22,6 @@ public class ClassStatusCommand {
                             else
                                 context.getSource().info(I18N.getTranslation(
                                         "injector.command.classstatus.notloaded", className, remappedName));
-                            return 0;
-                        })));
+                        }))));
     }
 }

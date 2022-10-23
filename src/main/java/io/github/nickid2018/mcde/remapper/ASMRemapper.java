@@ -32,6 +32,14 @@ public class ASMRemapper extends Remapper {
         return get == null ? name : get;
     }
 
+    public String mapFieldNameNoType(String owner, String name) {
+        MappingClassData clazz = classMap.get(ClassUtils.toBinaryName(owner));
+        if (clazz == null)
+            return name;
+        String get = clazz.findFieldNoDesc(name);
+        return get == null ? name : get;
+    }
+
     @Override
     public String map(String typeName) {
         MappingClassData clazz = classMap.get(ClassUtils.toBinaryName(typeName));
