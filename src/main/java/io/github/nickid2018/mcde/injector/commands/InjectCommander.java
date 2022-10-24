@@ -29,6 +29,7 @@ public class InjectCommander {
         DataListCommand.register(dispatcher);
         DataLimitCommand.register(dispatcher);
         DataValueCommand.register(dispatcher);
+        DataPlotCommand.register(dispatcher);
     }
 
     public static LiteralArgumentBuilder<InjectorFrame> literal(String var0) {

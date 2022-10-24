@@ -60,7 +60,6 @@ public class DataValueFrame {
                 expandNode(event);
                 tree.invalidate();
             }
-
             @Override
             public void treeCollapsed(TreeExpansionEvent event) {
             }
@@ -81,6 +80,14 @@ public class DataValueFrame {
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setVisible(true);
+    }
+
+    public boolean isShowing() {
+        return frame.isVisible();
+    }
+
+    public void focus() {
+        frame.requestFocus();
     }
 
     private void actionField(ActionEvent e) {

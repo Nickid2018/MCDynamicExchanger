@@ -55,7 +55,7 @@ public class DataValueEntry {
 
     @Override
     public String toString() {
-        return className == null ? name + ": " + value : name + ": (" + className + ") " + value;
+        return className == null ? name + ":" + value : name + ":" + className + ":" + value;
     }
 
     public void setValue(Object value) {

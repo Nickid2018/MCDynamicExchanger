@@ -6,9 +6,11 @@ import io.github.nickid2018.mcde.asmdl.decompile.ClassDecompileVisitor;
 import io.github.nickid2018.mcde.injector.ClassDataRepository;
 import io.github.nickid2018.mcde.injector.ClassWriterHacked;
 import io.github.nickid2018.mcde.injector.MCProgramInjector;
+import io.github.nickid2018.mcde.injector.ui.completion.CompletionData;
 import io.github.nickid2018.mcde.remapper.ClassRemapperFix;
 import io.github.nickid2018.mcde.util.ClassUtils;
 import io.github.nickid2018.mcde.util.I18N;
+import org.fife.ui.autocomplete.AutoCompletion;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rtextarea.RTextScrollPane;
 import org.objectweb.asm.ClassReader;
@@ -142,6 +144,8 @@ public class WorkbenchFrame {
         textArea.getPopupMenu().add(find);
         textArea.registerKeyboardAction(e -> showFindDialog(textArea),
                 KeyStroke.getKeyStroke("control F"), JComponent.WHEN_FOCUSED);
+        AutoCompletion ac = new AutoCompletion(CompletionData.getProvider());
+        ac.install(textArea);
         textAreas.put(name, textArea);
         fileList.add(name);
         list.setListData(fileList.toArray(String[]::new));
