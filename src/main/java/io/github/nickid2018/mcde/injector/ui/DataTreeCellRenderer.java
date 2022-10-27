@@ -10,7 +10,6 @@ public class DataTreeCellRenderer extends DefaultTreeCellRenderer {
         setLeafIcon(null);
         setOpenIcon(null);
         setClosedIcon(null);
-        setBackgroundSelectionColor(Color.WHITE);
         setSize(10000, getHeight());
     }
 
@@ -22,9 +21,11 @@ public class DataTreeCellRenderer extends DefaultTreeCellRenderer {
         String[] split = valueStr.replace("<", "&lt;").replace(">", "&gt;").split(":", 3);
         String text;
         if (split.length == 3)
-            text = "<html><span style=\"font-family: 微软雅黑\"><b>%s</b>: <i>(%s)</i> %s</span></html>".formatted(split[0], split[1], split[2]);
+            text = "<html><span style=\"font-family: 微软雅黑\"><span style=\"font-weight: bold\">%s</span>: <span style=\"color: gray; font-style: italic\">(%s)</span> %s</span></html>".formatted(split[0], split[1], split[2]);
+        else if (split.length == 2)
+            text = "<html><span style=\"font-family: 微软雅黑\"><span style=\"font-weight: bold\">%s</span>: %s</span></html>".formatted(split[0], split[1]);
         else
             text = "<html><span style=\"font-family: 微软雅黑\">%s</span></html>".formatted(valueStr);
-        return super.getTreeCellRendererComponent(tree, text, selected, expanded, leaf, row, hasFocus);
+        return super.getTreeCellRendererComponent(tree, text, false, expanded, leaf, row, hasFocus);
     }
 }

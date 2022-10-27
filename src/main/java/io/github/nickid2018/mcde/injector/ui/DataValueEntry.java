@@ -33,11 +33,18 @@ public class DataValueEntry {
 
         Class<?> clazz = obj.getClass();
         this.clazz = clazz;
-        String type = remapper.map(clazz.getName());
-        String[] split = type.split("[/.]");
-        className = split[split.length - 1];
 
-        if (!clazz.isArray() && !Collection.class.isAssignableFrom(clazz)) {
+        if (clazz.isArray()) {
+            int dimension = 1;
+            while ((clazz = clazz.getComponentType()).isArray())
+                dimension++;
+            String type = remapper.map(clazz.getName());
+            String[] split = type.split("[/.]");
+            className = split[split.length - 1] + "[]".repeat(dimension);
+        } else if (!Collection.class.isAssignableFrom(clazz)) {
+            String type = remapper.map(clazz.getName());
+            String[] split = type.split("[/.]");
+            className = split[split.length - 1];
             while (clazz != null) {
                 for (Field field : clazz.getDeclaredFields()) {
                     if (Modifier.isStatic(field.getModifiers()))
@@ -50,12 +57,20 @@ public class DataValueEntry {
                 }
                 clazz = clazz.getSuperclass();
             }
+        } else {
+            String type = remapper.map(clazz.getName());
+            String[] split = type.split("[/.]");
+            className = split[split.length - 1];
         }
     }
 
     @Override
     public String toString() {
-        return className == null ? name + ":" + value : name + ":" + className + ":" + value;
+        try {
+            return className == null ? name + ":" + value : name + ":" + className + ":" + value;
+        } catch (ConcurrentModificationException e) {
+            return name + ":" + className + ":(concurrent modification when getting value)";
+        }
     }
 
     public void setValue(Object value) {

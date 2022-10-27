@@ -138,14 +138,16 @@ public class WorkbenchFrame {
         textArea.setSyntaxEditingStyle("text/asmdl");
         textArea.setCodeFoldingEnabled(true);
         textArea.setText(code);
+        AutoCompletion ac = new AutoCompletion(CompletionData.getProvider());
+        ac.setParameterAssistanceEnabled(true);
+        ac.setAutoActivationEnabled(true);
+        ac.install(textArea);
         JMenuItem find = new JMenuItem(I18N.getTranslation("injector.find_dialog.name"));
         find.setAccelerator(KeyStroke.getKeyStroke("control F"));
         find.addActionListener(e -> showFindDialog(textArea));
         textArea.getPopupMenu().add(find);
         textArea.registerKeyboardAction(e -> showFindDialog(textArea),
                 KeyStroke.getKeyStroke("control F"), JComponent.WHEN_FOCUSED);
-        AutoCompletion ac = new AutoCompletion(CompletionData.getProvider());
-        ac.install(textArea);
         textAreas.put(name, textArea);
         fileList.add(name);
         list.setListData(fileList.toArray(String[]::new));

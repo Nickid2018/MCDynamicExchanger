@@ -7,6 +7,7 @@ public class CompletionData {
 
     public static CompletionProvider getProvider() {
         DefaultCompletionProvider provider = new DefaultCompletionProvider();
+        BasicKeywordCompletion.keywords(provider);
         DataCollectTemplates.makeDataCollectTemplate(provider);
         return provider;
     }

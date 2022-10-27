@@ -174,7 +174,7 @@ LineCommentBegin         = "#"
    /* Keywords */
    "class" | "method" | "field" | "label" | "true" | "false" | "value" | "signature" | "extends" |
    "public" | "protected" | "private" | "static" | "final" | "synthetic" | "abstract" | "implements" |
-   "interface" | "super" | "enum" | "bridge" | "synchoronized" | "volatile" | "transient" | "throws" |
+   "interface" | "super" | "enum" | "bridge" | "synchronized" | "volatile" | "transient" | "throws" |
    "native" | "varargs" | "strict" | "outerclass" | "annotation" | "nesthost" | "nestmember" | "innerclass" { addToken(Token.RESERVED_WORD); }
 
    /* Data types */
