@@ -191,7 +191,7 @@ public class DataCollector {
     }
 
     public static List<DataEntry<?>> getData(String name) {
-        return new ArrayList<>(DATA.get(name));
+        return DATA.containsKey(name) ? new ArrayList<>(DATA.get(name)) : new ArrayList<>();
     }
 
     public static void clear(String name) {
